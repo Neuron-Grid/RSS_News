@@ -1,0 +1,39 @@
+# Mac OS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
+
+# ボリュームのルートに表示される可能性のあるファイル
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# リモートAFP共有に作成される可能性のあるディレクトリ
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# iCloudで生成されるファイル
+*.icloud
+
+# Django
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+
+# その他
+db.sqlite3
+db.sqlite3-journal
+mysqldata/
+git-sim_media/
