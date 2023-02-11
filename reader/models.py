@@ -5,7 +5,7 @@ from django.db import models
 # Feedモデル
 class Feed(models.Model):
     url = models.URLField(unique=True)                      # フィードのURL
-    title = models.CharField(max_length=100)                # フィードのタイトル
+    title = models.CharField(max_length=50)                 # フィードのタイトル
     description = models.TextField(blank=True, null=True)   # フィードの説明
 
     def __str__(self):
@@ -20,7 +20,7 @@ class Feed(models.Model):
 # Entryモデル
 class Entry(models.Model):
     feed = models.ForeignKey(Feed, on_delete=models.CASCADE)    # フィード
-    title = models.CharField()                                  # エントリのタイトル
+    title = models.CharField(max_length=50)                     # エントリのタイトル
     link = models.URLField()                                    # エントリのリンク
     summary = models.TextField()                                # エントリの要約
     pub_date = models.DateTimeField()                           # エントリの公開日時

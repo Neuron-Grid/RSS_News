@@ -19,7 +19,9 @@
                     <form action="" method="post">
                         {% csrf_token %}
                         <p>本当に削除しますか？</p>
-                        <button type="submit" class="btn btn-primary">削除</button>
+                        <!-- 登録済みのフィードのタイトルを表示し何を削除するかを選択する -->
+                        <p>{{ feed.name }}</p>
+                        <input type="submit" value="削除">
                     </form>
                 </div>
             </div>

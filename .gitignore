@@ -31,6 +31,7 @@ Temporary Items
 *.pyc
 __pycache__/
 local_settings.py
+venv/
 
 # その他
 db.sqlite3

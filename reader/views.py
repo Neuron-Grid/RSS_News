@@ -6,8 +6,8 @@ import feedparser
 # フィード一覧
 @login_required
 def index(request):
-    subscriptions = Subscription.objects.filter(user=request.user)
-    return render(request, 'reader/index.html', {'subscriptions': subscriptions})
+    feeds = Feed.objects.filter(subscription__user=request.user)
+    return render(request, 'reader/feed_list.html', {'feeds': feeds})
 
 # フィードの追加
 @login_required
@@ -46,7 +46,7 @@ def delete_feed(request, feed_id):
         return render(request, 'reader/delete_feed_error.html')
     Subscription.objects.filter(user=request.user, feed=feed_id).delete()
     # 購読しているフィードに登録されているタイトルを取得し、タイトルに紐づくエントリを削除
+    # remove_feed.htmlでフィードのタイトルを表示し、何を削除するかを選択する
     feed_title = Feed.objects.get(id=feed_id).title
-    Entry.objects.filter(feed__title=feed_title).delete()
-    return redirect('reader:index')
-
+    Entry.objects.filter(feed=feed_id).delete()
+    return render(request, 'reader/remove_feed.html', {'feed_title': feed_title})
