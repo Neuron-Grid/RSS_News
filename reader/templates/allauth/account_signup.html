@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ja">
+    {% extends 'base.html' %}
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>
+            {% block title %}
+            アカウント作成
+            {% endblock %}
+        </title>
+    </head>
+    <body>
+        <!-- 中央寄せにして作成 -->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <h1>アカウント作成</h1>
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-primary">作成</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- ログインページに戻るリンクを作成ボタンの下に追加 -->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <p>
+                        既にアカウントをお持ちの方は、
+                    <a href="{% url 'account_login' %}">こちら</a>
+                    からログインして下さい。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

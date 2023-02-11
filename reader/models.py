@@ -1,17 +1,17 @@
 from django.contrib.auth.models import User
-from django.db import models
 from django.core.exceptions import ValidationError
-
+from django.db import models
 
 # Feedモデル
 class Feed(models.Model):
-    url = models.URLField(unique=True)
-    title = models.CharField(max_length=100)
-    description = models.TextField(blank=True, null=True)
+    url = models.URLField(unique=True)                      # フィードのURL
+    title = models.CharField(max_length=100)                # フィードのタイトル
+    description = models.TextField(blank=True, null=True)   # フィードの説明
 
     def __str__(self):
         return self.title
 
+    # フィードのURLが重複していないかチェックする
     def clean(self):
         if Feed.objects.filter(url=self.url).exclude(id=self.id).exists():
             raise ValidationError('既に登録されているフィードです。')
@@ -19,11 +19,11 @@ class Feed(models.Model):
 
 # Entryモデル
 class Entry(models.Model):
-    feed = models.ForeignKey(Feed, on_delete=models.CASCADE)
-    title = models.CharField()
-    link = models.URLField()
-    summary = models.TextField()
-    pub_date = models.DateTimeField()
+    feed = models.ForeignKey(Feed, on_delete=models.CASCADE)    # フィード
+    title = models.CharField()                                  # エントリのタイトル
+    link = models.URLField()                                    # エントリのリンク
+    summary = models.TextField()                                # エントリの要約
+    pub_date = models.DateTimeField()                           # エントリの公開日時
 
     def __str__(self):
         return self.title
