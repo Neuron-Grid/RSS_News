@@ -1,5 +1,5 @@
 # 本プロジェクト概要
-サービス名 : RSS News
+サービス名 : RSS News<br>
 ログイン機能は、Django Allauthで作成
 - RSSリーダー
 - djangoで作成中
@@ -42,7 +42,6 @@ RSSフィードの情報を保存するためのモデルです。以下の属�
 
 - 現時点で、使用しているパッケージ<br>
     [Allauth](https://pypi.org/project/django-allauth/)<br>
-    [django_bootstrap5](https://pypi.org/project/django-bootstrap5/)<br>
     [feedparser](https://pypi.org/project/feedparser/)<br>
 
 - 今後、使用する可能性があるパッケージ<br>

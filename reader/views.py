@@ -3,9 +3,17 @@ from django.contrib.auth.decorators import login_required
 from .models import Feed, Subscription, Entry
 import feedparser
 
+# indexページ
+def index(request):
+    if request.user.is_authenticated:
+        feeds = Feed.objects.filter(subscription__user=request.user)
+        return render(request, 'reader/index.html', {'feeds': feeds})
+    else:
+        return redirect('/accounts/login/')
+
 # フィード一覧
 @login_required
-def index(request):
+def feed_list(request):
     feeds = Feed.objects.filter(subscription__user=request.user)
     return render(request, 'reader/feed_list.html', {'feeds': feeds})
 

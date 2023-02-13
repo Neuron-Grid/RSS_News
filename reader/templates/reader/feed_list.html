@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja">
+    {% extends "../base.html" %}
     <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>
             {% block title %}
             フィード一覧
@@ -12,25 +10,27 @@
     </head>
     <body>
         <!-- ナビゲーションバーにRSSフィードを追加するページと削除するページのURLを追加 -->
-        <nav>
-            <ul>
-                <li>
-                    <a href="{% url 'reader:all_feeds' %}">フィード一覧</a>
-                </li>
-                <li>
-                    <a href="{% url 'reader:add_feed' %}">RSSフィードを追加</a>
-                </li>
-                <li>
-                    <a href="{% url 'reader:remove_feed' %}">RSSフィードを削除</a>
-                </li>
-            </ul>
-        </nav>
+        {% block content %}
+        <header>
+            {% block header %}
+            <h1>フィード一覧</h1>
+            <nav>
+                <ul>
+                    <li>
+                        <a href="{% url 'reader:add_feed' %}">フィードを追加</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'reader:remove_feed' %}">フィードを削除</a>
+                    </li>
+                </ul>
+            </nav>
+            {% endblock %}
+        </header>
         <!-- RSSフィードの一覧を表示するページを作成する -->
-        <!-- 中央寄せにしてページを作成する -->
+        <p>{{ user.username }}様ログインに成功しました。</p>
         <div class="container">
             <div class="row">
                 <div class="col-md-6 offset-md-3">
-                    <h1>フィード一覧</h1>
                     <!-- フィード一覧を表示する -->
                     <ul>
                         {% for feed in feeds %}
@@ -42,5 +42,6 @@
                 </div>
             </div>
         </div>
+        {% endblock %}
     </body>
 </html>

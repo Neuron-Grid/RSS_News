@@ -16,7 +16,6 @@ class Feed(models.Model):
         if Feed.objects.filter(url=self.url).exclude(id=self.id).exists():
             raise ValidationError('既に登録されているフィードです。')
 
-
 # Entryモデル
 class Entry(models.Model):
     feed = models.ForeignKey(Feed, on_delete=models.CASCADE)    # フィード
@@ -27,7 +26,6 @@ class Entry(models.Model):
 
     def __str__(self):
         return self.title
-
 
 # Subscriptionモデル
 class Subscription(models.Model):

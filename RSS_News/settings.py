@@ -152,14 +152,15 @@ ACCOUNT_EMAIL_REQUIRED = True                       # サインアップ（ユ�
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'            # メール検証を必須とする
 
 LOGIN_URL = '/accounts/login/'                       # ログインURLの設定
-LOGIN_REDIRECT_URL = '/index/'                       # ログイン後のリダイレクト先
+LOGIN_REDIRECT_URL = '/feed_list/'                   # ログイン後のリダイレクト先
 ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login/'     # ログアウト後のリダイレクト先
 
 # メールの設定
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'    # メールの送信先をコンソールに出力する
-# EMAIL_HOST = 'smtp.gmail.com'                                       # メールサーバーのホスト名
-# EMAIL_PORT = 587                                                    # メールサーバーのポート番号
-# EMAIL_HOST_USER = '                                                 # メールサーバーのユーザー名
-# EMAIL_HOST_PASSWORD = '                                             # メールサーバーのパスワード
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'    # メールの送信先をコンソールに出力する
+EMAIL_HOST = 'smtp.gmail.com'                                       # メールサーバーのホスト名
+EMAIL_PORT = 587                                                    # メールサーバーのポート番号
+EMAIL_HOST_USER = 'qiye208@gmail.com'                               # メールサーバーのユーザー名
+EMAIL_HOST_PASSWORD = 'mxwneziukpnazddh'                            # メールサーバーのパスワード
 # EMAIL_USE_TLS = True                                                # TLS暗号化通信を使用する
 # EMAIL_USE_SSL = False                                               # SSL暗号化通信を使用する
+

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>
+            {% block title %}
+            メールアドレスを確認してください
+            {% endblock %}
+        </title>
+    </head>
+    <body>
+        {% block content %}
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <h1>メールアドレスを確認してください</h1>
+                    <p>
+                        確認のための電子メールを送信しました。記載されているリンクに従って、登録を確定してください。<br>
+                        受信トレイに確認メールがメールが届かない場合は、迷惑メールフォルダを確認してください。<br>
+                        数分以内に確認メールが届かない場合は、管理者までご連絡ください。<br>
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endblock %}
+    </body>
+</html>
