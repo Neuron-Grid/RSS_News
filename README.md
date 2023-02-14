@@ -17,7 +17,7 @@
 ## DB設計
 このアプリは、Feed、Entry、UserFeedの3つのDBテーブルを使用しています。<br>
 ログイン機能は、Django Allauthで作成している為、Userテーブルは使用していません。<br>
-詳細は下記に記載しています。
+<details><summary>詳細は下記に記載しています。</summary>
 
 ### Feedモデル
 RSSフィードの情報を保存するためのモデルです。以下の属性が定義されています：
@@ -37,6 +37,8 @@ RSSフィードの情報を保存するためのモデルです。以下の属�
 ユーザーが購読しているフィードを表すモデルです。以下の属性が定義されています：
 - `user`: ユーザー。ForeignKey型で、django.contrib.auth.models.Userモデルと関連付けられます。
 - `feed`: フィード。ForeignKey型で、Feedモデルと関連付けられます。
+
+</details>
 
 ***
 
