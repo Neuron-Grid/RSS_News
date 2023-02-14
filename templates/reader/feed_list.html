@@ -1,0 +1,46 @@
+{% extends "../base.html" %}
+<head>
+    {% block title %}
+    <title>
+        フィード一覧
+    </title>
+    {% endblock %}
+</head>
+{% block content %}
+<body>
+    <!-- ナビゲーションバーにRSSフィードを追加するページと削除するページのURLを追加 -->
+    <!-- headerの中身の文字を中央に寄せる -->
+    <!-- bootstrap5に対応した書き方をする -->
+    {% block header %}
+    <header>
+        <ui>
+            <li>
+                <h1>フィード一覧</h1>
+            </li>
+            <li>
+                <a href="{% url 'reader:add_feed' %}">フィードを追加</a>
+            </li>
+            <li>
+                <a href="{% url 'reader:remove_feed' %}">フィードを削除</a>
+            </li>
+        </ui>
+    </header>
+    {% endblock %}
+    <!-- RSSフィードの一覧を表示するページを作成する -->
+    <p>{{ user.username }}様ログインに成功しました。</p>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <!-- フィード一覧を表示する -->
+                {% for feed in feeds %}
+                <ul>
+                    <li>
+                        <a href="{% url 'reader:feed_detail' feed.id %}">{{ feed.name }}</a>
+                    </li>
+                </ul>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+{% endblock %}

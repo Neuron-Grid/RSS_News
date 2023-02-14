@@ -1,0 +1,56 @@
+
+{% extends "../base.html" %}
+<head>
+    {% block title %}
+    <title>
+        RSS News
+    </title>
+    {% endblock %}
+</head>
+{% block content %}
+<body>
+    <!-- ログインページと新規登録ページのURLをheaderに追加 -->
+    {% block header %}
+    <header>
+        <nav class="navbar navbar-expand-sm bg-light">
+            <div class="container-fluid">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <h1 class="navbar-brand">RSS News</h1>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'account_login' %}">ログイン</a>
+                    </li>
+                    <li class="nav-item">
+                        <!-- signupのリンクを追加 -->
+                        <a class="nav-link " href="{% url 'account_signup' %}">新規登録</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    {% endblock header %}
+    <!-- このwebサイトがログイン機能付きのRSSリーダーであることを説明をする -->
+    <!-- 中央寄せにして作成 -->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <h1>RSS News</h1>
+                <p class="text-nowrap">
+                    このWebサイトは、ログイン機能付きのRSSリーダーです。
+                </p>
+                <p class="text-nowrap">
+                    アカウントをお持ちの方は、
+                    <a class="nav-link" href="{% url 'account_login' %}">こちら</a>
+                    からログインしてください。
+                </p>
+                <p class="text-nowrap">
+                    アカウントをお持ちでない方は、
+                    <a class="nav-link" href="{% url 'account_signup' %}">こちら</a>
+                    から新規登録してください。
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+{% endblock %}

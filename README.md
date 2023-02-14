@@ -44,5 +44,9 @@ RSSフィードの情報を保存するためのモデルです。以下の属�
     [Allauth](https://pypi.org/project/django-allauth/)<br>
     [feedparser](https://pypi.org/project/feedparser/)<br>
 
-- 今後、使用する可能性があるパッケージ<br>
--  [django-crispy-forms](https://pypi.org/project/django-crispy-forms/)<br>
+
+***
+
+- 現在確認されている問題
+    - ログイン後に、画面に何も表示されない
+    - 

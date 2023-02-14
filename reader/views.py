@@ -1,16 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Feed, Subscription, Entry
-from .tasks import update_feed
 import feedparser
 
 # indexページ
 def index(request):
-    if request.user.is_authenticated:
-        feeds = Feed.objects.filter(subscription__user=request.user)
-        return render(request, 'reader/index.html', {'feeds': feeds})
-    else:
-        return redirect('/accounts/login/')
+    return render(request, 'reader/index.html')
 
 # フィード一覧
 @login_required
@@ -45,7 +40,7 @@ def update_feed(request, feed_id):
             summary=entry['summary'],
             pub_date=entry['published'],
         )
-    return redirect('reader:index')
+    return redirect('reader:feed_list')
 
 # フィードの削除
 @login_required
@@ -59,8 +54,3 @@ def delete_feed(request, feed_id):
     feed_title = Feed.objects.get(id=feed_id).title
     Entry.objects.filter(feed=feed_id).delete()
     return render(request, 'reader/remove_feed.html', {'feed_title': feed_title})
-
-# Celeryタスク
-def update_feeds(request):
-    update_feed.apply_async()
-    return redirect('home')

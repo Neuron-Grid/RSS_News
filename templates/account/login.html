@@ -1,0 +1,50 @@
+
+{% extends '../base.html' %}
+<head>
+    {% block title %}
+    <title>
+        ログイン
+    </title>
+    {% endblock %}
+</head>
+{% block content %}
+<body>
+    <!-- 中央寄せにして作成する -->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <h1>ログイン</h1>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary">ログイン!!!</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--パスワードの再設定ページに移動するリンクをログインボタンの下に追加-->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <p>
+                    パスワードを忘れた方は
+                    <a href="{% url 'account_reset_password' %}">こちら</a>
+                    から変更して下さい。
+                </p>
+            </div>
+        </div>
+    </div>
+    <!-- パスワードの再設定ページに移動するリンクの下にアカウントの新規作成ページに移動するリンクを追加 -->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <p>
+                    アカウントをお持ちでない方は
+                    <a href="{% url 'account_signup' %}">こちら</a>
+                    から新規登録して下さい。
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+{% endblock %}
