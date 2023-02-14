@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'django.contrib.sites',
+    "django_bootstrap5",
 ]
 
 MIDDLEWARE = [
@@ -150,8 +151,8 @@ AUTHENTICATION_BACKENDS = (
 )
 
 ACCOUNT_AUTHENTICATION_METHOD = 'email'             # メールアドレス（とパスワードで）認証する
-ACCOUNT_USERNAME_REQUIRED = True                    # サインアップ（ユーザー登録）の時にユーザーネームを尋ねる
-ACCOUNT_EMAIL_REQUIRED = True                       # サインアップ（ユーザー登録）の時にメールアドレスを尋ねる
+ACCOUNT_USERNAME_REQUIRED = True                    # 新規登録の時にユーザーネームを尋ねる
+ACCOUNT_EMAIL_REQUIRED = True                       # 新規登録の時にメールアドレスを尋ねる
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'            # メール検証を必須とする
 
 LOGIN_URL = '/accounts/login/'                          # ログインURLの設定

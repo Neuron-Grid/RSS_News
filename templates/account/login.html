@@ -1,4 +1,3 @@
-
 {% extends '../base.html' %}
 <head>
     {% block title %}
@@ -12,37 +11,57 @@
     <!-- 中央寄せにして作成する -->
     <div class="container">
         <div class="row">
-            <div class="col-md-6 offset-md-3">
-                <h1>ログイン</h1>
-                <form action="" method="post">
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <button type="submit" class="btn btn-primary">ログイン!!!</button>
-                </form>
+            <div class="col-md-6 offset-md-3 flex-column">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6 offset-md-3">
+                            <h1 class="text-center mb-4">ログイン</h1>
+                            <form class="d-flex flex-column"  action="{% url 'account_login' %}" method="post">
+                                {% csrf_token %}
+                                <label for="{{ form.username.id_for_label }}">
+                                    ユーザー名
+                                    {{ form.username }}
+                                    {% if form.username.errors %}
+                                        <span class="text-danger container">
+                                            {{ form.username.errors }}
+                                        </span>
+                                    {% endif %}
+                                </label>
+                                <label for="{{ form.password.id_for_label }}">
+                                    パスワード
+                                    {{ form.password }}
+                                    {% if form.password.errors %}
+                                        <span class="text-danger container">
+                                            {{ form.password.errors }}
+                                        </span>
+                                    {% endif %}
+                                </label>
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-primary mt-3">ログイン</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     <!--パスワードの再設定ページに移動するリンクをログインボタンの下に追加-->
+    <!-- 中央寄せにして作成 -->
     <div class="container">
-        <div class="row">
-            <div class="col-md-6 offset-md-3">
-                <p>
-                    パスワードを忘れた方は
-                    <a href="{% url 'account_reset_password' %}">こちら</a>
-                    から変更して下さい。
-                </p>
-            </div>
-        </div>
-    </div>
-    <!-- パスワードの再設定ページに移動するリンクの下にアカウントの新規作成ページに移動するリンクを追加 -->
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6 offset-md-3">
-                <p>
-                    アカウントをお持ちでない方は
-                    <a href="{% url 'account_signup' %}">こちら</a>
-                    から新規登録して下さい。
-                </p>
+        <div class="row container">
+            <div class="col-md-6 offset-md-3 flex-column">
+                <div class="container">
+                    <p>パスワードを忘れた方は、
+                        <a href="{% url 'account_reset_password' %}" style="text-decoration: none;" class="link-primary">こちら</a>
+                        から変更して下さい。
+                    </p>
+                    <p>
+                        アカウントをお持ちでない方は、
+                        <a href="{% url 'account_signup' %}" style="text-decoration: none;">こちら</a>
+                        から新規登録して下さい。
+                    </p>
+                </div>
             </div>
         </div>
     </div>

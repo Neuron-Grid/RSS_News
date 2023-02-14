@@ -1,6 +1,5 @@
 # 本プロジェクト概要
 サービス名 : RSS News<br>
-ログイン機能は、Django Allauthで作成
 - RSSリーダー
 - djangoで作成中
 - ログイン機能つき
@@ -9,14 +8,15 @@
 - 無料で利用できる
 
 ## 作成理由
-- 今自分が使っているRSSリーダーが不便だった為、自作しようと思った
+- 今自分が使っているRSSリーダーが不便だった
 - クロスプラットフォームで使えるものを作成する必要があった
 
-上記の2つを考慮し、ブラウザ上で動作するRSSリーダーを作成する
+上記の2つを考慮した場合、ブラウザ上で動作するRSSリーダーを作成するのが最適だと考えたため、本プロジェクトを作成することにしました。
 
 ***
 ## DB設計
-このアプリは、Feed、Entry、UserFeedの3つのDBテーブルを使用しています。
+このアプリは、Feed、Entry、UserFeedの3つのDBテーブルを使用しています。<br>
+ログイン機能は、Django Allauthで作成している為、Userテーブルは使用していません。<br>
 詳細は下記に記載しています。
 
 ### Feedモデル
@@ -40,13 +40,45 @@ RSSフィードの情報を保存するためのモデルです。以下の属�
 
 ***
 
-- 現時点で、使用しているパッケージ<br>
-    [Allauth](https://pypi.org/project/django-allauth/)<br>
-    [feedparser](https://pypi.org/project/feedparser/)<br>
+<details><summary>使用しているパッケージ</summary>
 
+[Allauth](https://pypi.org/project/django-allauth/)<br>
+[feedparser](https://pypi.org/project/feedparser/)<br>
+[django-crispy-forms](https://pypi.org/project/django-crispy-forms/)<br>
+[django-bootstrap5](https://pypi.org/project/django-bootstrap5/)<br>
+
+リンク先は[PyPI](https://pypi.org/)のURLとなっています。
+</details>
 
 ***
 
-- 現在確認されている問題
-    - ログイン後に、画面に何も表示されない
-    - 
+<details><summary>現在確認されている問題</summary>
+
+- フィードが更新されない
+- アカウントの削除ができない
+- ログイン後にエラーが発生する
+```
+コンソールには以下のようなエラーが表示される
+GET /feed_list/ HTTP/1.1" 500 176778
+```
+```
+ブラウザでは以下のようなエラーが表示される
+NoReverseMatch at /feed_list/
+'reader' is not a registered namespace
+```
+</details>
+
+<details><summary>今後追加する機能</summary>
+
+> フィードを更新するボタンを追加する<br>
+> > Feed_list.htmlにボタンを追加する<br>
+
+> アカウントの削除機能を追加する<br>
+> アカウントを削除するページを作成する<br>
+</details>
+
+
+<details><summary>現在解決中の問題</summary>
+
+- フィードの更新されない
+</details>

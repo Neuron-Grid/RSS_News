@@ -1,27 +1,24 @@
-<!DOCTYPE html>
-<html lang="ja">
-    {% extends "../base.html" %}
-    <head>
-        {% block title %}
-        <title>
-            メールアドレスを確認してください
-        </title>
-        {% endblock %}
-    </head>
-    {% block content %}
-    <body>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 offset-md-3">
-                    <h1>メールアドレスを確認してください</h1>
-                    <p>
-                        確認のための電子メールを送信しました。記載されているリンクに従って、登録を確定してください。<br>
-                        受信トレイに確認メールがメールが届かない場合は、迷惑メールフォルダを確認してください。<br>
-                        数分以内に確認メールが届かない場合は、管理者までご連絡ください。<br>
-                    </p>
-                </div>
+{% extends "../base.html" %}
+<head>
+    {% block title %}
+    <title>
+        メールアドレスを確認してください
+    </title>
+    {% endblock %}
+</head>
+{% block content %}
+<body>
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-md-6 offset-md-3 text-center">
+                <h1>メールアドレスを確認してください</h1>
+                <p class="my-4">
+                    確認のための電子メールを送信しました。記載されているリンクに従って、登録を確定してください。<br>
+                    受信トレイに確認メールがメールが届かない場合は、迷惑メールフォルダを確認してください。<br>
+                    数分以内に確認メールが届かない場合は、管理者までご連絡ください。<br>
+                </p>
             </div>
         </div>
-    </body>
-    {% endblock %}
-</html>
+    </div>
+</body>
+{% endblock %}

@@ -33,22 +33,51 @@
     <!-- このwebサイトがログイン機能付きのRSSリーダーであることを説明をする -->
     <!-- 中央寄せにして作成 -->
     <div class="container">
-        <div class="row">
-            <div class="col-md-6 offset-md-3">
-                <h1>RSS News</h1>
-                <p class="text-nowrap">
+        <div class="row justify-content-center">
+            <div class="col-md-5 container">
+                <h1 style="height: 30px;">RSS News</h1>
+                <p>
                     このWebサイトは、ログイン機能付きのRSSリーダーです。
                 </p>
-                <p class="text-nowrap">
-                    アカウントをお持ちの方は、
-                    <a class="nav-link" href="{% url 'account_login' %}">こちら</a>
-                    からログインしてください。
-                </p>
-                <p class="text-nowrap">
-                    アカウントをお持ちでない方は、
-                    <a class="nav-link" href="{% url 'account_signup' %}">こちら</a>
-                    から新規登録してください。
-                </p>
+                <div>
+                    <p>
+                        既にアカウントをお持ちの方は、
+                        <a class="link-primary" style="text-decoration: none;" href="{% url 'account_login' %}">こちら</a>
+                        からログインしてください。
+                    </p>
+                    <p>
+                        アカウントをお持ちでない方は、
+                        <a class="link-primary" style="text-decoration: none;" href="{% url 'account_signup' %}">こちら</a>
+                        から新規登録してください。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-5">
+                <div class="card">
+                    <div class="card-body">
+                        <details>
+                            <summary>注意事項</summary>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <p>現時点では、登録したフィードの編集機能は実装していません。</p>
+                                </li>
+                                <li class="list-group-item">
+                                    <p>現時点では、アカウントの削除機能がありません。</p>
+                                </li>
+                                <li class="list-group-item">
+                                    <p>現時点では、フィードの削除機能は実装していません。</p>
+                                </li>
+                                <li class="list-group-item">
+                                    <p>現時点では、アカウントの管理のページがありません。</p>
+                                </li>
+                            </ul>
+                        </details>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
