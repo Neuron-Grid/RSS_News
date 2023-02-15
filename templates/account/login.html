@@ -18,12 +18,12 @@
                             <h1 class="text-center mb-4">ログイン</h1>
                             <form class="d-flex flex-column"  action="{% url 'account_login' %}" method="post">
                                 {% csrf_token %}
-                                <label for="{{ form.username.id_for_label }}">
+                                <label for="{{ form.email.id_for_label }}">
                                     ユーザー名
-                                    {{ form.username }}
-                                    {% if form.username.errors %}
+                                    {{ form.email }}
+                                    {% if form.email.errors %}
                                         <span class="text-danger container">
-                                            {{ form.username.errors }}
+                                            {{ form.email.errors }}
                                         </span>
                                     {% endif %}
                                 </label>

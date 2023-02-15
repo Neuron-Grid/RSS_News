@@ -10,8 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+from celery.schedules import crontab
 from pathlib import Path
-# from celery import Celery
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -169,7 +169,15 @@ EMAIL_HOST_PASSWORD = 'mxwneziukpnazddh'                            # メール�
 # EMAIL_USE_SSL = False                                               # SSL暗号化通信を使用する
 
 # Celery
-# CELERY_BROKER_URL = 'redis://localhost:6379/1'
-# CELERY_RESULT_BACKEND = 'django-db'
-# CELERY_CACHE_BACKEND = 'django-cache'
-# CELERY_TASK_TRACK_STARTED = True
+CELERY_BROKER_URL = 'redis://localhost:6379/1'
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_CACHE_BACKEND = 'django-cache'
+CELERY_TASK_TRACK_STARTED = True
+
+# Celery
+CELERY_BEAT_SCHEDULE = {
+    'update-feeds': {
+        'task': 'myapp.tasks.update_feeds',
+        'schedule': crontab(minute='*/10'),
+    },
+}

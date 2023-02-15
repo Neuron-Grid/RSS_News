@@ -39,16 +39,19 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6 offset-md-3">
-                <!-- フィード一覧を表示する -->
-                {% for feed in feeds %}
+                <h2>{{ feed.title }}</h2>
+                <p>{{ feed.description }}</p>
                 <ul>
+                {% for entry in feed.entry_set.all %}
                     <li>
-                        <a href="{% url 'reader:feed_detail' feed.id %}">
-                            {{ feed.name }}
-                        </a>
+                        <a href="{{ entry.link }}">{{ entry.title }}</a>
+                        <p>{{ entry.summary }}</p>
+                        <p>{{ entry.pub_date }}</p>
                     </li>
-                </ul>
+                {% empty %}
+                    <li>まだ登録されていません。</li>
                 {% endfor %}
+                </ul>
             </div>
         </div>
     </div>

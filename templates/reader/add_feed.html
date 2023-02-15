@@ -16,24 +16,24 @@
                     {% csrf_token %}
                     {{ form.as_p }}
                     <!-- フィード名の入力フォーム -->
-                    <div class="form-group" style="height: 30px;">
+                    <div class="form-group"  >
                         <label for="feed_name">フィード名</label>
                         <input type="text" class="form-control" id="feed_name" name="feed_name" placeholder="タイトルを入力してください">
                     </div>
                     <!-- URLの入力フォーム -->
-                    <div class="form-group" style="height: 30px;">
+                    <div class="form-group" >
                         <label for="url">URL</label>
                         <input type="text" class="form-control" id="url" name="url" placeholder="RSSフィードのURLを入力してください">
                     </div>
                     <!-- URLの入力フォームと追加ボタンの間にスペースを追加 -->
                     <!-- 追加ボタン -->
-                    <button type="submit" class="btn btn-primary" style="height: 30px;">追加</button>
+                    <button type="submit" class="btn btn-primary">追加</button>
                 </form>
             </div>
         </div>
     </div>
     <!-- 追加ボタンの下にフィード一覧に戻るリンクを追加 -->
-    <div class="container" style="height: 30px;">
+    <div class="container">
         <div class="row">
             <div class="col-md-6 offset-md-3">
                 <a href="{% url 'reader:feed_list' %}">フィード一覧に戻る</a>

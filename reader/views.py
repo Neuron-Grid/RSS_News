@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Feed, Subscription, Entry
+from django.views.generic.detail import DetailView
 import feedparser
 
 # indexページ
@@ -54,3 +55,9 @@ def delete_feed(request, feed_id):
     feed_title = Feed.objects.get(id=feed_id).title
     Entry.objects.filter(feed=feed_id).delete()
     return render(request, 'reader/remove_feed.html', {'feed_title': feed_title})
+
+@login_required
+class FeedDetailView(DetailView):
+    model = Feed
+    template_name = 'reader/feed_detail.html'
+    context_object_name = 'feed'

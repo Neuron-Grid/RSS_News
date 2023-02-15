@@ -1,4 +1,4 @@
-from django.contrib.contenttypes.models import ContentType
+# from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from .models import Feed, Entry
 from django.utils import timezone
@@ -23,3 +23,8 @@ def update_feeds():
                     pub_date=timezone.make_aware(entry.published_parsed),
                 )
                 new_entry.save()
+    # エントリーの総数が300件を超えたら、古いエントリーを削除する
+    entries_count = Entry.objects.count()
+    if entries_count > 300:
+        oldest_entries = Entry.objects.order_by('pub_date')[:entries_count - 300]
+        oldest_entries.delete()
