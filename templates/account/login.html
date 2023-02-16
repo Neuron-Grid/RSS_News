@@ -16,28 +16,14 @@
                     <div class="row">
                         <div class="col-md-6 offset-md-3">
                             <h1 class="text-center mb-4">ログイン</h1>
-                            <form class="d-flex flex-column"  action="{% url 'account_login' %}" method="post">
+                            <form class="d-flex flex-column row g-3" method="post" action="{% url 'account_login' %}">
                                 {% csrf_token %}
-                                <label for="{{ form.email.id_for_label }}">
-                                    ユーザー名
-                                    {{ form.email }}
-                                    {% if form.email.errors %}
-                                        <span class="text-danger container">
-                                            {{ form.email.errors }}
-                                        </span>
-                                    {% endif %}
-                                </label>
-                                <label for="{{ form.password.id_for_label }}">
-                                    パスワード
-                                    {{ form.password }}
-                                    {% if form.password.errors %}
-                                        <span class="text-danger container">
-                                            {{ form.password.errors }}
-                                        </span>
-                                    {% endif %}
-                                </label>
-                                <div class="d-grid gap-2">
-                                    <button type="submit" class="btn btn-primary mt-3">ログイン</button>
+                                {{ form.as_p }}
+                                {% if redirect_field_value %}
+                                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                                {% endif %}
+                                <div class="col-12">
+                                    <button class="btn btn-primary" type="submit">ログイン</button>
                                 </div>
                             </form>
                         </div>

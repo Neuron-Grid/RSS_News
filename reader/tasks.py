@@ -23,8 +23,9 @@ def update_feeds():
                     pub_date=timezone.make_aware(entry.published_parsed),
                 )
                 new_entry.save()
-    # エントリーの総数が300件を超えたら、古いエントリーを削除する
+    # エントリーの総数が500件を超えたら、日時が古い物から順番にエントリーを削除する
     entries_count = Entry.objects.count()
-    if entries_count > 300:
-        oldest_entries = Entry.objects.order_by('pub_date')[:entries_count - 300]
+    if entries_count > 500:
+        entries_to_delete = entries_count - 500
+        oldest_entries = Entry.objects.order_by('pub_date')[:entries_to_delete]
         oldest_entries.delete()

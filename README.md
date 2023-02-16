@@ -48,6 +48,7 @@ RSSフィードの情報を保存するためのモデルです。以下の属�
 [feedparser](https://pypi.org/project/feedparser/)<br>
 [django-crispy-forms](https://pypi.org/project/django-crispy-forms/)<br>
 [django-bootstrap5](https://pypi.org/project/django-bootstrap5/)<br>
+[django_feedparser](https://pypi.org/project/django-feedparser/)<br>
 
 リンク先は[PyPI](https://pypi.org/)のURLとなっています。
 </details>

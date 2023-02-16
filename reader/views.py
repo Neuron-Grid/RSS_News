@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Feed, Subscription, Entry
 from django.views.generic.detail import DetailView
+from django.contrib import messages
 import feedparser
 
 # indexページ
@@ -18,8 +19,14 @@ def feed_list(request):
 @login_required
 def add_feed(request):
     if request.method == 'POST':
-        feed_url = request.POST['feed_url']
+        feed_url = request.POST.get('feed_url')
         feed = feedparser.parse(feed_url)
+        # 追加
+        print(feed)
+        if not feed.entries:
+            messages.error(request, '指定されたURLのフィードが見つかりませんでした。')
+            return render(request, 'reader/add_feed.html')
+
         feed_title = feed['feed']['title']
         feed_description = feed['feed']['description']
         feed = Feed.objects.create(
@@ -27,6 +34,7 @@ def add_feed(request):
         Subscription.objects.create(user=request.user, feed=feed)
         return redirect('reader:index')
     return render(request, 'reader/add_feed.html')
+
 
 # フィードの更新
 @login_required
@@ -46,16 +54,32 @@ def update_feed(request, feed_id):
 # フィードの削除
 @login_required
 def delete_feed(request, feed_id):
-    # ログインしているユーザーが一件もフィードを購読していない場合はエラーを表示
-    if Subscription.objects.filter(user=request.user).count() == 1:
-        return render(request, 'reader/delete_feed_error.html')
-    Subscription.objects.filter(user=request.user, feed=feed_id).delete()
-    # 購読しているフィードに登録されているタイトルを取得し、タイトルに紐づくエントリを削除
-    # remove_feed.htmlでフィードのタイトルを表示し、何を削除するかを選択する
-    feed_title = Feed.objects.get(id=feed_id).title
-    Entry.objects.filter(feed=feed_id).delete()
-    return render(request, 'reader/remove_feed.html', {'feed_title': feed_title})
+    # ログインしているユーザーがフィードを購読しているかを確認し、登録されたフィードが0件だった場合エラーを表示
+    if Subscription.objects.filter(user=request.user, feed=feed_id).count() == 0:
+        messages.error(request, 'フィードは購読されていません。')
+        return redirect('reader:feed_list')
+    # ログインしているユーザーがフィードを1件以上購読している場合は
+    # フィードの追加時に指定したタイトルを表示し何を削除するかを選択させる
+    # 削除ボタンを押すとフィードの購読が解除される
+    # フィードの購読を解除すると、そのフィードに紐づく記事も削除される
+    # 何も選択されなかった場合はフィード一覧に戻る
+    if Subscription.objects.filter(user=request.user, feed=feed_id).count() > 0:
+        feed = Feed.objects.get(id=feed_id)
+        if request.method == 'POST':
+            feed.delete()
+            return redirect('reader:feed_list')
+        return render(request, 'reader/delete_feed.html', {'feed': feed})
+    return redirect('reader:feed_list')
 
+
+    # if Subscription.objects.filter(user=request.user, feed=feed_id).count() > 0:
+    #     feed = Feed.objects.get(id=feed_id)
+    #     if request.method == 'POST':
+    #         Subscription.objects.filter(user=request.user, feed=feed_id).delete()
+    #         return redirect('reader:feed_list')
+    #     return render(request, 'reader/delete_feed.html', {'feed': feed})
+    # return redirect('reader:feed_list')
+# フィードの詳細
 @login_required
 class FeedDetailView(DetailView):
     model = Feed

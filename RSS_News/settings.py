@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'django.contrib.sites',
     "django_bootstrap5",
+    'django_feedparser',
 ]
 
 MIDDLEWARE = [
