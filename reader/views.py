@@ -21,8 +21,9 @@ def add_feed(request):
     if request.method == 'POST':
         feed_url = request.POST.get('feed_url')
         feed = feedparser.parse(feed_url)
-        # 追加
-        print(feed)
+        if not feed:
+            messages.error(request, '指定されたURLのフィードが見つかりませんでした。')
+            return render(request, 'reader/add_feed.html')
         if not feed.entries:
             messages.error(request, '指定されたURLのフィードが見つかりませんでした。')
             return render(request, 'reader/add_feed.html')
@@ -30,11 +31,13 @@ def add_feed(request):
         feed_title = feed['feed']['title']
         feed_description = feed['feed']['description']
         feed = Feed.objects.create(
-            url=feed_url, title=feed_title, description=feed_description)
+            url=feed_url,
+            title=feed_title,
+            description=feed_description
+            )
         Subscription.objects.create(user=request.user, feed=feed)
         return redirect('reader:index')
     return render(request, 'reader/add_feed.html')
-
 
 # フィードの更新
 @login_required
@@ -58,8 +61,7 @@ def delete_feed(request, feed_id):
     if Subscription.objects.filter(user=request.user, feed=feed_id).count() == 0:
         messages.error(request, 'フィードは購読されていません。')
         return redirect('reader:feed_list')
-    # ログインしているユーザーがフィードを1件以上購読している場合は
-    # フィードの追加時に指定したタイトルを表示し何を削除するかを選択させる
+    # ログインしているユーザーがフィードを1件以上購読している場合は、フィードの追加時に指定したタイトルを表示し何を削除するかを選択させる
     # 削除ボタンを押すとフィードの購読が解除される
     # フィードの購読を解除すると、そのフィードに紐づく記事も削除される
     # 何も選択されなかった場合はフィード一覧に戻る
@@ -71,14 +73,6 @@ def delete_feed(request, feed_id):
         return render(request, 'reader/delete_feed.html', {'feed': feed})
     return redirect('reader:feed_list')
 
-
-    # if Subscription.objects.filter(user=request.user, feed=feed_id).count() > 0:
-    #     feed = Feed.objects.get(id=feed_id)
-    #     if request.method == 'POST':
-    #         Subscription.objects.filter(user=request.user, feed=feed_id).delete()
-    #         return redirect('reader:feed_list')
-    #     return render(request, 'reader/delete_feed.html', {'feed': feed})
-    # return redirect('reader:feed_list')
 # フィードの詳細
 @login_required
 class FeedDetailView(DetailView):

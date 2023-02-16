@@ -38,3 +38,5 @@ db.sqlite3
 db.sqlite3-journal
 mysqldata/
 git-sim_media/
+.env
+*.env

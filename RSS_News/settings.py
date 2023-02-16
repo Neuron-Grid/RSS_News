@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from celery.schedules import crontab
 from pathlib import Path
 import os
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -46,7 +47,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'django.contrib.sites',
     "django_bootstrap5",
-    'django_feedparser',
+    # 'django_feedparser',
 ]
 
 MIDDLEWARE = [
@@ -85,14 +86,15 @@ WSGI_APPLICATION = 'RSS_News.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 # 授業ノートを参照
+# env
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mysitedb',
-        'USER': 'mysitedbuser',
-        'PASSWORD': 'mysitedbpassword',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
+        'ENGINE': 'os.environ.get("DB_ENGINE")',
+        'NAME': 'os.environ.get("DB_NAME")',
+        'USER': 'os.environ.get("DB_USER")',
+        'PASSWORD': 'os.environ.get("DB_PASSWORD")',
+        'HOST': 'os.environ.get("DB_HOST")',
+        'PORT': 'os.environ.get("DB_PORT")',
         # MySQLで日本語が使えるようにする設定
         'OPTIONS': {
                 'charset': 'utf8mb4',
@@ -142,6 +144,9 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# 環境変数
+env = environ.Env()
+env.read_env(os.path.join(BASE_DIR,'.env'))
 
 # Allauthの設定
 SITE_ID = 1
@@ -162,12 +167,11 @@ ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login/'        # ログアウト後の�
 
 # メールの設定
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'    # メールの送信先をコンソールに出力する
-EMAIL_HOST = 'smtp.gmail.com'                                       # メールサーバーのホスト名
-EMAIL_PORT = 587                                                    # メールサーバーのポート番号
-EMAIL_HOST_USER = 'qiye208@gmail.com'                               # メールサーバーのユーザー名
-EMAIL_HOST_PASSWORD = 'mxwneziukpnazddh'                            # メールサーバーのパスワード
-# EMAIL_USE_TLS = True                                                # TLS暗号化通信を使用する
-# EMAIL_USE_SSL = False                                               # SSL暗号化通信を使用する
+EMAIL_HOST = os.environ.get('EMAIL_HOST')                           # メールサーバーのホスト名
+EMAIL_PORT = os.environ.get('EMAIL_PORT')                           # メールサーバーのポート番号
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')                 # メールサーバーのユーザー名
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')         # メールサーバーのパスワード
+EMAIL_USE_TLS = True                                                # TLS暗号化通信を使用する
 
 # Celery
 CELERY_BROKER_URL = 'redis://localhost:6379/1'
