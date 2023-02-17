@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'django.contrib.sites',
     "django_bootstrap5",
-    # 'django_feedparser',
+    'django_feedparser',
 ]
 
 MIDDLEWARE = [
@@ -86,15 +86,15 @@ WSGI_APPLICATION = 'RSS_News.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 # 授業ノートを参照
-# env
+# local.env
 DATABASES = {
     'default': {
-        'ENGINE': 'os.environ.get("DB_ENGINE")',
-        'NAME': 'os.environ.get("DB_NAME")',
-        'USER': 'os.environ.get("DB_USER")',
-        'PASSWORD': 'os.environ.get("DB_PASSWORD")',
-        'HOST': 'os.environ.get("DB_HOST")',
-        'PORT': 'os.environ.get("DB_PORT")',
+        'ENGINE': "django.db.backends.mysql",
+        'NAME': "mysitedb",
+        'USER': "mysitedbuser",
+        'PASSWORD': "mysitedbpassword",
+        'HOST': "127.0.0.1",
+        'PORT': "3306",
         # MySQLで日本語が使えるようにする設定
         'OPTIONS': {
                 'charset': 'utf8mb4',
@@ -146,43 +146,29 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # 環境変数
 env = environ.Env()
-env.read_env(os.path.join(BASE_DIR,'.env'))
+env.read_env(os.path.join(BASE_DIR,'local.env'))
 
 # Allauthの設定
 SITE_ID = 1
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',            #デフォルトの認証基盤 
-    'allauth.account.auth_backends.AuthenticationBackend'   # メールアドレスとパスワードの両方を用いて認証するために必要
+    'allauth.account.auth_backends.AuthenticationBackend',  # メールアドレスとパスワードの両方を用いて認証するために必要
 )
 
-ACCOUNT_AUTHENTICATION_METHOD = 'email'             # メールアドレス（とパスワードで）認証する
-ACCOUNT_USERNAME_REQUIRED = True                    # 新規登録の時にユーザーネームを尋ねる
-ACCOUNT_EMAIL_REQUIRED = True                       # 新規登録の時にメールアドレスを尋ねる
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'            # メール検証を必須とする
+ACCOUNT_AUTHENTICATION_METHOD = 'email'                 # メールアドレス（とパスワードで）認証する
+ACCOUNT_USERNAME_REQUIRED = True                        # 新規登録の時にユーザーネームを尋ねる
+ACCOUNT_EMAIL_REQUIRED = True                           # 新規登録の時にメールアドレスを尋ねる
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'                # メール検証を必須とする
 
 LOGIN_URL = '/accounts/login/'                          # ログインURLの設定
 LOGIN_REDIRECT_URL = '/feed_list'                       # ログイン後のリダイレクト先
 ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login/'        # ログアウト後のリダイレクト先
 
 # メールの設定
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'    # メールの送信先をコンソールに出力する
+EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND')     # メールの送信先をコンソールに出力する
 EMAIL_HOST = os.environ.get('EMAIL_HOST')                           # メールサーバーのホスト名
 EMAIL_PORT = os.environ.get('EMAIL_PORT')                           # メールサーバーのポート番号
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')                 # メールサーバーのユーザー名
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')         # メールサーバーのパスワード
 EMAIL_USE_TLS = True                                                # TLS暗号化通信を使用する
-
-# Celery
-CELERY_BROKER_URL = 'redis://localhost:6379/1'
-CELERY_RESULT_BACKEND = 'django-db'
-CELERY_CACHE_BACKEND = 'django-cache'
-CELERY_TASK_TRACK_STARTED = True
-
-# Celery
-CELERY_BEAT_SCHEDULE = {
-    'update-feeds': {
-        'task': 'myapp.tasks.update_feeds',
-        'schedule': crontab(minute='*/10'),
-    },
-}

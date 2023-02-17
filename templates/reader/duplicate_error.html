@@ -1,0 +1,20 @@
+{% extends "../base.html" %}
+{% block title %}
+  {{ feed.title }}
+{% endblock %}
+{% block content %}
+  <div class="row justify-content-center align-items-center" style="min-height: 50vh;">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <h2 class="card-title">エラー</h2>
+          <p class="card-text">同じフィードを複数回登録することはできません。</p>
+          <div style="min-height: 50vh;">
+            <a href="{% url 'reader:add_feed' %}" class="btn btn-primary">フィードの追加に戻る</a>
+            <a htref="{% url 'reader:feed_list' %}" class="btn btn-secondary">フィード一覧に戻る</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

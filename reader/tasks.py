@@ -1,9 +1,11 @@
-# from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from .models import Feed, Entry
 from django.utils import timezone
 from celery import shared_task
+from celery import Celery
 import feedparser
+
+app = Celery('rss_news')
 
 # Celeryタスク
 @shared_task

@@ -1,59 +1,29 @@
 {% extends "../base.html" %}
-<head>
-    {% block title %}
-    <title>
-        フィード一覧
-    </title>
-    {% endblock %}
-</head>
+
+{% block title %}
+<title>フィード一覧</title>
+{% endblock %}
+
 {% block content %}
-<body>
-    {% block header %}
-    <header class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">RSS News</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{% url 'reader:feed_list' %}">ホーム</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">アカウント管理</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'reader:add_feed' %}">RSSフィード追加</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'reader:remove_feed' %}">RSSフィード削除</a>
-                    </li>
-                </ul>
+<div class="container my-5">
+    <h1 class="text-center mb-5">フィード一覧</h1>
+    <div class="row">
+        {% for feed in feeds %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h3 class="card-title">{{ feed.title }}</h3>
+                        <p class="card-text">{{ feed.description }}</p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="{% url 'reader:detailed_list' feed.id %}" class="btn btn-primary">詳細</a>
+                        <a href="{% url 'reader:remove_feed' feed.id %}" class="btn btn-danger">削除</a>
+                    </div>
+                </div>
             </div>
-        </div>
-    </header>
-    {% endblock %}
-    <!-- RSSフィードの一覧を表示するページを作成する -->
-    <p>{{ user.username }}様ログインに成功しました。</p>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6 offset-md-3">
-                <h2>{{ feed.title }}</h2>
-                <p>{{ feed.description }}</p>
-                <ul>
-                {% for entry in feed.entry_set.all %}
-                    <li>
-                        <a href="{{ entry.link }}">{{ entry.title }}</a>
-                        <p>{{ entry.summary }}</p>
-                        <p>{{ entry.pub_date }}</p>
-                    </li>
-                {% empty %}
-                    <li>まだ登録されていません。</li>
-                {% endfor %}
-                </ul>
-            </div>
-        </div>
+        {% empty %}
+            <p>まだ登録されていません。</p>
+        {% endfor %}
     </div>
-</body>
+</div>
 {% endblock %}

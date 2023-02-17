@@ -1,16 +1,14 @@
-<!DOCTYPE html>
-<html lang="ja">
+{% extends "../base.html" %}
+{% block title %}
     <head>
-        {% extends "../base.html" %}
         <title>
-            {% block title %}
             フィードの削除
-            {% endblock %}
         </title>
     </head>
+{% endblock %}
+{% block content %}
     <body>
         <!-- 中央寄せにしてページを作成する -->
-        {% block content %}
         <div class="container">
             <div class="row">
                 <div class="col-md-6 offset-md-3">
@@ -19,7 +17,7 @@
                         {% csrf_token %}
                         <p>本当に削除しますか？</p>
                         <!-- 登録済みのフィードのタイトルを表示し何を削除するかを選択する -->
-                        <p>{{ feed.name }}</p>
+                        <p>{{ feed.title }}</p>
                         <input type="submit" value="削除">
                     </form>
                 </div>
@@ -33,6 +31,5 @@
                 </div>
             </div>
         </div>
-        {% endblock %}
     </body>
-</html>
+{% endblock %}
