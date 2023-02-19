@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
-from celery.schedules import crontab
 from pathlib import Path
 import os
 import environ
@@ -65,9 +64,7 @@ ROOT_URLCONF = 'RSS_News.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            os.path.join(BASE_DIR, 'templates'),
-        ],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -86,22 +83,22 @@ WSGI_APPLICATION = 'RSS_News.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 # 授業ノートを参照
+# https://scrapbox.io/vantan-prog-xBd7RI6mYx/Django開発3_Dockerとデータベースの設定
 # local.env
 DATABASES = {
     'default': {
-        'ENGINE': "django.db.backends.mysql",
-        'NAME': "mysitedb",
-        'USER': "mysitedbuser",
-        'PASSWORD': "mysitedbpassword",
-        'HOST': "127.0.0.1",
-        'PORT': "3306",
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'mysitedb',
+        'USER': 'mysitedbuser',
+        'PASSWORD': 'mysitedbpassword',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
         # MySQLで日本語が使えるようにする設定
         'OPTIONS': {
-                'charset': 'utf8mb4',
+            'charset': 'utf8mb4',
         },
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -144,7 +141,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# 環境変数
+# 環境変数の設定
 env = environ.Env()
 env.read_env(os.path.join(BASE_DIR,'local.env'))
 
@@ -166,7 +163,7 @@ LOGIN_REDIRECT_URL = '/feed_list'                       # ログイン後のリ�
 ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login/'        # ログアウト後のリダイレクト先
 
 # メールの設定
-EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND')     # メールの送信先をコンソールに出力する
+EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND')                     # メールの送信先をコンソールに出力する
 EMAIL_HOST = os.environ.get('EMAIL_HOST')                           # メールサーバーのホスト名
 EMAIL_PORT = os.environ.get('EMAIL_PORT')                           # メールサーバーのポート番号
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')                 # メールサーバーのユーザー名

@@ -49,6 +49,7 @@ RSSフィードの情報を保存するためのモデルです。以下の属�
 [django-crispy-forms](https://pypi.org/project/django-crispy-forms/)<br>
 [django-bootstrap5](https://pypi.org/project/django-bootstrap5/)<br>
 [django_feedparser](https://pypi.org/project/django-feedparser/)<br>
+[django-environ](https://pypi.org/project/django-environ/)<br>
 
 リンク先は[PyPI](https://pypi.org/)のURLとなっています。
 </details>
@@ -59,29 +60,17 @@ RSSフィードの情報を保存するためのモデルです。以下の属�
 
 - フィードが更新されない
 - アカウントの削除ができない
-- ログイン後にエラーが発生する
-```
-コンソールには以下のようなエラーが表示される
-GET /feed_list/ HTTP/1.1" 500 176778
-```
-```
-ブラウザでは以下のようなエラーが表示される
-NoReverseMatch at /feed_list/
-'reader' is not a registered namespace
-```
 </details>
 
 <details><summary>今後追加する機能</summary>
 
-> フィードを更新するボタンを追加する<br>
-> > Feed_list.htmlにボタンを追加する<br>
-
-> アカウントの削除機能を追加する<br>
-> アカウントを削除するページを作成する<br>
+- アカウントの削除機能を追加する<br>
+- アカウントを削除するページを作成する<br>
 </details>
 
 
 <details><summary>現在解決中の問題</summary>
 
 - フィードの更新されない
+- 現在
 </details>

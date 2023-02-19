@@ -1,5 +1,5 @@
 
-{% extends "../base.html" %}
+{% extends "base.html" %}
 <head>
     {% block title %}
     <title>
@@ -8,9 +8,8 @@
     {% endblock %}
 </head>
 {% block content %}
-<body>
     <!-- ログインページと新規登録ページのURLをheaderに追加 -->
-    {% block header %}
+    <!-- {% block header %}
     <header>
         <nav class="navbar navbar-expand-sm bg-light">
             <div class="container-fluid">
@@ -22,14 +21,14 @@
                         <a class="nav-link" href="{% url 'account_login' %}">ログイン</a>
                     </li>
                     <li class="nav-item">
-                        <!-- signupのリンクを追加 -->
+                        signupのリンクを追加
                         <a class="nav-link " href="{% url 'account_signup' %}">新規登録</a>
                     </li>
                 </ul>
             </div>
         </nav>
     </header>
-    {% endblock header %}
+    {% endblock header %} -->
     <!-- このwebサイトがログイン機能付きのRSSリーダーであることを説明をする -->
     <!-- 中央寄せにして作成 -->
     <div class="container">
@@ -63,13 +62,13 @@
                             <summary>注意事項</summary>
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item">
-                                    <p>現時点では、登録したフィードの編集機能は実装していません。</p>
+                                    <p>現時点では、登録したフィードの編集機能がありません。</p>
+                                </li>
+                                <li class="list-group-item">
+                                    <p>現時点では、フィードの削除機能がありません。</p>
                                 </li>
                                 <li class="list-group-item">
                                     <p>現時点では、アカウントの削除機能がありません。</p>
-                                </li>
-                                <li class="list-group-item">
-                                    <p>現時点では、フィードの削除機能は実装していません。</p>
                                 </li>
                                 <li class="list-group-item">
                                     <p>現時点では、アカウントの管理のページがありません。</p>
@@ -81,5 +80,4 @@
             </div>
         </div>
     </div>
-</body>
 {% endblock %}

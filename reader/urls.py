@@ -9,6 +9,5 @@ urlpatterns = [
     path('remove_feed/', views.remove_feed, name='remove_feed'),
     path('duplicate_error/', views.duplicate_error, name='duplicate_error'),
     path('feed_list/remove/<int:feed_id>/', views.remove_feed, name='remove_feed'),
-    # path('feed_detail/<int:feed_id>/', views.detailed_list, name='feed_detail'),
     path('detailed_list/<int:pk>/', views.DetailedListView.as_view(), name='detailed_list'),
 ]

@@ -1,7 +1,7 @@
 {% extends "../base.html" %}
 
 {% block title %}
-<title>{{ feed.title }}</title>
+<title>{{ entry.title }}</title>
 {% endblock %}
 
 {% block content %}
@@ -16,7 +16,7 @@
         </div>
         <div class="card-footer">
           <a href="{{ entry.link }}" target="_blank" class="btn btn-primary">記事を読む</a>
-          <small class="text-muted">{{ entry.published_date }}</small>
+          <small class="text-muted">{{ entry.pub_date }}</small>
         </div>
       </div>
     </div>
