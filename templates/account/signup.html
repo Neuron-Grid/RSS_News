@@ -7,17 +7,16 @@
     </title>
     {% endblock %}
 </head>
-{% block content %}
-<body>
+{% block main %}
     <!-- 中央寄せにして作成 -->
     <div class="container">
         <div class="row">
             <div class="col-md-6 offset-md-3 flex-column">
                 <div class="container">
                     <div class="row">
-                        <div class="col-md-6 offset-md-3">
-                            <h1>アカウント作成</h1>
-                            <form class="d-flex flex-column" action="" method="post">
+                        <div class="col-md-8 offset-md-3">
+                            <h1 class="text-center">アカウント作成</h1>
+                            <form class="d-flex flex-column" method="post">
                                 {% csrf_token %}
                                 <label for="{{ form.username.id_for_label }}">ユーザー名</label>
                                 {{ form.username }}
@@ -46,7 +45,6 @@
                 </p>
             <p class="mb-0">必ず注意事項を読んで下さい。</p>
         </div>
-        </div>
     </div>
     <div class="container">
         <div class="row justify-content-center">
@@ -57,13 +55,7 @@
                             <summary>注意事項</summary>
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item">
-                                    <p>現時点では、登録したフィードの編集機能は実装していません。</p>
-                                </li>
-                                <li class="list-group-item">
                                     <p>現時点では、アカウントの削除機能がありません。</p>
-                                </li>
-                                <li class="list-group-item">
-                                    <p>現時点では、フィードの削除機能は実装していません。</p>
                                 </li>
                                 <li class="list-group-item">
                                     <p>現時点では、アカウントの管理のページがありません。</p>
@@ -75,5 +67,4 @@
             </div>
         </div>
     </div>
-</body>
 {% endblock %}

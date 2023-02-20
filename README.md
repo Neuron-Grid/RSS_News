@@ -1,10 +1,9 @@
 # 本プロジェクト概要
-サービス名 : RSS News<br>
+サービス名 : `RSS News`
 - RSSリーダー
 - djangoで作成中
 - ログイン機能つき
-- シンプルで使いやすい(多分)
-- ユーザーの追跡はしない(予定)
+- webサイトのデザインには、[Bootstrap](https://getbootstrap.com/)を使用
 - 無料で利用できる
 
 ## 作成理由
@@ -17,7 +16,7 @@
 ## DB設計
 このアプリは、Feed、Entry、UserFeedの3つのDBテーブルを使用しています。<br>
 ログイン機能は、Django Allauthで作成している為、Userテーブルは使用していません。<br>
-<details><summary>詳細は下記に記載しています。</summary>
+<details><summary>詳細はこちらに記載しています。</summary>
 
 ### Feedモデル
 RSSフィードの情報を保存するためのモデルです。以下の属性が定義されています：
@@ -37,19 +36,18 @@ RSSフィードの情報を保存するためのモデルです。以下の属�
 ユーザーが購読しているフィードを表すモデルです。以下の属性が定義されています：
 - `user`: ユーザー。ForeignKey型で、django.contrib.auth.models.Userモデルと関連付けられます。
 - `feed`: フィード。ForeignKey型で、Feedモデルと関連付けられます。
-
 </details>
 
 ***
 
 <details><summary>使用しているパッケージ</summary>
 
-[Allauth](https://pypi.org/project/django-allauth/)<br>
-[feedparser](https://pypi.org/project/feedparser/)<br>
-[django-crispy-forms](https://pypi.org/project/django-crispy-forms/)<br>
-[django-bootstrap5](https://pypi.org/project/django-bootstrap5/)<br>
-[django_feedparser](https://pypi.org/project/django-feedparser/)<br>
-[django-environ](https://pypi.org/project/django-environ/)<br>
+- [Allauth](https://pypi.org/project/django-allauth/)<br>
+- [feedparser](https://pypi.org/project/feedparser/)<br>
+- [django_feedparser](https://pypi.org/project/django-feedparser/)<br>
+- [django-crispy-forms](https://pypi.org/project/django-crispy-forms/)<br>
+- [django-bootstrap5](https://pypi.org/project/django-bootstrap5/)<br>
+- [django-environ](https://pypi.org/project/django-environ/)<br>
 
 リンク先は[PyPI](https://pypi.org/)のURLとなっています。
 </details>

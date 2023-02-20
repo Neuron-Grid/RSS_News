@@ -1,55 +1,57 @@
 <!DOCTYPE html>
 <html lang="ja">
-    {% block head %}
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    {% endblock %}
     {% load django_bootstrap5 %}
     {% bootstrap_css %}
-    {% block content %}
+    {% block head %}
+        <head>
+            <meta charset="UTF-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <meta name="description" content="RSSフィードを登録して、最新のニュースを確認できるサイトです。">
+            <meta name="keywords" content="RSS,ニュース,フィード,登録,最新,RSSフィード">
+        </head>
+    {% endblock %}
+    {% block main %}
         <body>
             {% block navbar %}
-                <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                    <div class="container-fluid">
-                        <a class="navbar-brand" href="{% url 'reader:feed_list' %}">RSS News</a>
-                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                        <div class="collapse navbar-collapse" id="navbarNav">
-                            {% if user.is_authenticated %}
-                                <ul class="navbar-nav me-auto">
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{% url 'account_logout' %}">ログアウト</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{% url 'reader:remove_feed' %}">RSSフィード削除</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{% url 'reader:add_feed' %}">RSSフィード追加</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">アカウント管理</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link active" aria-current="page" href="{% url 'reader:feed_list' %}">ホーム</a>
-                                    </li>
-                                </ul>
-                            {% else %}
-                                <ul class="navbar-nav me-auto">
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{% url 'account_login' %}">ログイン</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{% url 'account_signup' %}">新規登録</a>
-                                    </li>
-                                </ul>
-                            {% endif %}
-                        </div>
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="{% url 'reader:index' %}">RSS News</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        {% if user.is_authenticated %}
+                        <ul class="navbar-nav me-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'account_logout' %}">ログアウト</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'reader:remove_feed' %}">RSSフィード削除</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'reader:add_feed' %}">RSSフィード追加</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">アカウント管理</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="{% url 'reader:feed_list' %}">ホーム</a>
+                            </li>
+                        </ul>
+                        {% else %}
+                        <ul class="navbar-nav me-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'account_login' %}">ログイン</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'account_signup' %}">新規登録</a>
+                            </li>
+                        </ul>
+                        {% endif %}
                     </div>
-                </nav>
+                </div>
+            </nav>
             {% endblock %}
         </body>
     {% endblock %}

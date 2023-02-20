@@ -1,33 +1,50 @@
 {% extends "../base.html" %}
-{% block title %}
+{% block head %}
     <head>
-        <title>
-            フィードの削除
-        </title>
+        {% block title %}
+            <title>
+                フィードの削除
+            </title>
+        {% endblock %}
     </head>
 {% endblock %}
 {% block content %}
+    {% block navbar%}
+    {% endblock %}
+{% endblock %}
+{% block main %}
     <!-- 中央寄せにしてページを作成する -->
     <div class="container">
         <div class="row">
-            <div class="col-md-6 offset-md-3">
-                <h1>フィードの削除</h1>
-                <form action="" method="post">
-                    {% csrf_token %}
-                    {% bootstrap_form form %}
-                    <p>本当に削除しますか？</p>
-                    <!-- 登録済みのフィードのタイトルを表示し何を削除するかを選択する -->
-                    <p>{{ feed.title }}</p>
-                    <input type="submit" value="削除">
-                </form>
+            <div class="col-md-6 offset-md-3 flex-column">
+                <div class="container text-center">
+                    <div class="row">
+                        <div class="col-md-8 offset-md-3">
+                            <h1>フィードの削除</h1>
+                            <form class="d-flex flex-column row g-3" method="post">
+                                {% csrf_token %}
+                                <p class="mt-5">本当に削除しますか？</p>
+                                <!-- 登録済みのフィードのタイトルを表示し何を削除するかを選択する -->
+                                <h3>{{ feed.title }}</h3>
+                                <input type="submit" value="削除">
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     <!-- フィード一覧に戻るリンクを削除ボタンの下に追加 -->
     <div class="container">
         <div class="row">
-            <div class="col-md-6 offset-md-3">
-                <a href="{% url 'reader:all_feeds' %}">フィード一覧に戻る</a>
+            <div class="col-md-6 offset-md-3 flex-column">
+                <div class="container text-center">
+                    <div class="row mt-4">
+                        <div class="col-md-8 offset-md-3">
+                            <a href="{% url 'reader:feed_list' %}">フィード一覧に戻る</a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

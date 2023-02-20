@@ -1,12 +1,13 @@
-from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Feed, Subscription, Entry
 from django.views.generic.detail import DetailView
-from django.contrib import messages
-import feedparser
-from .forms import AddFeedForm
-from django.db import IntegrityError
+from django.db import IntegrityError, transaction
+from .models import Feed, Subscription, Entry
+from django.shortcuts import render, redirect
 from django.views.generic import ListView
+from django.db import IntegrityError
+from django.contrib import messages
+from .forms import AddFeedForm
+import feedparser
 
 # indexページ
 def index(request):
@@ -30,40 +31,43 @@ def add_feed(request):
         form = AddFeedForm(request.POST)
         if form.is_valid():
             feed_url = form.cleaned_data['url']
+            feed_title = form.cleaned_data['feed_name']
             feed = feedparser.parse(feed_url)
             if not feed:
                 messages.error(request, '指定されたURLのフィードが見つかりませんでした。')
                 return render(request, 'reader/add_feed.html', {'form': form})
             if not feed.entries:
-                messages.error(request, '指定されたURLのフィードが見つかりませんでした。')
+                messages.error(request, '指定されたURLのフィードにエントリがありません。')
                 return render(request, 'reader/add_feed.html', {'form': form})
-
-            feed_title = form.cleaned_data['feed_name']
-            feed_description = feed['feed']['description']
+            feed_description = feed.get('feed', {}).get('description')
             try:
-                feed = Feed.objects.create(
-                    url=feed_url,
-                    title=feed_title,
-                    description=feed_description
-                )
+                with transaction.atomic():
+                    feed = Feed.objects.create(
+                        url=feed_url,
+                        title=feed_title,
+                        description=feed_description,
+                    )
+                    # エントリーを登録する
+                    entries = [
+                        Entry(
+                            feed=feed,
+                            title=entry.get('title', ''),
+                            link=entry.get('link', ''),
+                            summary=entry.get('summary', ''),
+                            pub_date=entry.get('published_parsed'),
+                        )
+                        for entry in feed.entries
+                    ]
+                    Entry.objects.bulk_create(entries)
+                    Subscription.objects.create(user=request.user, feed=feed)
             except IntegrityError:
+                messages.error(request, '同じフィードを複数回登録することはできません。')
                 return redirect('reader:duplicate_error')
-
-            # エントリーを登録する
-            for entry in feed.entries:
-                Entry.objects.create(
-                    feed=feed,
-                    title=entry.get('title'),
-                    link=entry.get('link'),
-                    summary=entry.get('summary'),
-                    pub_date=entry.get('published_parsed'),
-                )
-
-            Subscription.objects.create(user=request.user, feed=feed)
-            return redirect('reader:feed_list')
+        return redirect('reader:feed_list')
     else:
         form = AddFeedForm()
     return render(request, 'reader/add_feed.html', {'form': form})
+
 
 
 # フィードの更新
@@ -120,4 +124,7 @@ class DetailedListView(ListView):
 def detailed_list(request, feed_id):
     feed = Feed.objects.get(id=feed_id)
     entries = Entry.objects.filter(feed=feed)
-    return render(request, 'reader/detailed_list.html', {'feed': feed, 'entries': entries})
+    return render(request, 'reader/detailed_list.html', {
+        'feed': feed,
+        'entries': entries
+        })

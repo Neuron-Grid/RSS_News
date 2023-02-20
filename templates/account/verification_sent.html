@@ -1,4 +1,5 @@
 {% extends "../base.html" %}
+{% block head %}
 <head>
     {% block title %}
     <title>
@@ -6,7 +7,12 @@
     </title>
     {% endblock %}
 </head>
+{% endblock %}
 {% block content %}
+    {% block navbar%}
+    {% endblock %}
+{% endblock %}
+{% block main %}
 <body>
     <div class="container py-5">
         <div class="row">

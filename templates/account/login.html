@@ -3,29 +3,29 @@
 {% block head %}
     {% block title %}<title>ログイン</title>{% endblock %}
 {% endblock %}
-
-{% block navbar %}
-{% endblock %}
-
 {% block content %}
-<body>
+    {% block navbar%}
+    {% endblock %}
+{% endblock %}
+{% block main %}
     <!-- 中央寄せにして作成する -->
     <div class="container">
         <div class="row">
             <div class="col-md-6 offset-md-3 flex-column">
-                <div class="container">
+                <div class="container text-center">
                     <div class="row">
-                        <div class="col-md-6 offset-md-3">
-                            <h1 class="text-center mb-4">ログイン</h1>
-                            <form class="d-flex flex-column row g-3" method="post" action="{% url 'account_login' %}">
+                        <div class="col-md-8 offset-md-3">
+                            <h1>ログイン</h1>
+                            <form class="d-flex flex-column row g-3" method="post">
                                 {% csrf_token %}
                                 {{ form.as_p }}
-                                {% if redirect_field_value %}
-                                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-                                {% endif %}
-                                <div class="col-12">
-                                    <button class="btn btn-primary" type="submit">ログイン</button>
-                                </div>
+                                <!--
+                                    <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+                                    {{ form.email }}
+                                    <label for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
+                                    {{ form.password }}
+                                -->
+                                <button class="btn btn-primary" type="submit">ログイン</button>
                             </form>
                         </div>
                     </div>
@@ -34,9 +34,7 @@
         </div>
     </div>
     <!--パスワードの再設定ページに移動するリンクをログインボタンの下に追加-->
-    <!-- 中央寄せにして作成 -->
-    <!-- ログインボタンと間隔をあける -->
-    <div class="container">
+    <div class="container text-center">
         <div class="row container">
             <div class="col-md-6 offset-md-3 flex-column">
                 <div class="container my-3 mx-auto">
@@ -53,5 +51,4 @@
             </div>
         </div>
     </div>
-</body>
 {% endblock %}
