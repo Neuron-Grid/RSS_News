@@ -1,17 +1,19 @@
 {% extends '../base.html' %}
 {% block head %}
-<head>
-    {% block title %}
-    <title>
-        アカウント作成
-    </title>
-    {% endblock %}
-</head>
+    {{ block.super }}
+    <head>
+        {% block title %}
+        <title>
+            アカウント作成
+        </title>
+        {% endblock %}
+    </head>
 {% endblock %}
 {% block navbar%}
     {{ block.super }}
 {% endblock %}
 {% block main %}
+    {{ block.super }}
     <!-- 中央寄せにして作成 -->
     <div class="container">
         <div class="row">

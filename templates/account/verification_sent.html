@@ -1,6 +1,7 @@
 {% extends "../base.html" %}
 {% block head %}
 <head>
+    {{ block.super }}
     {% block title %}
     <title>
         メールアドレスを確認してください
@@ -12,6 +13,7 @@
     {{ block.super }}
 {% endblock %}
 {% block main %}
+    {{ block.super }}
     <div class="container py-5">
         <div class="row">
             <div class="col-md-6 offset-md-3 text-center">

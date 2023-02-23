@@ -2,42 +2,42 @@
 
 {% block head %}
 <head>
-    {% block title %}
-    <title>
-        メールアドレスを確認してください
-    </title>
-    {% endblock %}
+	{{ block.super }}
+	{% block title %}
+	<title>
+		メールアドレスを確認してください
+	</title>
+	{% endblock %}
+</head>
 {% endblock %}
 {% block navbar%}
-  {{ block.super }}
+	{{ block.super }}
 {% endblock %}
 
 {% block main %}
-<h1 class="text-center my-4">メールアドレスが確認されました。</h1>
+	{{ block.super }}
+	<h1 class="text-center my-4">メールアドレスが確認されました。</h1>
+	{% if confirmation %}
+		{% user_display confirmation.email_address.user as user_display %}
+		<p class="d-inline text-decoration-none">このメールアドレスが
+			<a href="mailto:{{ email }}">
+				{{ email }}
+			</a> 
+			{{ user_display }}のものであることを確認して下さい。
+		</p>
+		<form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
+			{% csrf_token %}
+			<button type="submit">確認</button>
+		</form>
+		{% else %}
 
-{% if confirmation %}
-  {% user_display confirmation.email_address.user as user_display %}
-  <p>このメールアドレスが
-    <a href="mailto:{{ email }}">
-      {{ email }}
-    </a> 
-    {{ user_display }}のものであることを確認して下さい。
-  </p>
-
-  <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
-    {% csrf_token %}
-    <button type="submit">確認</button>
-  </form>
-
-  {% else %}
-
-  {% url 'account_email' as email_url %}
-  <p>このメール確認リンクは有効期限が切れているか、無効なリンクです。</p>
-  <p>もう一度、
-    <a href="{{ email_url }}" class="d-inline text-decoration-none">
-      メール確認依頼
-    </a>
-    を発行してください。
-  </p>
-{% endif %}
+		{% url 'account_email' as email_url %}
+		<p>このメール確認リンクは有効期限が切れているか、無効なリンクです。</p>
+		<p>もう一度、
+			<a href="{{ email_url }}" class="d-inline text-decoration-none">
+				メール確認依頼
+			</a>
+			を発行してください。
+		</p>
+	{% endif %}
 {% endblock %}

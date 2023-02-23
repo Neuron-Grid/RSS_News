@@ -1,17 +1,19 @@
 {% extends "../base.html" %}
 {% block head %}
-<head>
-    <title>
+    <head>
+        {{ block.super }}
         {% block title %}
-        削除エラー
+            <title>
+                削除エラー
+            </title>
         {% endblock %}
-    </title>
-</head>
+    </head>
 {% endblock %}
 {% block navbar%}
     {{ block.super }}
 {% endblock %}
 {% block main %}
+    {{ block.super }}
     <!-- 中央寄せで作成 -->
     <div class="container">
         <div class="row">

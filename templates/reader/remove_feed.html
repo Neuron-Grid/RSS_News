@@ -1,6 +1,7 @@
 {% extends "../base.html" %}
 {% block head %}
     <head>
+        {{ block.super }}
         {% block title %}
             <title>
                 フィードの削除
@@ -12,6 +13,7 @@
     {{ block.super }}
 {% endblock %}
 {% block main %}
+    {{ block.super }}
     <!-- 中央寄せにしてページを作成する -->
     <div class="container">
         <div class="row">
