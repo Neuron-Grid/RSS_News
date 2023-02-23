@@ -1,11 +1,9 @@
 {% extends '../base.html' %}
-
 {% block head %}
     {% block title %}<title>ログイン</title>{% endblock %}
 {% endblock %}
-{% block content %}
-    {% block navbar%}
-    {% endblock %}
+{% block navbar %}
+    {{ block.super }}
 {% endblock %}
 {% block main %}
     <!-- 中央寄せにして作成する -->
@@ -16,15 +14,9 @@
                     <div class="row">
                         <div class="col-md-8 offset-md-3">
                             <h1>ログイン</h1>
-                            <form class="d-flex flex-column row g-3" method="post">
+                            <form class="d-flex flex-column row g-3" method="post" action="{% url 'account_login' %}">
                                 {% csrf_token %}
                                 {{ form.as_p }}
-                                <!--
-                                    <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
-                                    {{ form.email }}
-                                    <label for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
-                                    {{ form.password }}
-                                -->
                                 <button class="btn btn-primary" type="submit">ログイン</button>
                             </form>
                         </div>
@@ -39,12 +31,12 @@
             <div class="col-md-6 offset-md-3 flex-column">
                 <div class="container my-3 mx-auto">
                     <p>パスワードを忘れた方は、
-                        <a href="{% url 'account_reset_password' %}" style="text-decoration: none;" class="link-primary">こちら</a>
+                        <a href="{% url 'account_reset_password' %}" class="link-primary d-inline text-decoration-none">こちら</a>
                         から変更して下さい。
                     </p>
                     <p>
                         アカウントをお持ちでない方は、
-                        <a href="{% url 'account_signup' %}" style="text-decoration: none;">こちら</a>
+                        <a href="{% url 'account_signup' %}" class="link-primary d-inline text-decoration-none">こちら</a>
                         から新規登録して下さい。
                     </p>
                 </div>

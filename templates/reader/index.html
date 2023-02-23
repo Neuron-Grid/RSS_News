@@ -6,14 +6,13 @@
         {% endblock %}
     </head>
 {% endblock %}
+{% block navbar%}
+    {{ block.super }}
+{% endblock %}
 {% block main %}
-    <!-- このwebサイトがログイン機能付きのRSSリーダーであることを説明をする -->
-    <!-- 中央寄せにして作成 -->
-    {% block navbar %}
-    {% endblock %}
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-5 container">
+            <div class="col-md-5 container text-center">
                 <h1>RSS News</h1>
                 <p>このWebサイトは、ログイン機能付きのRSSリーダーです。</p>
                 <div>
@@ -34,7 +33,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-5">
-                <div class="card">
+                <div class="card my-4">
                     <div class="card-body">
                         <details>
                             <summary>注意事項</summary>
@@ -49,6 +48,15 @@
                         </details>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-5 container">
+                <p>管理者の連絡先<br>
+                    メールアドレス : neuron-grid@neuron-grid.net<br>
+                </p>
             </div>
         </div>
     </div>

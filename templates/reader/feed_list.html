@@ -6,9 +6,8 @@
         {% endblock %}
     </head>
 {% endblock %}
-{% block content %}
-    {% block navbar%}
-    {% endblock %}
+{% block navbar%}
+    {{ block.super }}
 {% endblock %}
 {% block main %}
     <div class="container my-5">
@@ -24,11 +23,11 @@
                         <div class="card-footer">
                             <a href="{% url 'reader:detailed_list' feed.id %}" class="btn btn-primary">詳細</a>
                             <a href="{% url 'reader:remove_feed' feed.id %}" class="btn btn-danger">削除</a>
-                        </div>
+                        </div>                        
                     </div>
                 </div>
             {% empty %}
-                <p>まだ登録されていません。</p>
+                <p class="text-center my-3">まだ登録されていません。</p>
             {% endfor %}
         </div>
     </div>

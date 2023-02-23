@@ -11,48 +11,45 @@
             <meta name="keywords" content="RSS,ニュース,フィード,登録,最新,RSSフィード">
         </head>
     {% endblock %}
+    {% block navbar %}
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="{% url 'reader:index' %}">RSS News</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    {% if user.is_authenticated %}
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'account_logout' %}">ログアウト</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'reader:add_feed' %}">RSSフィード追加</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">アカウント管理</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{% url 'reader:feed_list' %}">ホーム</a>
+                        </li>
+                    </ul>
+                    {% else %}
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'account_login' %}">ログイン</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'account_signup' %}">新規登録</a>
+                        </li>
+                    </ul>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+    {% endblock %}
     {% block main %}
         <body>
-            {% block navbar %}
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <div class="container-fluid">
-                    <a class="navbar-brand" href="{% url 'reader:index' %}">RSS News</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarNav">
-                        {% if user.is_authenticated %}
-                        <ul class="navbar-nav me-auto">
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'account_logout' %}">ログアウト</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'reader:remove_feed' %}">RSSフィード削除</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'reader:add_feed' %}">RSSフィード追加</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">アカウント管理</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="{% url 'reader:feed_list' %}">ホーム</a>
-                            </li>
-                        </ul>
-                        {% else %}
-                        <ul class="navbar-nav me-auto">
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'account_login' %}">ログイン</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'account_signup' %}">新規登録</a>
-                            </li>
-                        </ul>
-                        {% endif %}
-                    </div>
-                </div>
-            </nav>
-            {% endblock %}
         </body>
     {% endblock %}
 </html>

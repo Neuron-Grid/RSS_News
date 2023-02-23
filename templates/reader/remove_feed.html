@@ -8,9 +8,8 @@
         {% endblock %}
     </head>
 {% endblock %}
-{% block content %}
-    {% block navbar%}
-    {% endblock %}
+{% block navbar%}
+    {{ block.super }}
 {% endblock %}
 {% block main %}
     <!-- 中央寄せにしてページを作成する -->
@@ -21,7 +20,7 @@
                     <div class="row">
                         <div class="col-md-8 offset-md-3">
                             <h1>フィードの削除</h1>
-                            <form class="d-flex flex-column row g-3" method="post">
+                            <form class="d-flex flex-column row g-3" method="post" action="">
                                 {% csrf_token %}
                                 <p class="mt-5">本当に削除しますか？</p>
                                 <!-- 登録済みのフィードのタイトルを表示し何を削除するかを選択する -->

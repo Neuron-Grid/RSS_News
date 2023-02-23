@@ -163,9 +163,9 @@ LOGIN_REDIRECT_URL = '/feed_list'                       # ログイン後のリ�
 ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login/'        # ログアウト後のリダイレクト先
 
 # メールの設定
-EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND')                     # メールの送信先をコンソールに出力する
-EMAIL_HOST = os.environ.get('EMAIL_HOST')                           # メールサーバーのホスト名
-EMAIL_PORT = os.environ.get('EMAIL_PORT')                           # メールサーバーのポート番号
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')                 # メールサーバーのユーザー名
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')         # メールサーバーのパスワード
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"    # メールの送信先をコンソールに出力する
+EMAIL_HOST = "smtp.gmail.com"                                       # メールサーバーのホスト名
+EMAIL_PORT = "587"                                                  # メールサーバーのポート番号
+EMAIL_HOST_USER = "qiye208@gmail.com"                               # メールサーバーのユーザー名
+EMAIL_HOST_PASSWORD = "lwvybaboaoimwmvu"                            # メールサーバーのパスワード
 EMAIL_USE_TLS = True                                                # TLS暗号化通信を使用する

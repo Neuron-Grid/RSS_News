@@ -2,9 +2,8 @@
 {% block title %}
   {{ feed.title }}
 {% endblock %}
-{% block content %}
-    {% block navbar%}
-    {% endblock %}
+{% block navbar%}
+  {{ block.super }}
 {% endblock %}
 {% block main %}
   <div class="row justify-content-center align-items-center" style="min-height: 50vh;">

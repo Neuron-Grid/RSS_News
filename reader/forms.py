@@ -6,7 +6,6 @@
 
 from django import forms
 
-
 class AddFeedForm(forms.Form):
     feed_name = forms.CharField(
         label='フィード名',

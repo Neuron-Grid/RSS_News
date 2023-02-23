@@ -3,19 +3,28 @@
 {% block head %}
     {% block title %}<title>ログアウト</title>{% endblock %}
 {% endblock %}
-
+{% block navbar%}
+    {{ block.super }}
+{% endblock %}
 {% block main %}
-    <div class="container">
+    <div class="container my-5">
         <div class="row">
-            <div class="col-md-6 offset-md-3 flex-column">
-                <div class="container text-center">
-                    <div class="row">
-                        <div class="col-md-8 offset-md-3">
-                            <h1 class="space">ログアウト</h1>
-                            <p>ログアウトしました。</p>
-                        </div>
-                    </div>
+            <div class="col-md-6 mx-auto d-flex flex-column align-items-center">
+                <div class="text-center mb-4">
+                    <h1>ログアウト</h1>
+                    <p class="my-4">ログアウトしますか？</p>
                 </div>
+                <div class="d-flex">
+                    <form method="post" action="{% url 'account_logout' %}" class="me-4">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary">ログアウト</button>
+                    </form>
+                    <div class="text-center">
+                        <a href="{% url 'reader:index' %}" class="btn btn-primary">
+                            <p class="d-inline text-decoration-none">トップページに戻る</p>
+                        </a>
+                    </div>   
+                </div>             
             </div>
         </div>
     </div>

@@ -3,7 +3,6 @@ from django.views.generic.detail import DetailView
 from django.db import IntegrityError, transaction
 from .models import Feed, Subscription, Entry
 from django.shortcuts import render, redirect
-from django.views.generic import ListView
 from django.db import IntegrityError
 from django.contrib import messages
 from .forms import AddFeedForm
@@ -40,6 +39,8 @@ def add_feed(request):
                 messages.error(request, '指定されたURLのフィードにエントリがありません。')
                 return render(request, 'reader/add_feed.html', {'form': form})
             feed_description = feed.get('feed', {}).get('description')
+            # RelatedManagerオブジェクトをリストに変換する
+            entries = list(feed.entries)
             try:
                 with transaction.atomic():
                     feed = Feed.objects.create(
@@ -56,19 +57,17 @@ def add_feed(request):
                             summary=entry.get('summary', ''),
                             pub_date=entry.get('published_parsed'),
                         )
-                        for entry in feed.entries
+                        # 変数名を変更する
+                        for entry in entries
                     ]
                     Entry.objects.bulk_create(entries)
                     Subscription.objects.create(user=request.user, feed=feed)
             except IntegrityError:
-                messages.error(request, '同じフィードを複数回登録することはできません。')
                 return redirect('reader:duplicate_error')
         return redirect('reader:feed_list')
     else:
         form = AddFeedForm()
     return render(request, 'reader/add_feed.html', {'form': form})
-
-
 
 # フィードの更新
 @login_required
@@ -88,14 +87,12 @@ def update_feed(request, feed_id):
 # フィードの削除
 @login_required
 def remove_feed(request, feed_id):
-    # ログインしているユーザーがフィードを購読しているかを確認し、登録されたフィードが0件だった場合エラーを表示
+    # ログインしているユーザーがフィードを購読しているかを確認し、登録されたフィードが0件だった場合delete_feed_errorページにリダイレクトする
     if Subscription.objects.filter(user=request.user, feed=feed_id).count() == 0:
-        messages.error(request, 'フィードは購読されていません。')
-        return redirect('reader:feed_list')
+        return redirect('reader:delete_feed_error')
     # ログインしているユーザーがフィードを1件以上購読している場合は、フィードの追加時に指定したタイトルを表示し何を削除するかを選択させる
     # 削除ボタンを押すとフィードの購読が解除される
     # フィードの購読を解除すると、そのフィードに紐づく記事も削除される
-    # 何も選択されなかった場合はフィード一覧に戻る
     if Subscription.objects.filter(user=request.user, feed=feed_id).count() > 0:
         feed = Feed.objects.get(id=feed_id)
         if request.method == 'POST':
@@ -110,21 +107,18 @@ def feed_list(request):
     feeds = Feed.objects.filter(subscription__user=request.user)
     return render(request, 'reader/feed_list.html', {'feeds': feeds})
 
-
+@login_required
 class FeedDetailView(DetailView):
     model = Feed
     template_name = 'reader/feed_detail.html'
     context_object_name = 'feed'
 
-class DetailedListView(ListView):
-    model = Feed
-    template_name = 'reader/detailed_list.html'
-    context_object_name = 'feeds'
-
-def detailed_list(request, feed_id):
-    feed = Feed.objects.get(id=feed_id)
+@login_required
+def detailed_list(request, pk):
+    feed = Feed.objects.get(id=pk)
     entries = Entry.objects.filter(feed=feed)
     return render(request, 'reader/detailed_list.html', {
-        'feed': feed,
-        'entries': entries
-        })
+        'feed_id': pk,
+        'entries': entries,
+        }
+    )

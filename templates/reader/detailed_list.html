@@ -5,27 +5,26 @@
   <title>{{ entry.title }}</title>
   {% endblock %}
 {% endblock %}
-{% block content %}
-    {% block navbar%}
-    {% endblock %}
+{% block navbar%}
+  {{ block.super }}
 {% endblock %}
 {% block main %}
-<div class="container my-5">
-  <h1 class="text-center mb-5">{{ feed.title }}</h1>
-  <div class="row">
-    <div class="col-md-12 mb-4">
-      <div class="card h-100">
-        <div class="card-body">
-          <h5 class="card-title">{{ entry.title }}</h5>
-          <p class="card-text">{{ entry.summary }}</p>
-        </div>
-        <div class="card-footer">
-          <a href="{{ entry.link }}" target="_blank" class="btn btn-primary">記事を読む</a>
-          <small class="text-muted">{{ entry.pub_date }}</small>
+  <div class="container my-5">
+    <h1 class="text-center mb-5">{{ feed.title }}</h1>
+    <div class="row">
+      <div class="col-md-12 mb-4">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">{{ entry.title }}</h5>
+            <p class="card-text">{{ entry.summary }}</p>
+          </div>
+          <div class="card-footer">
+            <a href="{{ entry.link }}" target="_blank" class="btn btn-primary">記事を読む</a>
+            <small class="text-muted">{{ entry.pub_date }}</small>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 {% endblock %}
 

@@ -3,26 +3,28 @@
 {% block title %}
     <title>フィードの追加</title>
 {% endblock %}
-
-{% block content %}
+{% block navbar%}
+    {{ block.super }}
+{% endblock %}
+{% block main %}
     <div class="container my-5">
         <div class="row">
             <div class="col-md-6 mx-auto">
                 <h1 class="text-center mb-5">フィードの追加</h1>
-                <form method="post">
+                <form method="post" action="{% url 'reader:add_feed' %}">
                     {% csrf_token %}
-                    <div class="mb-3">
+                    <div class="mb-4">
                         {{ form.feed_name.label_tag }}
                         {{ form.feed_name }}
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-4">
                         {{ form.url.label_tag }}
                         {{ form.url }}
                     </div>
-                    <button type="submit" class="btn btn-primary">追加</button>
+                    <button type="submit" class="btn btn-primary text-center">追加</button>
                 </form>
                 <div class="text-center mt-3">
-                    <a href="{% url 'reader:feed_list' %}">フィード一覧に戻る</a>
+                    <a href="{% url 'reader:feed_list' %}" class="d-inline text-decoration-none">フィード一覧</a>に戻る
                 </div>
             </div>
         </div>

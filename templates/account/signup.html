@@ -1,5 +1,5 @@
-
 {% extends '../base.html' %}
+{% block head %}
 <head>
     {% block title %}
     <title>
@@ -7,6 +7,10 @@
     </title>
     {% endblock %}
 </head>
+{% endblock %}
+{% block navbar%}
+    {{ block.super }}
+{% endblock %}
 {% block main %}
     <!-- 中央寄せにして作成 -->
     <div class="container">
@@ -16,7 +20,7 @@
                     <div class="row">
                         <div class="col-md-8 offset-md-3">
                             <h1 class="text-center">アカウント作成</h1>
-                            <form class="d-flex flex-column" method="post">
+                            <form class="d-flex flex-column" method="post" action="{% url 'account_signup' %}">
                                 {% csrf_token %}
                                 <label for="{{ form.username.id_for_label }}">ユーザー名</label>
                                 {{ form.username }}
@@ -40,7 +44,7 @@
             <div class="col-md-6 text-center">
                 <p>
                     既にアカウントをお持ちの方は、
-                    <a href="{% url 'account_login' %}" style="text-decoration: none;">こちら</a>
+                    <a href="{% url 'account_login' %}" class="d-inline text-decoration-none">こちら</a>
                     からログインして下さい。
                 </p>
             <p class="mb-0">必ず注意事項を読んで下さい。</p>
