@@ -14,7 +14,7 @@ CELERY_TIMEZONE = 'Asia/Tokyo'
 CELERY_BEAT_SCHEDULE = {
     'update-feeds': {
         'task': 'reader.tasks.update_feeds',
-        'schedule': crontab(minute='*/10'),
+        'schedule': crontab(minute='*/5'),
     },
 }
 

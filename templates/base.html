@@ -27,11 +27,14 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'reader:add_feed' %}">RSSフィード追加</a>
                         </li>
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a class="nav-link" href="#">アカウント管理</a>
-                        </li>
+                        </li> -->
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{% url 'reader:feed_list' %}">ホーム</a>
+                            <a class="nav-link active" href="{% url 'reader:feed_list' %}">リスト一覧</a>
+                        </li>
+                        <li>
+                            <a class="nav-link" href="{% url 'reader:site_manager' %}">サイト管理者</a>
                         </li>
                     </ul>
                     {% else %}
@@ -41,6 +44,9 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'account_signup' %}">新規登録</a>
+                        </li>
+                        <li>
+                            <a class="nav-link" href="{% url 'reader:site_manager' %}">サイト管理者</a>
                         </li>
                     </ul>
                     {% endif %}

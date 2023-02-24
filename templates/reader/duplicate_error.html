@@ -10,15 +10,19 @@
 {% endblock %}
 {% block main %}
 	{{ block.super }}
-	<div class="row justify-content-center align-items-center" style="min-height: 50vh;">
-		<div class="col-md-6">
-			<div class="card">
-				<div class="card-body">
-					<h2 class="card-title">エラー</h2>
-					<h4 class="card-text">同じフィードを複数回登録することはできません。</h4>
-					<div class="d-flex justify-content-between" style="min-height: 50vh;">
-						<a href="{% url 'reader:add_feed' %}" class="btn btn-primary">フィードの追加に戻る</a>
-						<a href="{% url 'reader:feed_list' %}" class="btn btn-secondary">フィード一覧に戻る</a>
+	<div class="container">
+		<div class="row">
+				<div class="col-md-6 offset-md-3 flex-column">
+					<div class="container text-center">
+						<div class="row">
+							<div class="col-md-8 offset-md-3">
+							<h2>エラー</h2>
+							<p class="my-5">同じフィードを複数回登録することはできません。</p>
+							<div class="d-flex justify-content-between">
+								<a href="{% url 'reader:add_feed' %}" class="btn btn-primary">フィードの追加に戻る</a>
+								<a href="{% url 'reader:feed_list' %}" class="btn btn-secondary">フィード一覧に戻る</a>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

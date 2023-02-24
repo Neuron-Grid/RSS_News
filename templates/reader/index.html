@@ -36,7 +36,7 @@
         <div class="row justify-content-center">
             <div class="col-md-5">
                 <div class="card my-4">
-                    <div class="card-body">
+                    <div class="card-body text-center">
                         <details>
                             <summary>注意事項</summary>
                             <ul class="list-group list-group-flush">
@@ -53,12 +53,15 @@
             </div>
         </div>
     </div>
-    <div class="container my-5">
+    <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-5 container">
-                <p>管理者の連絡先<br>
-                    メールアドレス : neuron-grid@neuron-grid.net<br>
-                </p>
+            <div class="col-md-5">
+                <div class="my-4 text-center">
+                    <p>サイト管理者の情報は、
+                        <a class="link-primary" style="text-decoration: none;" href="{% url 'reader:site_manager' %}">こちら</a>
+                        からご確認ください。
+                    </p>
+                </div>
             </div>
         </div>
     </div>

@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     "django_bootstrap5",
     'django_feedparser',
+    'django_celery_beat',
+    'django_celery_results',
 ]
 
 MIDDLEWARE = [
@@ -169,3 +171,6 @@ EMAIL_PORT = "587"                                                  # メール�
 EMAIL_HOST_USER = "qiye208@gmail.com"                               # メールサーバーのユーザー名
 EMAIL_HOST_PASSWORD = "lwvybaboaoimwmvu"                            # メールサーバーのパスワード
 EMAIL_USE_TLS = True                                                # TLS暗号化通信を使用する
+
+# CELERY
+CELERY_TASK_TRACK_STARTED = True

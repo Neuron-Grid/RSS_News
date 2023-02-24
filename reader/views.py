@@ -1,5 +1,4 @@
 from django.contrib.auth.decorators import login_required
-from django.views.generic.detail import DetailView
 from django.db import IntegrityError, transaction
 from .models import Feed, Subscription, Entry
 from django.shortcuts import render, redirect
@@ -11,6 +10,10 @@ import feedparser
 # indexページ
 def index(request):
     return render(request, 'reader/index.html')
+
+# サイト管理
+def site_manager(request):
+    return render(request, 'reader/site_manager.html') 
 
 # エラー処理
 @login_required
@@ -90,7 +93,7 @@ def remove_feed(request, feed_id):
     # ログインしているユーザーがフィードを購読しているかを確認し、登録されたフィードが0件だった場合delete_feed_errorページにリダイレクトする
     if Subscription.objects.filter(user=request.user, feed=feed_id).count() == 0:
         return redirect('reader:delete_feed_error')
-    # ログインしているユーザーがフィードを1件以上購読している場合は、フィードの追加時に指定したタイトルを表示し何を削除するかを選択させる
+    # フィードを削除するときは、remove_feedのページにリダイレクトし、そのフィードの削除確認をする。
     # 削除ボタンを押すとフィードの購読が解除される
     # フィードの購読を解除すると、そのフィードに紐づく記事も削除される
     if Subscription.objects.filter(user=request.user, feed=feed_id).count() > 0:
@@ -101,18 +104,13 @@ def remove_feed(request, feed_id):
         return render(request, 'reader/remove_feed.html', {'feed': feed})
     return redirect('reader:feed_list')
 
-# フィードの詳細
+# フィードのリスト
 @login_required
 def feed_list(request):
     feeds = Feed.objects.filter(subscription__user=request.user)
     return render(request, 'reader/feed_list.html', {'feeds': feeds})
 
-@login_required
-class FeedDetailView(DetailView):
-    model = Feed
-    template_name = 'reader/feed_detail.html'
-    context_object_name = 'feed'
-
+# フィードの詳細
 @login_required
 def detailed_list(request, pk):
     feed = Feed.objects.get(id=pk)

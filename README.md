@@ -3,7 +3,7 @@
 - RSSリーダー
 - djangoで作成中
 - ログイン機能つき
-- webサイトのデザインには、[Bootstrap](https://getbootstrap.com/)を使用
+- webサイトのデザインには、[Bootstrap](https://getbootstrap.com/)を使用しています。
 - 無料で利用できる
 
 ## 作成理由
@@ -48,6 +48,8 @@ RSSフィードの情報を保存する為のモデルです。以下の属性�
 - [django-crispy-forms](https://pypi.org/project/django-crispy-forms/)<br>
 - [django-bootstrap5](https://pypi.org/project/django-bootstrap5/)<br>
 - [django-environ](https://pypi.org/project/django-environ/)<br>
+- [django-celery-beat](https://pypi.org/project/django-celery-beat/)<br>
+- [django-celery-results](https://pypi.org/project/django-celery-results/)<br>
 
 リンク先は[PyPI](https://pypi.org/)のURLとなっています。
 </details>

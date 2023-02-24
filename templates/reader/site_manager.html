@@ -1,0 +1,40 @@
+{% extends "../base.html" %}
+{% block head %}
+    <head>
+        {{ block.super }}
+        {% block title %}
+            <title>
+                サイト管理者
+            </title>
+        {% endblock %}
+    </head>
+{% endblock %}
+{% block navbar%}
+    {{ block.super }}
+{% endblock %}
+{% block main %}
+    {{ block.super }}
+    <div class="container mt-5">
+        <h1 class="text-center my-5">管理者情報</h1>
+        <table class="table table-striped mt-4">
+            <tbody class="text-center">
+                <tr>
+                    <th scope="row">名前</th>
+                    <td>管理者</td>
+                </tr>
+                <tr>
+                    <th scope="row">メールアドレス</th>
+                    <td>example@example.com</td>
+                </tr>
+                <tr>
+                    <th scope="row">GPGの公開鍵</th>
+                    <td>
+                        -----BEGIN PGP PUBLIC KEY-----<br>
+                        xxxxxx<br>
+                        -----END PGP PUBLIC KEY-----
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

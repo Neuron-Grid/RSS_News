@@ -15,17 +15,17 @@
     <div class="container my-5">
         <div class="row">
             <div class="col-md-6 mx-auto d-flex flex-column align-items-center">
-                <div class="text-center mb-4">
+                <div class="text-center">
                     <h1>ログアウト</h1>
                     <p class="my-4">ログアウトしますか？</p>
                 </div>
-                <div class="d-flex">
+                <div class="d-flex my-3">
                     <form method="post" action="{% url 'account_logout' %}" class="me-4">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-primary">ログアウト</button>
+                        <button type="submit button" class="btn btn-primary">ログアウト</button>
                     </form>
                     <div class="text-center">
-                        <a href="{% url 'reader:index' %}" class="btn btn-primary">
+                        <a href="{% url 'reader:index' %}" class="btn btn-secondary">
                             <p class="d-inline text-decoration-none">トップページに戻る</p>
                         </a>
                     </div>   

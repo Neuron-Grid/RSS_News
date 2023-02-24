@@ -41,33 +41,44 @@
         </div>
     </div>    
     <!-- ログインページに戻るリンクを作成ボタンの下に追加 -->
-    <div class="container py-5">
-        <div class="row justify-content-center align-items-center">
-            <div class="col-md-6 text-center">
-                <p>
-                    既にアカウントをお持ちの方は、
-                    <a href="{% url 'account_login' %}" class="d-inline text-decoration-none">こちら</a>
-                    からログインして下さい。
-                </p>
-            <p class="mb-0">必ず注意事項を読んで下さい。</p>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3 flex-column">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-8 offset-md-3 text-center">
+                            <p class="my-4">
+                                既にアカウントをお持ちの方は、
+                                <a href="{% url 'account_login' %}" class="d-inline text-decoration-none">こちら</a>
+                                からログインして下さい。
+                            </p>
+                            <p class="mb-0">必ず注意事項を読んで下さい。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-5">
-                <div class="card">
-                    <div class="card-body">
-                        <details>
-                            <summary>注意事項</summary>
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">
-                                    <p>現時点では、アカウントの削除機能がありません。</p>
-                                </li>
-                                <li class="list-group-item">
-                                    <p>現時点では、アカウントの管理のページがありません。</p>
-                                </li>
-                            </ul>
-                        </details>
+        <div class="row">
+            <div class="col-md-6 offset-md-3 flex-column">
+                <div class="container">
+                    <div class="row my-3">
+                        <div class="col-md-8 offset-md-3 text-center card">
+                            <div class="card-body">
+                                <details>
+                                    <summary>注意事項</summary>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">
+                                            <p>現時点では、アカウントの削除機能がありません。</p>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <p>現時点では、アカウントの管理のページがありません。</p>
+                                        </li>
+                                    </ul>
+                                </details>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
