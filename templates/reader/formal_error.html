@@ -1,0 +1,24 @@
+{% extends "../base.html" %}
+{% block head %}
+    {{ block.super }}
+    <head>
+        {% block title %}
+            <title>
+                エラー
+            </title>
+        {% endblock %}
+    </head>
+{% endblock %}
+{% block navbar%}
+    {{ block.super }}
+{% endblock %}
+{% block main %}
+    {{ block.super }}
+    <h1 class="mt-4 my-4 text-center">
+        日付のパースに失敗しました。
+    </h1>
+    <p class="text-center my-4 mt-4">
+        このエラーは、RSSフィードの日付のフォーマットが正しくない場合に発生します。<br>
+        もしくは、フィードのパースに失敗した場合に発生します。
+    </p>
+{% endblock %}

@@ -73,4 +73,17 @@ RSSフィードの情報を保存する為のモデルです。以下の属性�
 <details><summary>現在解決中の問題</summary>
 
 - いろいろな場所で発生しているエラーを解決しています
+- ５分毎にフィードが更新されない
 </details>
+
+***
+
+``` Shell
+pip install celery django-celery-results redis django-redis django-celery-beat mysqlclient \
+ django django-allauth feedparser django_feedparser django-crispy-forms django-bootstrap5 django-environ && \
+ pip list --outdated | tail -n +3 | awk '{print $1}' | xargs pip install -U && \
+ docker-compose up -d && \
+ sleep 5; python manage.py makemigrations && \
+ python manage.py migrate && \
+ python manage.py runserver
+```

@@ -1,17 +1,22 @@
+from django.utils.dateparse import parse_datetime as django_parse_datetime
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError, transaction
+from django.utils.dateparse import parse_datetime
 from .models import Feed, Subscription, Entry
 from django.shortcuts import render, redirect
 from django.db import IntegrityError
 from django.contrib import messages
 from .forms import AddFeedForm
 import feedparser
+import datetime
+import time
+import re
 
 # indexページ
 def index(request):
     return render(request, 'reader/index.html')
 
-# サイト管理
+# 管理者ページ
 def site_manager(request):
     return render(request, 'reader/site_manager.html') 
 
@@ -20,11 +25,46 @@ def site_manager(request):
 def duplicate_error(request):
     return render(request, 'reader/duplicate_error.html')
 
+# エラー処理
+@login_required
+def formal_error(request):
+    return render(request, 'reader/formal_error.html')
+
 # フィード一覧
 @login_required
 def feed_list(request):
     feeds = Feed.objects.filter(subscription__user=request.user)
     return render(request, 'reader/feed_list.html', {'feeds': feeds})
+
+# 文字列値をdatetimeオブジェクトに変換する。
+@login_required
+def custom_parse_datetime(value):
+    # 既にdatetimeオブジェクトが渡されている場合はそのまま返す
+    if isinstance(value, datetime.datetime):
+        return value
+    # valueがNoneの場合はNoneを返す
+    if value is None:
+        return None
+    # valueがstr型の場合
+    if isinstance(value, str):
+        # 日付文字列のフォーマットを調整する
+        for pattern in [
+            r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?[+-]\d{2}:\d{2}$',
+            r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z$',
+            r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(\.\d+)?$',
+            r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?$',
+        ]:
+            match = re.match(pattern, value)
+            if match:
+                value = match.group(0)
+                break
+        else:
+            return redirect('reader:formal_error')
+        # datetimeオブジェクトに変換して返す
+        try:
+            return datetime.datetime.fromisoformat(value)
+        except ValueError:
+            return redirect('reader:formal_error')
 
 # フィードの追加
 @login_required
@@ -42,7 +82,6 @@ def add_feed(request):
                 messages.error(request, '指定されたURLのフィードにエントリがありません。')
                 return render(request, 'reader/add_feed.html', {'form': form})
             feed_description = feed.get('feed', {}).get('description')
-            # RelatedManagerオブジェクトをリストに変換する
             entries = list(feed.entries)
             try:
                 with transaction.atomic():
@@ -52,21 +91,23 @@ def add_feed(request):
                         description=feed_description,
                     )
                     # エントリーを登録する
-                    entries = [
-                        Entry(
-                            feed=feed,
-                            title=entry.get('title', ''),
-                            link=entry.get('link', ''),
-                            summary=entry.get('summary', ''),
-                            pub_date=entry.get('published_parsed'),
-                        )
-                        # 変数名を変更する
-                        for entry in entries
-                    ]
-                    Entry.objects.bulk_create(entries)
+                    for entry in entries:
+                        try:
+                            Entry.objects.create(
+                                feed=feed,
+                                title=entry.get('title', ''),
+                                link=entry.get('link', ''),
+                                summary=entry.get('summary', ''),
+                                pub_date=custom_parse_datetime(entry.get('published_parsed')),
+                            )
+                        except ValueError:
+                            return redirect('reader:formal_error')
                     Subscription.objects.create(user=request.user, feed=feed)
             except IntegrityError:
                 return redirect('reader:duplicate_error')
+        else:
+            # フォームが無効な場合はエラーを表示する
+            messages.error(request, '不正な値が入力されました。')
         return redirect('reader:feed_list')
     else:
         form = AddFeedForm()
@@ -114,7 +155,10 @@ def feed_list(request):
 @login_required
 def detailed_list(request, pk):
     feed = Feed.objects.get(id=pk)
-    entries = Entry.objects.filter(feed=feed)
+    entries = Entry.objects.filter(
+        feed=feed,
+        title=request.GET.get('title', ''),
+    ).order_by('-pub_date')
     return render(request, 'reader/detailed_list.html', {
         'feed_id': pk,
         'entries': entries,

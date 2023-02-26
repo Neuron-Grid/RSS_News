@@ -13,3 +13,8 @@ services:
       - "3306:3306"
     volumes:
       - ./mysqldata:/var/lib/mysql
+  rabbitmq:
+    image: "rabbitmq:3.8.3-management"
+    ports:
+      - "5672:5672"
+      - "15672:15672"

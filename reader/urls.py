@@ -10,7 +10,7 @@ urlpatterns = [
     path('feed_list/', views.feed_list, name='feed_list'),
     path('add_feed/', views.add_feed, name='add_feed'),
     path('remove_feed/<int:feed_id>/', views.remove_feed, name='remove_feed'),
-    path('duplicate_error/', views.duplicate_error, name='duplicate_error'),
     path('feed_list/remove/<int:feed_id>/', views.remove_feed, name='remove_feed'),
+    path('duplicate_error/', views.duplicate_error, name='duplicate_error'),
     path('detailed_list/<int:pk>/', views.detailed_list, name='detailed_list'),
 ]

@@ -1,10 +1,9 @@
 # Celery
-import os
-from celery import Celery
 from celery.schedules import crontab
+from celery import Celery
+import os
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'RSS_News.settings')
-
 
 app = Celery('rss_news')
 app.config_from_object('django.conf:settings', namespace='CELERY')

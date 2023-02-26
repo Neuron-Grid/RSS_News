@@ -16,28 +16,30 @@
 
 {% block main %}
 	{{ block.super }}
-	<h1 class="text-center my-4">メールアドレスが確認されました。</h1>
-	{% if confirmation %}
-		{% user_display confirmation.email_address.user as user_display %}
-		<p class="d-inline text-decoration-none">このメールアドレスが
-			<a href="mailto:{{ email }}">
-				{{ email }}
-			</a> 
-			{{ user_display }}のものであることを確認して下さい。
-		</p>
-		<form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
-			{% csrf_token %}
-			<button type="submit">確認</button>
-		</form>
-		{% else %}
-
-		{% url 'account_email' as email_url %}
-		<p>このメール確認リンクは有効期限が切れているか、無効なリンクです。</p>
-		<p>もう一度、
-			<a href="{{ email_url }}" class="d-inline text-decoration-none">
-				メール確認依頼
-			</a>
-			を発行してください。
-		</p>
-	{% endif %}
+	<div class="container d-flex align-items-center justify-content-center">
+		<div class="text-center">
+			<h1 class="mt-5 my-5 text-center">メールアドレスが確認されました。</h1>
+	
+			{% if confirmation %}
+				{% url 'account_login' as login_url %}
+					<p>メールアドレスの確認が完了しました。</p>
+					<p>
+						<!-- ユーザー名を表示 -->
+						{{ user.username }}様であれば、確認ボタンを押してログインしてください。
+					</p>
+				<form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
+					{% csrf_token %}
+					<button type="submit" class="btn btn-primary mt-3">確認</button>
+				</form>
+			{% else %}
+				{% url 'account_email' as email_url %}
+				<p>このメール確認リンクは有効期限が切れているか、無効なリンクです。</p>
+				<p>もう一度、
+					<a href="{{ email_url }}" class="text-decoration-none">メール確認依頼</a>
+					を発行してください。
+				</p>
+			{% endif %}
+		</div>
+	</div>
+	
 {% endblock %}

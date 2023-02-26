@@ -22,13 +22,12 @@
                     <div class="row">
                         <div class="col-md-8 offset-md-3">
                             <h1>フィードの削除</h1>
-                            <form class="d-flex flex-column row g-3" method="post" action="{% url 'account_logout' %}">
+                            <!-- actionを修正 -->
+                            <form class="d-flex flex-column row g-3" method="post" action="{% url 'reader:remove_feed' feed_id=feed.id %}">
                                 {% csrf_token %}
                                 <p class="mt-5">本当に削除しますか？</p>
                                 <h3>{{ feed.title }}</h3>
-                                <button type="submit" class="btn btn-secondary">
-                                    削除
-                                </button>
+                                <button type="submit" class="btn btn-secondary">削除</button>
                             </form>
                         </div>
                     </div>
