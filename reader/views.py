@@ -1,7 +1,7 @@
 from django.utils.dateparse import parse_datetime as django_parse_datetime
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError, transaction
-from django.utils.dateparse import parse_datetime
+# from django.utils.dateparse import parse_datetime
 from .models import Feed, Subscription, Entry
 from django.shortcuts import render, redirect
 from django.db import IntegrityError
@@ -9,7 +9,7 @@ from django.contrib import messages
 from .forms import AddFeedForm
 import feedparser
 import datetime
-import time
+# import time
 import re
 
 # indexページ
@@ -30,6 +30,11 @@ def duplicate_error(request):
 def formal_error(request):
     return render(request, 'reader/formal_error.html')
 
+# エラー処理
+@login_required
+def delete_feed_error(request):
+    return render(request, 'reader/delete_feed_error.html')
+
 # フィード一覧
 @login_required
 def feed_list(request):
@@ -37,7 +42,7 @@ def feed_list(request):
     return render(request, 'reader/feed_list.html', {'feeds': feeds})
 
 # 文字列値をdatetimeオブジェクトに変換する。
-@login_required
+# @login_required
 def custom_parse_datetime(value):
     # 既にdatetimeオブジェクトが渡されている場合はそのまま返す
     if isinstance(value, datetime.datetime):
@@ -98,7 +103,7 @@ def add_feed(request):
                                 title=entry.get('title', ''),
                                 link=entry.get('link', ''),
                                 summary=entry.get('summary', ''),
-                                pub_date=custom_parse_datetime(entry.get('published_parsed')),
+                                pub_date=custom_parse_datetime(entry.get('published', '')),
                             )
                         except ValueError:
                             return redirect('reader:formal_error')
@@ -126,7 +131,6 @@ def update_feed(request, feed_id):
             summary=entry['summary'],
             pub_date=entry['published'],
         )
-    return redirect('reader:feed_list')
 
 # フィードの削除
 @login_required
@@ -145,12 +149,6 @@ def remove_feed(request, feed_id):
         return render(request, 'reader/remove_feed.html', {'feed': feed})
     return redirect('reader:feed_list')
 
-# フィードのリスト
-@login_required
-def feed_list(request):
-    feeds = Feed.objects.filter(subscription__user=request.user)
-    return render(request, 'reader/feed_list.html', {'feeds': feeds})
-
 # フィードの詳細
 @login_required
 def detailed_list(request, pk):
@@ -159,8 +157,13 @@ def detailed_list(request, pk):
         feed=feed,
         title=request.GET.get('title', ''),
     ).order_by('-pub_date')
+    
+    if request.method == 'POST':
+        update_feed(pk)
+        # 更新が終了したら、再度詳細ページにリダイレクトする
+        return redirect('reader:detailed_list', pk=pk)
+
     return render(request, 'reader/detailed_list.html', {
         'feed_id': pk,
         'entries': entries,
-        }
-    )
+    })
