@@ -1,5 +1,4 @@
 {% extends "../base.html" %}
-
 {% block head %}
 	{{ block.super }}
 	{% block title %}
@@ -43,14 +42,14 @@
 	</div>
 {% endblock %}
 {% block javascript %}
-    <script>
-        document.getElementById("update-feed-button").addEventListener("click", function() {
-            var feedId = this.dataset.feedId;
-            fetch("/update_feed/" + feedId + "/")
-                .then(response => response.text())
-                .then(data => {
-                    location.reload();
-            });
-        });
-    </script>
+	<script>
+		document.getElementById("update-feed-button").addEventListener("click", function() {
+			var feedId = this.dataset.feedId;
+			fetch("/update_feed/" + feedId + "/")
+				.then(response => response.text())
+				.then(data => {
+					location.reload();
+			});
+		});
+	</script>
 {% endblock %}

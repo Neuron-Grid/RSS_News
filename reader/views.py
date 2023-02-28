@@ -157,9 +157,8 @@ def detailed_list(request, pk):
     feed = Feed.objects.get(id=pk)
     entries = Entry.objects.filter(
         feed=feed,
-        title=request.GET.get('title', ''),
+        # title=request.GET.get('title', ''),
     ).order_by('-pub_date')
-
     if request.method == 'POST':
         # update_feed関数を呼び出す
         update_feed(request, pk)
@@ -167,6 +166,7 @@ def detailed_list(request, pk):
         return redirect('reader:detailed_list', pk=pk)
 
     return render(request, 'reader/detailed_list.html', {
+        'feed': feed,
         'feed_id': pk,
         'entries': entries,
     })
