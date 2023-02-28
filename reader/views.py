@@ -119,6 +119,7 @@ def add_feed(request):
     return render(request, 'reader/add_feed.html', {'form': form})
 
 # フィードの更新
+# detailed_list.htmlからフィードの更新ボタンを押したときに呼び出される
 @login_required
 def update_feed(request, feed_id):
     feed = Feed.objects.get(id=feed_id)
@@ -131,6 +132,7 @@ def update_feed(request, feed_id):
             summary=entry['summary'],
             pub_date=entry['published'],
         )
+    return redirect('reader:detailed_list', pk=feed_id)
 
 # フィードの削除
 @login_required
@@ -157,9 +159,10 @@ def detailed_list(request, pk):
         feed=feed,
         title=request.GET.get('title', ''),
     ).order_by('-pub_date')
-    
+
     if request.method == 'POST':
-        update_feed(pk)
+        # update_feed関数を呼び出す
+        update_feed(request, pk)
         # 更新が終了したら、再度詳細ページにリダイレクトする
         return redirect('reader:detailed_list', pk=pk)
 

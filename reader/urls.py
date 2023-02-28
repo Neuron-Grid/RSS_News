@@ -15,4 +15,5 @@ urlpatterns = [
     path('detailed_list/<int:pk>/', views.detailed_list, name='detailed_list'),
     path('delete_feed_error/', views.delete_feed_error, name='delete_feed_error'),
     path('formal_error/', views.formal_error, name='formal_error'),
+    path('update_feed/<int:feed_id>/', views.update_feed, name='update_feed'),
 ]

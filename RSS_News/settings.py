@@ -12,14 +12,13 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
+import environ
 
-# import environ
 
 # 環境変数の設定
-# env = environ.Env()
-# env_path = os.path.join(BASE_DIR, 'local.env')
-# environ.Env.read_env(env_path)
-# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+environ.Env.read_env(os.path.join(BASE_DIR, 'local.env'))
+env = environ.Env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -105,7 +104,7 @@ DATABASES = {
         # MySQLで日本語が使えるようにする設定
         'OPTIONS': {
             'charset': 'utf8mb4',
-            'connect_timeout': 30,
+            'connect_timeout': 10,
         },
     }
 }
@@ -170,12 +169,12 @@ ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login/'        # ログアウト後の�
 
 # メールの設定
 # local.envから読み取って記述
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'    # メールの送信先をコンソールに出力する
-EMAIL_HOST = "smtp.sendgrid.net"                                      # メールサーバーのホスト名
-EMAIL_PORT = "587"                                                 # メールサーバーのポート番号
-EMAIL_HOST_USER = "sggis7gd@kke.com"                              # メールサーバーのユーザー名
-EMAIL_HOST_PASSWORD = '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'                            # メールサーバーのパスワード
-EMAIL_USE_TLS = True                                                # TLS暗号化通信を使用する
+# EMAIL_BACKEND = env('EMAIL_BACKEND')                    # メールの送信先をコンソールに出力する
+EMAIL_HOST = env('EMAIL_HOST')                          # メールサーバーのホスト名
+EMAIL_PORT = env('EMAIL_PORT')                          # メールサーバーのポート番号
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')                # メールサーバーのユーザー名
+EMAIL_HOST_PASSWORD = ('EMAIL_HOST_PASSWORD')           # メールサーバーのパスワード
+EMAIL_USE_TLS = True                                    # TLS暗号化通信を使用する
 
 # CELERY
 CELERY_TASK_TRACK_STARTED = True
