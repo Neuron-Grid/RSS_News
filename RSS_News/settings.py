@@ -14,7 +14,6 @@ from pathlib import Path
 import os
 import environ
 
-
 # 環境変数の設定
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 environ.Env.read_env(os.path.join(BASE_DIR, 'local.env'))
@@ -169,12 +168,12 @@ ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login/'        # ログアウト後の�
 
 # メールの設定
 # local.envから読み取って記述
-# EMAIL_BACKEND = env('EMAIL_BACKEND')                    # メールの送信先をコンソールに出力する
 EMAIL_HOST = env('EMAIL_HOST')                          # メールサーバーのホスト名
 EMAIL_PORT = env('EMAIL_PORT')                          # メールサーバーのポート番号
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')                # メールサーバーのユーザー名
-EMAIL_HOST_PASSWORD = ('EMAIL_HOST_PASSWORD')           # メールサーバーのパスワード
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')        # メールサーバーのパスワード
 EMAIL_USE_TLS = True                                    # TLS暗号化通信を使用する
+EMAIL_USE_SSL = False                                   # SSL暗号化通信を使用しない
 
 # CELERY
 CELERY_TASK_TRACK_STARTED = True
