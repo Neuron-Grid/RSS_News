@@ -12,34 +12,28 @@
 {% endblock %}
 {% block main %}
 {{ block.super }}
-<div class="container text-center">
-	<div class="row">
-		<div class="col-md-12">
-			<h1>{{ feed.title }}</h1>
-			<p>{{ feed.description }}</p>
-		</div>
+<div class="container">
+	<div class="text-center">
+		<h1>{{ feed.title }}</h1>
+		<p>{{ feed.description }}</p>
 	</div>
-	{% for entry in entries %}
-	<div class="col-md-12 mb-4">
-		<div class="card h-100">
-			<div class="card-body">
-				<h5 class="card-title">{{ entry.title }}</h5>
-				<p class="card-text">{{ entry.summary }}</p>
-			</div>
-			<div class="card-footer">
-				<a href="{{ entry.link }}" target="_blank" class="btn btn-primary">記事を読む</a>
-			</div>
-		</div>
+	<div class=" my-4 text-center">
+		<button class="btn btn-primary mt-3" id="update-feed-button" data-feed-id="{{ feed.id }}">更新</button>
 	</div>
-	{% endfor %}
-</div>
-	<div class="row">
-		<div class="col-md-12">
-			<div class="card-footer">
-				<button id="update-feed-button" data-feed-id="{{ feed.id }}">更新</button>
+	<div class="row row-cols-1 row-cols-md-3 g-4">
+		{% for entry in entries %}
+		<div class="col mb-4">
+			<div class="card h-100">
+				<div class="card-body">
+					<h5 class="card-title">{{ entry.title }}</h5>
+					<p class="card-text">{{ entry.summary }}</p>
+				</div>
+				<div class="card-footer">
+					<a href="{{ entry.link }}" target="_blank" class="btn btn-primary">記事を読む</a>
+				</div>
 			</div>
 		</div>
-	</div>
+		{% endfor %}
 {% endblock %}
 {% block javascript %}
 	<script>
