@@ -56,34 +56,43 @@ RSSフィードの情報を保存する為のモデルです。以下の属性�
 
 ***
 
-<details><summary>現在確認されている問題</summary>
+<details><summary>今後修正する問題</summary>
 
 - フィードが更新されない
-- アカウントの削除ができない
-- settings.pyに書かれているDBとメールの設定を環境変数に変更する
-</details>
-
-<details><summary>今後追加する機能</summary>
-
+- settings.pyとdocker-compose.ymlに書かれているDBの設定を環境変数に変更する
 - アカウントの削除機能を追加する
 - アカウントを削除するページを作成する
+- webサイトのデザインを統一する
+- アカウントの管理ページを作成する
 </details>
-
 
 <details><summary>現在解決中の問題</summary>
 
-- いろいろな場所で発生しているエラーを解決しています
-- ５分毎にフィードが更新されない
+- フィードの更新に関する問題を最優先で解決します
+- その後、アカウントの削除や管理するページを作成します
 </details>
 
 ***
 
+## ローカル環境での実行方法
+### 1. リポジトリをクローンする
+
 ``` Shell
-pip install celery django-celery-results redis django-redis django-celery-beat mysqlclient \
- django django-allauth feedparser django_feedparser django-crispy-forms django-bootstrap5 django-environ && \
- pip list --outdated | tail -n +3 | awk '{print $1}' | xargs pip install -U && \
- docker-compose up -d && \
- sleep 5; python manage.py makemigrations && \
- python manage.py migrate && \
- python manage.py runserver
+git clone https://github.com/Neuron-Grid/RSS_News && \
+pip install celery django-allauth feedparser django-crispy-forms \
+django-celery-results django_feedparser redis django django-celery-beat \
+django-redis django-bootstrap5 mysqlclient django-environ && \
+pip list --outdated | tail -n +3 | awk '{print $1}' | xargs pip install -U && \
+cd RSS_News
+```
+### 2. local.envを作成し、データベースやメールの環境変数を設定する
+``` Shell
+touch local.env
+```
+### 3. 実行する
+``` Shell
+docker-compose up -d && \
+sleep 7; python manage.py makemigrations && \
+python manage.py migrate && \
+python manage.py runserver
 ```
