@@ -10,13 +10,23 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+from dotenv import load_dotenv
 from pathlib import Path
-import os
+from pathlib import Path
 import environ
+import os
 
 # 環境変数の設定
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-environ.Env.read_env(os.path.join(BASE_DIR, 'local.env'))
+BASE_DIR = Path(__file__).resolve().parent.parent
+# 最初にlocal.envを読み込む。無ければserver.envを読み込む
+env_files = ['local.env', 'server.env']
+for env_file in env_files:
+    env_path = os.path.join(BASE_DIR, env_file)
+    if os.path.exists(env_path):
+        load_dotenv(env_path)
+        break
+else:
+    raise EnvironmentError("環境変数の設定ファイルが見つかりませんでした。: {}".format(', '.join(env_files)))
 env = environ.Env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -89,9 +99,6 @@ WSGI_APPLICATION = 'RSS_News.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-# 授業ノートを参照
-# https://scrapbox.io/vantan-prog-xBd7RI6mYx/Django開発3_Dockerとデータベースの設定
-# local.env
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',

@@ -1,52 +1,41 @@
-{% extends '../base.html' %}
-{% block head %}
-    {{ block.super }}
-    {% block title %}
-        <title>
-            ログイン
-        </title>
-    {% endblock %}
-{% endblock %}
-{% block navbar %}
-    {{ block.super }}
-{% endblock %}
-{% block main %}
-    {{ block.super }}
-    <!-- 中央寄せにして作成する -->
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6 offset-md-3 flex-column">
-                <div class="container text-center">
-                    <div class="row">
-                        <div class="col-md-8 offset-md-3">
-                            <h1 class="mt-5 my-5 text-center">ログイン</h1>
-                            <form class="d-flex flex-column row g-3" method="post" action="{% url 'account_login' %}">
-                                {% csrf_token %}
-                                {{ form.as_p }}
-                                <button class="btn btn-primary" type="submit">ログイン</button>
-                            </form>
-                        </div>
+{% extends '../base.html' %} {% block head %} {{ block.super }} {% block title %}
+<title>ログイン</title>
+{% endblock %} {% endblock %} {% block navbar %} {{ block.super }} {% endblock %} {% block main %} {{ block.super }}
+<!-- 中央寄せにして作成する -->
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3 flex-column">
+            <div class="container text-center">
+                <div class="row">
+                    <div class="col-md-8 offset-md-3">
+                        <h1 class="mt-5 my-5 text-center">ログイン</h1>
+                        <form class="d-flex flex-column row g-3" method="post" action="{% url 'account_login' %}">
+                            {% csrf_token %} {{ form.as_p }}
+                            <button class="btn btn-primary" type="submit">ログイン</button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!--パスワードの再設定ページに移動するリンクをログインボタンの下に追加-->
-    <div class="container text-center">
-        <div class="row container">
-            <div class="col-md-6 offset-md-3 flex-column">
-                <div class="container my-3 mx-auto">
-                    <p>パスワードを忘れた方は、
-                        <a href="{% url 'account_reset_password' %}" class="link-primary d-inline text-decoration-none">こちら</a>
-                        から変更して下さい。
-                    </p>
-                    <p>
-                        アカウントをお持ちでない方は、
-                        <a href="{% url 'account_signup' %}" class="link-primary d-inline text-decoration-none">こちら</a>
-                        から新規登録して下さい。
-                    </p>
-                </div>
+</div>
+<!--パスワードの再設定ページに移動するリンクをログインボタンの下に追加-->
+<div class="container text-center">
+    <div class="row container">
+        <div class="col-md-6 offset-md-3 flex-column">
+            <div class="container my-3 mx-auto">
+                <p>
+                    パスワードを忘れた方は、
+                    <a href="{% url 'account_reset_password' %}" class="link-primary d-inline text-decoration-none">こちら</a>
+                    から変更して下さい。
+                </p>
+                <p>
+                    アカウントをお持ちでない方は、
+                    <a href="{% url 'account_signup' %}" class="link-primary d-inline text-decoration-none">こちら</a>
+                    から新規登録して下さい。
+                </p>
             </div>
         </div>
     </div>
+</div>
 {% endblock %}

@@ -1,38 +1,29 @@
-{% extends "../base.html" %}
-{% block head %}
-    {{ block.super }}
-    <head>
-        {% block title %}
-            <title>
-                フィード一覧
-            </title>
-        {% endblock %}
-    </head>
-{% endblock %}
-{% block navbar%}
-    {{ block.super }}
-{% endblock %}
-{% block main %}
-    {{ block.super }}
-    <div class="container my-5">
-        <h1 class="text-center mb-5">フィード一覧</h1>
-        <div class="row">
-            {% for feed in feeds %}
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h3 class="card-title">{{ feed.title }}</h3>
-                            <p class="card-text">{{ feed.description }}</p>
-                        </div>
-                        <div class="card-footer">
-                            <a href="{% url 'reader:detailed_list' feed.id %}" class="btn btn-primary">詳細</a>
-                            <a href="{% url 'reader:remove_feed' feed.id %}" class="btn btn-danger">削除</a>
-                        </div>                        
-                    </div>
+{% extends "../base.html" %} {% block head %} {{ block.super }}
+<head>
+    {% block title %}
+    <title>フィード一覧</title>
+    {% endblock %}
+</head>
+{% endblock %} {% block navbar%} {{ block.super }} {% endblock %} {% block main %} {{ block.super }}
+<div class="container my-5">
+    <h1 class="text-center mb-5">フィード一覧</h1>
+    <div class="row">
+        {% for feed in feeds %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h3 class="card-title">{{ feed.title }}</h3>
+                    <p class="card-text">{{ feed.description }}</p>
                 </div>
-            {% empty %}
-                <p class="text-center my-3">まだ登録されていません。</p>
-            {% endfor %}
+                <div class="card-footer">
+                    <a href="{% url 'reader:detailed_list' feed.id %}" class="btn btn-primary">詳細</a>
+                    <a href="{% url 'reader:remove_feed' feed.id %}" class="btn btn-danger">削除</a>
+                </div>
+            </div>
         </div>
+        {% empty %}
+        <p class="text-center my-3">まだ登録されていません。</p>
+        {% endfor %}
     </div>
+</div>
 {% endblock %}

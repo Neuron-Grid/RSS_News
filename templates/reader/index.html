@@ -1,73 +1,67 @@
-{% extends "../base.html" %}
-{% block head %}
-    {{ block.super }}
-    <head>
-        {% block title %}
-            <title>RSS News</title>
-        {% endblock %}
-    </head>
-{% endblock %}
-{% block navbar%}
-    {{ block.super }}
-{% endblock %}
-{% block main %}
-    {{ block.super }}
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-5 container text-center">
-                <h1 class="mt-5 my-5 text-center">RSS News</h1>
-                <p>このWebサイトは、ログイン機能付きのRSSリーダーです。</p>
-                <div>
-                    <p>
-                        既にアカウントをお持ちの方は、
-                        <a class="link-primary" style="text-decoration: none;" href="{% url 'account_login' %}">こちら</a>
-                        からログインしてください。
-                    </p>
-                    <p>
-                        アカウントをお持ちでない方は、
-                        <a class="link-primary" style="text-decoration: none;" href="{% url 'account_signup' %}">こちら</a>
-                        から新規登録してください。
-                    </p>
-                </div>
+{% extends "../base.html" %} {% block head %} {{ block.super }}
+<head>
+    {% block title %}
+    <title>RSS News</title>
+    {% endblock %}
+</head>
+{% endblock %} {% block navbar%} {{ block.super }} {% endblock %} {% block main %} {{ block.super }}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-5 container text-center">
+            <h1 class="mt-5 my-5 text-center">RSS News</h1>
+            <p>このWebサイトは、ログイン機能付きのRSSリーダーです。</p>
+            <div>
+                <p>
+                    既にアカウントをお持ちの方は、
+                    <a class="link-primary" style="text-decoration: none" href="{% url 'account_login' %}">こちら</a>
+                    からログインしてください。
+                </p>
+                <p>
+                    アカウントをお持ちでない方は、
+                    <a class="link-primary" style="text-decoration: none" href="{% url 'account_signup' %}">こちら</a>
+                    から新規登録してください。
+                </p>
             </div>
         </div>
     </div>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6 offset-md-2 flex-column">
-                <div class="row my-3">
-                    <div class="col-md-8 text-center card">
-                        <div class="card-body">
-                            <details>
-                                <summary>注意事項</summary>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">
-                                        <p>アカウントの削除機能がありません。</p>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <p>アカウントの管理のページがありません。</p>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <p>今後、この機能を出来るだけ早く追加します。</p>
-                                    </li>
-                                </ul>
-                            </details>
-                        </div>
+</div>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 offset-md-2 flex-column">
+            <div class="row my-3">
+                <div class="col-md-8 text-center card">
+                    <div class="card-body">
+                        <details>
+                            <summary>注意事項</summary>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <p>アカウントの削除機能がありません。</p>
+                                </li>
+                                <li class="list-group-item">
+                                    <p>アカウントの管理のページがありません。</p>
+                                </li>
+                                <li class="list-group-item">
+                                    <p>今後、この機能を出来るだけ早く追加します。</p>
+                                </li>
+                            </ul>
+                        </details>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-5">
-                <div class="my-4 text-center">
-                    <p>サイト管理者の情報は、
-                        <a class="link-primary" style="text-decoration: none;" href="{% url 'reader:site_manager' %}">こちら</a>
-                        からご確認ください。
-                    </p>
-                </div>
+</div>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="my-4 text-center">
+                <p>
+                    サイト管理者の情報は、
+                    <a class="link-primary" style="text-decoration: none" href="{% url 'reader:site_manager' %}">こちら</a>
+                    からご確認ください。
+                </p>
             </div>
         </div>
     </div>
+</div>
 {% endblock %}

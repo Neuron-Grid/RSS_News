@@ -1,49 +1,54 @@
-{% extends "../base.html" %}
-{% block head %}
-	{{ block.super }}
-	{% block title %}
-	<title>
-		{{ entry.title }}
-	</title>
-	{% endblock %}
-{% endblock %}
-{% block navbar%}
-	{{ block.super }}
-{% endblock %}
-{% block main %}
-{{ block.super }}
+{% extends "../base.html" %} {% block head %} {{ block.super }} {% endblock %} {% block title %}
+<title>{{ entry.title }}</title>
+{% endblock %} {% block navbar %} {{ block.super }} {% endblock %} {% block main %} {{ block.super }}
 <div class="container">
-	<div class="text-center">
-		<h1>{{ feed.title }}</h1>
-		<p>{{ feed.description }}</p>
-	</div>
-	<div class=" my-4 text-center">
-		<button class="btn btn-primary mt-3" id="update-feed-button" data-feed-id="{{ feed.id }}">更新</button>
-	</div>
-	<div class="row row-cols-1 row-cols-md-3 g-4">
-		{% for entry in entries %}
-		<div class="col mb-4">
-			<div class="card h-100">
-				<div class="card-body">
-					<h5 class="card-title">{{ entry.title }}</h5>
-					<p class="card-text">{{ entry.summary }}</p>
-				</div>
-				<div class="card-footer">
-					<a href="{{ entry.link }}" target="_blank" class="btn btn-primary">記事を読む</a>
-				</div>
-			</div>
-		</div>
-		{% endfor %}
-{% endblock %}
-{% block javascript %}
-	<script>
-		document.getElementById("update-feed-button").addEventListener("click", function() {
-			var feedId = this.dataset.feedId;
-			fetch("/update_feed/" + feedId + "/")
-				.then(response => response.text())
-				.then(data => {
-					location.reload();
-			});
-		});
-	</script>
+    <div class="text-center">
+        <h1>{{ feed.title }}</h1>
+        <p>{{ feed.description }}</p>
+    </div>
+    <div class="my-4 text-center">
+        <button class="btn btn-primary mt-3" id="update-feed-button" data-feed-id="{{ feed.id }}">更新</button>
+    </div>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for entry in entries %}
+        <div class="col mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ entry.title }}</h5>
+                    <p class="card-text">{{ entry.summary }}</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{{ entry.link }}" target="_blank" class="btn btn-primary"> 記事を読む </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %} {% block script %}
+<script type="text/javascript">
+    function setCardHeight() {
+        const cards = document.querySelectorAll(".card");
+        let maxHeight = 0;
+        cards.forEach((card) => {
+            const height = card.offsetHeight;
+            if (height > maxHeight) {
+                maxHeight = height;
+            }
+        });
+        cards.forEach((card) => {
+            card.style.height = `${maxHeight}px`;
+        });
+    }
+    setCardHeight();
+
+    $(document).ready(function () {
+        $("#update-feed-button").click(function () {
+            var feedId = $(this).data("feed-id");
+            $.post("{% url 'update_feed' feed_id=feedId %}", function () {
+                window.location.href = "{% url 'reader:detailed_list' pk=feedId %}";
+            });
+        });
+    });
+</script>
 {% endblock %}

@@ -1,7 +1,5 @@
-from django.utils.dateparse import parse_datetime as django_parse_datetime
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError, transaction
-# from django.utils.dateparse import parse_datetime
 from .models import Feed, Subscription, Entry
 from django.shortcuts import render, redirect
 from django.db import IntegrityError
@@ -9,7 +7,6 @@ from django.contrib import messages
 from .forms import AddFeedForm
 import feedparser
 import datetime
-# import time
 import re
 
 # indexページ
@@ -42,7 +39,7 @@ def feed_list(request):
     return render(request, 'reader/feed_list.html', {'feeds': feeds})
 
 # 文字列値をdatetimeオブジェクトに変換する。
-# @login_required
+# 変換できなければ、formal_error.htmlにリダイレクトする。
 def custom_parse_datetime(value):
     # 既にdatetimeオブジェクトが渡されている場合はそのまま返す
     if isinstance(value, datetime.datetime):
@@ -121,7 +118,7 @@ def add_feed(request):
 # フィードの更新
 # detailed_list.htmlからフィードの更新ボタンを押したときに呼び出される
 @login_required
-def update_feed(request, feed_id):
+def update_feed(feed_id):
     feed = Feed.objects.get(id=feed_id)
     entries = feedparser.parse(feed.url)['entries']
     for entry in entries:

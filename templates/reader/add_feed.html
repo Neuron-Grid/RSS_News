@@ -1,47 +1,25 @@
-{% extends "../base.html" %}
-{% block head %}
-    {{ block.super }}
-    <head>
-        {% block title %}
-            <title>
-                フィードの追加
-            </title>
-        {% endblock %}
-    </head>
-{% endblock %}
-{% block navbar%}
-    {{ block.super }}
-{% endblock %}
-{% block main %}
-    {{ block.super }}
-    <div class="container my-5">
-        <div class="row">
-            <div class="col-md-6 mx-auto">
-                <h1 class="text-center mb-5">フィードの追加</h1>
-                {{ form.non_field_errors }}
-                {% for field in form %}
-                    {% for error in field.errors %}
-                        <div class="alert alert-danger text-center" role="alert">
-                            {{ error }}
-                        </div>
-                    {% endfor %}
-                {% endfor %}
-                <form method="post" action="{% url 'reader:add_feed' %}">
-                    {% csrf_token %}
-                    <div class="mb-4">
-                        {{ form.feed_name.label_tag }}
-                        {{ form.feed_name }}
-                    </div>
-                    <div class="mb-4">
-                        {{ form.url.label_tag }}
-                        {{ form.url }}
-                    </div>
-                    <button type="submit" class="btn btn-primary text-center">追加</button>
-                </form>
-                <div class="text-center mt-3">
-                    <a href="{% url 'reader:feed_list' %}" class="d-inline text-decoration-none">フィード一覧</a>に戻る
-                </div>
-            </div>
+{% extends "../base.html" %} {% block head %} {{ block.super }}
+<head>
+    {% block title %}
+    <title>フィードの追加</title>
+    {% endblock %}
+</head>
+{% endblock %} {% block navbar %} {{ block.super }} {% endblock %} {% block main %} {{ block.super }}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-6 mx-auto">
+            <h1 class="text-center mb-5">フィードの追加</h1>
+            {{ form.non_field_errors }} {% for field in form %} {% for error in field.errors %}
+            <div class="alert alert-danger text-center" role="alert">{{ error }}</div>
+            {% endfor %} {% endfor %}
+            <form method="post" action="{% url 'reader:add_feed' %}">
+                {% csrf_token %}
+                <div class="mb-4">{{ form.feed_name.label_tag }} {{ form.feed_name }}</div>
+                <div class="mb-4">{{ form.url.label_tag }} {{ form.url }}</div>
+                <button type="submit" class="btn btn-primary text-center">追加</button>
+            </form>
+            <div class="text-center mt-3"><a href="{% url 'reader:feed_list' %}" class="d-inline text-decoration-none">フィード一覧</a>に戻る</div>
         </div>
     </div>
+</div>
 {% endblock %}

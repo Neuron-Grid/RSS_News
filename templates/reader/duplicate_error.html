@@ -1,31 +1,22 @@
-{% extends "../base.html" %}
-{% block title %}
-	{{ block.super }}
-	<title>
-		エラー
-	</title>
-{% endblock %}
-{% block navbar%}
-	{{ block.super }}
-{% endblock %}
-{% block main %}
-	{{ block.super }}
-	<div class="container">
-		<div class="row">
-				<div class="col-md-6 offset-md-3 flex-column">
-					<div class="container text-center">
-						<div class="row">
-							<div class="col-md-8 offset-md-3">
-							<h2>エラー</h2>
-							<p class="my-5">同じフィードを複数回登録することはできません。</p>
-							<div class="d-flex justify-content-between">
-								<a href="{% url 'reader:add_feed' %}" class="btn btn-primary">フィードの追加に戻る</a>
-								<a href="{% url 'reader:feed_list' %}" class="btn btn-secondary">フィード一覧に戻る</a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+{% extends "../base.html" %} {% block head %} {{ block.super }} {% endblock %} {% block title %}
+<title>エラー</title>
+{% endblock %} {% block navbar %} {{ block.super }} {% endblock %} {% block main %} {{ block.super }}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3 flex-column">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 offset-md-3">
+                        <h2 class="my-4 mt-4 text-center">エラー</h2>
+                        <p class="my-5 text-center">同じフィードを複数回登録することはできません。</p>
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'reader:add_feed' %}" class="btn btn-primary"> フィードの追加に戻る </a>
+                            <a href="{% url 'reader:feed_list' %}" class="btn btn-secondary"> フィード一覧に戻る </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

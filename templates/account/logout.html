@@ -1,36 +1,25 @@
-{% extends '../base.html' %}
-{% block head %}
-    {{ block.super }}
-    {% block title %}
-        <title>
-            ログアウト
-        </title>
-    {% endblock %}
-{% endblock %}
-{% block navbar%}
-    {{ block.super }}
-{% endblock %}
-{% block main %}
-    {{ block.super }}
-    <div class="container my-5">
-        <div class="row">
-            <div class="col-md-6 mx-auto d-flex flex-column align-items-center">
+{% extends '../base.html' %} {% block head %} {{ block.super }} {% block title %}
+<title>ログアウト</title>
+{% endblock %} {% endblock %} {% block navbar %} {{ block.super }} {% endblock %} {% block main %} {{ block.super }}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-6 mx-auto d-flex flex-column align-items-center">
+            <div class="text-center">
+                <h1 class="mt-5 my-5 text-center">ログアウト</h1>
+                <p class="my-4">ログアウトしますか？</p>
+            </div>
+            <div class="d-flex my-3">
+                <form method="post" action="{% url 'account_logout' %}" class="me-4">
+                    {% csrf_token %}
+                    <button type="submit button" class="btn btn-primary">ログアウト</button>
+                </form>
                 <div class="text-center">
-                    <h1 class="mt-5 my-5 text-center">ログアウト</h1>
-                    <p class="my-4">ログアウトしますか？</p>
+                    <a href="{% url 'reader:index' %}" class="btn btn-secondary">
+                        <p class="d-inline text-decoration-none">トップページに戻る</p>
+                    </a>
                 </div>
-                <div class="d-flex my-3">
-                    <form method="post" action="{% url 'account_logout' %}" class="me-4">
-                        {% csrf_token %}
-                        <button type="submit button" class="btn btn-primary">ログアウト</button>
-                    </form>
-                    <div class="text-center">
-                        <a href="{% url 'reader:index' %}" class="btn btn-secondary">
-                            <p class="d-inline text-decoration-none">トップページに戻る</p>
-                        </a>
-                    </div>   
-                </div>             
             </div>
         </div>
     </div>
+</div>
 {% endblock %}
