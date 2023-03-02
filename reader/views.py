@@ -1,7 +1,7 @@
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError, transaction
 from .models import Feed, Subscription, Entry
-from django.shortcuts import render, redirect
 from django.db import IntegrityError
 from django.contrib import messages
 from .forms import AddFeedForm
@@ -31,6 +31,11 @@ def formal_error(request):
 @login_required
 def delete_feed_error(request):
     return render(request, 'reader/delete_feed_error.html')
+
+# エラー処理
+@login_required
+def error_page(request):
+    return render(request, 'reader/error_page.html')
 
 # フィード一覧
 @login_required
@@ -110,15 +115,18 @@ def add_feed(request):
         else:
             # フォームが無効な場合はエラーを表示する
             messages.error(request, '不正な値が入力されました。')
-        return redirect('reader:feed_list')
+        return redirect('reader:error_page')
     else:
         form = AddFeedForm()
     return render(request, 'reader/add_feed.html', {'form': form})
 
 # フィードの更新
-# detailed_list.htmlからフィードの更新ボタンを押したときに呼び出される
+# htmlのidがupdate-feed-buttonの更新ボタンを押したときRSSフィードが更新される
 @login_required
-def update_feed(feed_id):
+def update_feed(request, feed_id):
+    feed = get_object_or_404(Feed, pk=feed_id)
+    if Subscription.objects.filter(user=request.user, feed=feed_id).count() == 0:
+        return redirect('reader:error_page')
     feed = Feed.objects.get(id=feed_id)
     entries = feedparser.parse(feed.url)['entries']
     for entry in entries:

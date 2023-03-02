@@ -73,6 +73,7 @@ RSS フィードの情報を保存する為のモデルです。以下の属性�
 <details><summary>今後修正する問題</summary>
 
 -   フィードが更新されない
+-   detailed_list.htmlの更新ボタンが機能しない
 -   'settings.py' と 'docker-compose.yml' に書かれている DB の設定を環境変数に変更する
 -   アカウントの削除機能を追加する
 -   アカウントを削除するページを作成する
@@ -83,7 +84,6 @@ RSS フィードの情報を保存する為のモデルです。以下の属性�
 <details><summary>現在解決中の問題</summary>
 
 -   フィードの更新に関する問題を最優先で解決します
--   その後、アカウントの削除や管理するページを作成します
 </details>
 
 ---
@@ -119,6 +119,7 @@ EMAIL_HOST_PASSWORD=アプリパスワード
 
 #settings.pyのSECRET_KEY
 SECRET_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+DEBUG=True
 
 #データベースの設定
 DB_ENGINE=django.db.backends.mysql

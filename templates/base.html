@@ -61,5 +61,22 @@
     </nav>
     {% endblock %} {% block main %}
     <body></body>
+    {% endblock %} {% block JS_Resize %}
+    <script type="text/javascript">
+        function setCardHeight() {
+            const cards = document.querySelectorAll(".card");
+            let maxHeight = 0;
+            cards.forEach((card) => {
+                const height = card.offsetHeight;
+                if (height > maxHeight) {
+                    maxHeight = height;
+                }
+            });
+            cards.forEach((card) => {
+                card.style.height = `${maxHeight}px`;
+            });
+        }
+        setCardHeight();
+    </script>
     {% endblock %}
 </html>

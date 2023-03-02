@@ -1,0 +1,27 @@
+{% extends "../base.html" %} {% block head %} {{ block.super }} {% endblock %} {% block title %}
+<title>エラー</title>
+{% endblock %} {% block navbar %} {{ block.super }} {% endblock %} {% block main %} {{ block.super }}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3 flex-column">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 offset-md-3">
+                        <h2 class="my-4 mt-4 text-center">エラー</h2>
+                        <p class="my-5 text-center">
+                            エラーが発生しました。<br />
+                            問題が発生している場合は、管理者に状況を報告してください。<br />
+                        </p>
+                        <!-- エラーメッセージがある場合は表示する -->
+                        <p class="my-4 mt-4 text-center">{% if error_message %} {{ error_message }} {% endif %}</p>
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'reader:site_manager' %}" class="btn btn-primary"> 管理者情報 </a>
+                            <a href="{% url 'reader:feed_list' %}" class="btn btn-secondary"> フィード一覧に戻る </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

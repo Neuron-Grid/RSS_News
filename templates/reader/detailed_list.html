@@ -25,30 +25,22 @@
         {% endfor %}
     </div>
 </div>
-{% endblock %} {% block script %}
+{% endblock %} {% block feed_update %}
 <script type="text/javascript">
-    function setCardHeight() {
-        const cards = document.querySelectorAll(".card");
-        let maxHeight = 0;
-        cards.forEach((card) => {
-            const height = card.offsetHeight;
-            if (height > maxHeight) {
-                maxHeight = height;
-            }
-        });
-        cards.forEach((card) => {
-            card.style.height = `${maxHeight}px`;
-        });
-    }
-    setCardHeight();
-
-    $(document).ready(function () {
-        $("#update-feed-button").click(function () {
-            var feedId = $(this).data("feed-id");
-            $.post("{% url 'update_feed' feed_id=feedId %}", function () {
-                window.location.href = "{% url 'reader:detailed_list' pk=feedId %}";
-            });
+    // HTMLのidがupdate-feed-buttonのボタンを押されたら、RSSフィードを更新する
+    // 処理が終わったら、このページをリロードする
+    $(document).on("click", "#update-feed-button", function () {
+        var feed_id = $(this).data("feed-id");
+        $.ajax({
+            url: "/api/feeds/" + feed_id,
+            type: "PUT",
+            success: function (data) {
+                location.reload();
+            },
+            error: function (data) {
+                alert("更新に失敗しました");
+            },
         });
     });
 </script>
-{% endblock %}
+{% endblock %} {% block JS_Resize %} {{ block.super }} {% endblock %}

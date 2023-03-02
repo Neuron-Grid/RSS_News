@@ -10,9 +10,12 @@ urlpatterns = [
     path('feed_list/', views.feed_list, name='feed_list'),
     path('add_feed/', views.add_feed, name='add_feed'),
     path('remove_feed/<int:feed_id>/', views.remove_feed, name='remove_feed'),
-    path('duplicate_error/', views.duplicate_error, name='duplicate_error'),
     path('detailed_list/<int:pk>/', views.detailed_list, name='detailed_list'),
-    path('delete_feed_error/', views.delete_feed_error, name='delete_feed_error'),
     path('formal_error/', views.formal_error, name='formal_error'),
     path('update_feed/<int:feed_id>/', views.update_feed, name='update_feed'),
+    path('update_feed/', views.update_feed, name='update_feed'),
+    # エラーページ
+    path('error_page/', views.update_feed, name='error'),
+    path('duplicate_error/', views.duplicate_error, name='duplicate_error'),
+    path('delete_feed_error/', views.delete_feed_error, name='delete_feed_error'),
 ]
