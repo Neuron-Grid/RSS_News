@@ -1,20 +1,41 @@
 version: "3.7"
 services:
-  django-db:
-    # env_file: ./local.env
-    platform: linux/x86_64
-    image: "mysql:5.7"
-    environment:
-      - "MYSQL_ROOT_PASSWORD=root"
-      - "MYSQL_DATABASE=mysitedb"
-      - "MYSQL_USER=mysitedbuser"
-      - "MYSQL_PASSWORD=mysitedbpassword"
-    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-    ports:
-      - "3306:3306"
-    volumes:
-      - ./mysqldata:/var/lib/mysql
-  rabbitmq:
-    image: "rabbitmq:3.8.3-management"
-    ports:
-      - "6379:6379"
+    # MySQLサーバー
+    mysql:
+        platform: linux/x86_64
+        image: "mysql:5.7"
+        environment:
+            - "MYSQL_ROOT_PASSWORD=root"
+            - "MYSQL_DATABASE=mysitedb"
+            - "MYSQL_USER=mysitedbuser"
+            - "MYSQL_PASSWORD=mysitedbpassword"
+        command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+        ports:
+            - "3306:3306"
+        volumes:
+            - ./mysqldata:/var/lib/mysql
+    # Redisサーバー
+    redis:
+        platform: linux/x86_64
+        image: "redis:latest"
+        ports:
+            - "8000:8000"
+        depends_on:
+            - mysql
+        environment:
+            - "DJANGO_SETTINGS_MODULE=RSS_News.settings.docker"
+            - "DATABASE_URL=mysql://mysitedbuser:mysitedbpassword@mysql:3306/mysitedb"
+        networks:
+            mynetwork:
+                ipv4_address: 172.27.0.2
+        # Redisキャッシュバックエンドを設定
+        extra_hosts:
+            - "redis:172.27.0.2"
+        volumes:
+            - ./data/redis:/var/lib/redis
+
+networks:
+    mynetwork:
+        ipam:
+            config:
+                - subnet: 172.27.0.0/16

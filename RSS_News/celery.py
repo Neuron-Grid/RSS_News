@@ -1,4 +1,3 @@
-# Celery
 from celery.schedules import crontab
 from celery import Celery
 import os
@@ -16,8 +15,3 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': crontab(minute='*/5'),
     },
 }
-
-CELERY_BROKER_URL = 'redis://localhost:6379/1'  # RedisのURL
-CELERY_RESULT_BACKEND = 'django-db'             # DBに結果を保存
-CELERY_CACHE_BACKEND = 'django-cache'           # キャッシュに結果を保存
-CELERY_TASK_TRACK_STARTED = True                # 開始時刻を記録

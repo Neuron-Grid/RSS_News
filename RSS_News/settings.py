@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     "django_bootstrap5",
     'django_feedparser',
+    # フィードの自動更新
     'django_celery_beat',
     'django_celery_results',
 ]
@@ -110,7 +111,6 @@ DATABASES = {
         # MySQLで日本語が使えるようにする設定
         'OPTIONS': {
             'charset': 'utf8mb4',
-            'connect_timeout': 10,
         },
     }
 }
@@ -174,7 +174,7 @@ LOGIN_REDIRECT_URL = '/feed_list'                       # ログイン後のリ�
 ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login/'        # ログアウト後のリダイレクト先
 
 # メールの設定
-# local.envから読み取って記述
+# envファイルから読み取る
 EMAIL_HOST = env('EMAIL_HOST')                          # メールサーバーのホスト名
 EMAIL_PORT = env('EMAIL_PORT')                          # メールサーバーのポート番号
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')                # メールサーバーのユーザー名
@@ -183,4 +183,8 @@ EMAIL_USE_TLS = True                                    # TLS暗号化通信を�
 EMAIL_USE_SSL = False                                   # SSL暗号化通信を使用しない
 
 # CELERY
-CELERY_TASK_TRACK_STARTED = True
+CELERY_BROKER_URL = 'redis://localhost:6379/0'                                          # RedisのURL
+# CELERY_RESULT_BACKENDにMySQLの設定を記述
+CELERY_RESULT_BACKEND = 'db+mysql://mysitedbuser:mysitedbpassword@127.0.0.1/mysitedb'   # DBに結果を保存
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+CELERY_TASK_TRACK_STARTED = True                                                        # 開始時刻を記録
