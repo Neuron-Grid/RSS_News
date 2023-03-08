@@ -36,7 +36,7 @@
 このアプリは、`Feed`、`Entry`、`UserFeed`の 3 つの DB テーブルを使用しています。<br>
 ログイン機能は、Django Allauthを利用している為、Userテーブルは無いです。<br>
 
-<details><summary>詳細はこちらに記載しています。</summary>
+<details><summary>詳細はこちら</summary>
 
 ### Feed モデル
 
@@ -73,8 +73,9 @@ RSS フィードの情報を保存する為のモデルです。以下の属性�
 -   settings.pyとdocker-compose.ymlに書かれている DB の設定を環境変数に変更する
 -   アカウントの削除機能を追加する
 -   アカウントの削除ページを作成する
--   デザインを統一する
 -   アカウントの管理ページを作成する
+-   デザインを統一する
+-   ダークモードの実装
 </details>
 
 <details><summary>解決中の問題</summary>
@@ -85,6 +86,9 @@ RSS フィードの情報を保存する為のモデルです。以下の属性�
 ---
 
 ## 使い方
+
+> **Note**<br>
+> Googleアカウントの設定以外はコピペで動きます
 
 ### 1. リポジトリをクローンする
 
@@ -102,17 +106,23 @@ django-redis django-bootstrap5 mysqlclient django-environ python-dotenv
 pip list --outdated | tail -n +3 | awk '{print $1}' | xargs pip install -U 
 ```
 
-### 3. local.env を作成し、環境変数を設定する
+### 3. プロジェクトのルートフォルダに移動し、local.envに環境変数を設定する
 ```Shell
+cd RSS_News && \
 touch local.env
 ```
 
 ### local.envの設定例です。
+
+> **Warning**<br>
+> 事前にgoogleアカウントのアプリパスワードを発行してください。
+
+
 ```local.env
 #メールの設定
 EMAIL_HOST=smtp.googlemail.com
 EMAIL_PORT=587
-EMAIL_HOST_USER=google_account@gmail.com
+EMAIL_HOST_USER=googleアカウント@gmail.com
 EMAIL_HOST_PASSWORD=アプリパスワード
 
 #settings.py
@@ -124,7 +134,7 @@ DEBUG=False
 
 ```Shell
 docker-compose up -d && \
-sleep 5; python manage.py makemigrations && \
+sleep 10; python manage.py makemigrations && \
 python manage.py migrate && \
 python manage.py runserver
 ```
