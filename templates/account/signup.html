@@ -1,85 +1,98 @@
-{% extends '../base.html' %}
-{% block head %}
-    {{ block.super }}
-    <head>
-        {% block title %}
-        <title>
-            アカウント作成
-        </title>
-        {% endblock %}
-    </head>
-{% endblock %}
-{% block navbar%}
-    {{ block.super }}
-{% endblock %}
-{% block main %}
-    {{ block.super }}
-    <!-- 中央寄せにして作成 -->
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6 offset-md-3 flex-column">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-8 offset-md-3">
-                            <h1>アカウント作成</h1>
-                            <form class="d-flex flex-column" method="post" action="{% url 'account_signup' %}">
-                                {% csrf_token %}
-                                <label for="{{ form.username.id_for_label }}">ユーザー名</label>
-                                {{ form.username }}
-                                <label for="{{ form.email.id_for_label }}">メールアドレス</label>
-                                {{ form.email }}
-                                <label for="{{ form.password1.id_for_label }}">パスワード</label>
-                                {{ form.password1 }}
-                                <label for="{{ form.password2.id_for_label }}">パスワードの確認</label>
-                                {{ form.password2 }}
-                                <button type="submit" class="btn btn-primary mt-3">作成</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>    
-    <!-- ログインページに戻るリンクを作成ボタンの下に追加 -->
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6 offset-md-3 flex-column">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-8 offset-md-3 text-center">
-                            <p class="my-4">
-                                既にアカウントをお持ちの方は、
-                                <a href="{% url 'account_login' %}" class="d-inline text-decoration-none">こちら</a>
-                                からログインして下さい。
-                            </p>
-                            <p class="mb-0">必ず注意事項を読んで下さい。</p>
-                        </div>
+{% extends '../base.html' %} {% block head %} {{ block.super }}
+<head>
+    {% block title %}
+    <title>アカウント作成</title>
+    {% endblock %}
+</head>
+{% endblock %} {% block navbar%} {{ block.super }} {% endblock %} {% block main %} {{ block.super }}
+<!-- 中央寄せにして作成 -->
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3 flex-column">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 offset-md-3">
+                        <h1 class="my-5">アカウント作成</h1>
+                        <form class="d-flex flex-column" method="post" action="{% url 'account_signup' %}">
+                            {% csrf_token %}
+                            <label for="{{ form.username.id_for_label }}">ユーザー名</label>
+                            {{ form.username }}
+                            <label for="{{ form.email.id_for_label }}">メールアドレス</label>
+                            {{ form.email }}
+                            <label for="{{ form.password1.id_for_label }}">パスワード</label>
+                            {{ form.password1 }}
+                            <label for="{{ form.password2.id_for_label }}">パスワードの確認</label>
+                            {{ form.password2 }}
+                            <button type="submit" class="btn btn-primary mt-3">作成</button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6 offset-md-3 flex-column">
-                <div class="container">
-                    <div class="row my-3">
-                        <div class="col-md-8 offset-md-3 text-center card">
-                            <div class="card-body">
-                                <details>
-                                    <summary>注意事項</summary>
-                                    <ul class="list-group list-group-flush">
-                                        <li class="list-group-item">
-                                            <p>現時点では、アカウントの削除機能がありません。</p>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <p>現時点では、アカウントの管理のページがありません。</p>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <p>今後、この機能を出来るだけ早く追加します。</p>
-                                        </li>
-                                    </ul>
-                                </details>
+</div>
+<!-- ログインページに戻るリンクを作成ボタンの下に追加 -->
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3 flex-column">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 offset-md-3 text-center">
+                        <p class="my-4">
+                            既にアカウントをお持ちの方は、
+                            <a href="{% url 'account_login' %}" class="d-inline text-decoration-none">こちら</a>
+                            からログインして下さい。
+                        </p>
+                        <p class="mb-0">必ず注意事項を読んで下さい。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 offset-md-3 flex-column">
+            <div class="container">
+                <div class="row my-3">
+                    <div class="col-md-8 text-center card border-0">
+                        <div class="card-body text-center">
+                            <div class="accordion" id="accordionExample">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingOne">
+                                        <button
+                                            class="accordion-button collapsed"
+                                            type="button"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#collapseOne"
+                                            aria-expanded="false"
+                                            aria-controls="collapseOne"
+                                            data-bs-parent="#accordionExample"
+                                        >
+                                            注意事項
+                                        </button>
+                                    </h2>
+                                    <div
+                                        id="collapseOne"
+                                        class="accordion-collapse collapse"
+                                        aria-labelledby="headingOne"
+                                        data-bs-parent="#accordionExample"
+                                    >
+                                        <div class="accordion-body">
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item">
+                                                    <p>アカウントの削除機能がありません。</p>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <p>アカウントの管理のページがありません。</p>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <p>今後、この機能を出来るだけ早く追加します。</p>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -87,4 +100,5 @@
             </div>
         </div>
     </div>
+</div>
 {% endblock %}

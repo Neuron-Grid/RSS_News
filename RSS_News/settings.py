@@ -179,7 +179,6 @@ EMAIL_PORT = env('EMAIL_PORT')                          # メールサーバー�
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')                # メールサーバーのユーザー名
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')        # メールサーバーのパスワード
 EMAIL_USE_TLS = True                                    # TLS暗号化通信を使用する
-EMAIL_USE_SSL = False                                   # SSL暗号化通信を使用しない
 
 # CELERY
 CELERY_BROKER_URL = 'redis://localhost:6379/0'                                          # RedisのURL
