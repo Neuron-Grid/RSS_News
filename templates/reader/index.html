@@ -23,47 +23,45 @@
                 </p>
             </div>
         </div>
-    </div>
-</div>
-<div class="container">
-    <div class="row justify-content-center">
         <div class="col-md-6 offset-md-2 flex-column">
-            <div class="row my-3">
-                <div class="col-md-8 text-center card border-0">
-                    <div class="card-body">
-                        <div class="accordion" id="accordionExample">
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="headingOne">
-                                    <button
-                                        class="accordion-button"
-                                        type="button"
-                                        data-bs-toggle="collapse"
-                                        data-bs-target="#collapseOne"
-                                        aria-expanded="false"
-                                        aria-controls="collapseOne"
+            <div class="container">
+                <div class="row my-3">
+                    <div class="col-md-8 card border-0">
+                        <div class="card-body">
+                            <div class="accordion" id="accordionExample">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingOne">
+                                        <button
+                                            class="accordion-button collapsed"
+                                            type="button"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#collapseOne"
+                                            aria-expanded="false"
+                                            aria-controls="collapseOne"
+                                            data-bs-parent="#accordionExample"
+                                        >
+                                            注意事項
+                                        </button>
+                                    </h2>
+                                    <div
+                                        id="collapseOne"
+                                        class="accordion-collapse collapse"
+                                        aria-labelledby="headingOne"
                                         data-bs-parent="#accordionExample"
                                     >
-                                        注意事項
-                                    </button>
-                                </h2>
-                                <div
-                                    id="collapseOne"
-                                    class="accordion-collapse collapse"
-                                    aria-labelledby="headingOne"
-                                    data-bs-parent="#accordionExample"
-                                >
-                                    <div class="accordion-body">
-                                        <ul class="list-group list-group-flush">
-                                            <li class="list-group-item">
-                                                <p>アカウントの削除機能がありません。</p>
-                                            </li>
-                                            <li class="list-group-item">
-                                                <p>アカウントの管理のページがありません。</p>
-                                            </li>
-                                            <li class="list-group-item">
-                                                <p>今後、この機能を出来るだけ早く追加します。</p>
-                                            </li>
-                                        </ul>
+                                        <div class="accordion-body">
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item">
+                                                    <p>アカウントの削除機能がありません。</p>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <p>アカウントの管理のページがありません。</p>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <p>今後、この機能を出来るだけ早く追加します。</p>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -72,10 +70,6 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
-<div class="container">
-    <div class="row justify-content-center">
         <div class="col-md-5">
             <div class="my-4 text-center">
                 <p>
@@ -87,13 +81,4 @@
         </div>
     </div>
 </div>
-
 {% endblock %}
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const accordionButton = document.querySelector(".accordion-button");
-        const accordionCollapse = document.querySelector(".accordion-collapse");
-        accordionButton.classList.add("collapsed");
-        accordionCollapse.classList.remove("show");
-    });
-</script>

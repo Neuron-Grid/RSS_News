@@ -54,7 +54,7 @@ def custom_parse_datetime(value):
         return None
     # valueがstr型の場合
     if isinstance(value, str):
-        # 日付文字列のフォーマットを調整する
+        # 日付のフォーマットを調整する
         for pattern in [
             r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?[+-]\d{2}:\d{2}$',
             r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z$',
@@ -121,12 +121,9 @@ def add_feed(request):
     return render(request, 'reader/add_feed.html', {'form': form})
 
 # フィードの更新
-# htmlのidがupdate-feed-buttonの更新ボタンを押したときRSSフィードが更新される
+# postを受け取った場合だけフィードを更新する
 @login_required
 def update_feed(request, feed_id):
-    feed = get_object_or_404(Feed, pk=feed_id)
-    if Subscription.objects.filter(user=request.user, feed=feed_id).count() == 0:
-        return redirect('reader:error_page')
     feed = Feed.objects.get(id=feed_id)
     entries = feedparser.parse(feed.url)['entries']
     for entry in entries:
@@ -162,12 +159,11 @@ def detailed_list(request, pk):
     feed = Feed.objects.get(id=pk)
     entries = Entry.objects.filter(
         feed=feed,
-        # title=request.GET.get('title', ''),
-    ).order_by('-pub_date')
+    ).order_by('pub_date')
+
+    # 更新ボタンが押されたらフィードを更新
     if request.method == 'POST':
-        # update_feed関数を呼び出す
         update_feed(request, pk)
-        # 更新が終了したら、再度詳細ページにリダイレクトする
         return redirect('reader:detailed_list', pk=pk)
 
     return render(request, 'reader/detailed_list.html', {

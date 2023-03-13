@@ -10,10 +10,7 @@
         <h1 class="mt-5 my-5 text-center">メールアドレスが確認されました。</h1>
         {% if confirmation %} {% url 'account_login' as login_url %}
         <p>メールアドレスの確認が完了しました。</p>
-        <p>
-            <!-- ユーザー名を表示 -->
-            {{ user.username }}様であれば、確認ボタンを押してログインしてください。
-        </p>
+        <p>{{ user.username }}様であれば、確認ボタンを押してログインしてください。</p>
         <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
             {% csrf_token %}
             <button type="submit" class="btn btn-primary mt-3">確認</button>

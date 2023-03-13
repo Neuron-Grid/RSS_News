@@ -18,7 +18,7 @@
                             {% csrf_token %}
                             <p class="mt-5">本当に削除しますか？</p>
                             <h3>{{ feed.title }}</h3>
-                            <button type="submit" class="btn btn-secondary">削除</button>
+                            <button type="submit" class="btn btn-danger">削除</button>
                         </form>
                     </div>
                 </div>
@@ -33,7 +33,7 @@
             <div class="container text-center">
                 <div class="row mt-4">
                     <div class="col-md-8 offset-md-3">
-                        <a href="{% url 'reader:feed_list' %}">フィード一覧に戻る</a>
+                        <a href="{% url 'reader:feed_list' %}" class="btn btn-primary">フィード一覧に戻る</a>
                     </div>
                 </div>
             </div>

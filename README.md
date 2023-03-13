@@ -7,11 +7,11 @@
 -   web サイトのデザインに[Bootstrap](https://getbootstrap.com/)を使用しています。
 
 ## 作成理由
--   今自分が使っているRSSリーダーが異なるOS間で連携が取れないので不便だった
+
+-   今自分が使っている RSS リーダーが異なる OS 間で連携が取れないので不便だった
 -   クロスプラットフォームで使えるものを作成する必要があった
 
-この２つを考慮し、ブラウザ上で動作するRSSリーダーを作成するのが最適だと考えた為、Djangoで作成しました。
-
+この２つを考慮し、ブラウザ上で動作する RSS リーダーを作成するのが最適だと考えた為、Django で作成しました。
 
 ---
 
@@ -27,14 +27,14 @@
 -   [django-celery-results](https://pypi.org/project/django-celery-results/)<br>
 -   [python-dotenv](https://pypi.org/project/python-dotenv/)<br>
 
-リンク先は[PyPI](https://pypi.org/)のURLです。
+リンク先は[PyPI](https://pypi.org/)の URL です。
 
 ---
 
 ## DB 設計
 
 このアプリは、`Feed`、`Entry`、`UserFeed`の 3 つの DB テーブルを使用しています。<br>
-ログイン機能は、Django Allauthを利用している為、Userテーブルは無いです。<br>
+ログイン機能は、Django Allauth を利用している為、User テーブルは無いです。<br>
 
 <details><summary>詳細はこちら</summary>
 
@@ -69,8 +69,8 @@ RSS フィードの情報を保存する為のモデルです。以下の属性�
 <details><summary>今後修正する問題</summary>
 
 -   フィードが自動更新されない(動作未検証)
--   detailed_list.htmlの更新ボタンが機能しない
--   settings.pyとdocker-compose.ymlに書かれている DB の設定を環境変数に変更する
+-   detailed_list.html の更新ボタンが機能しない
+-   settings.py と docker-compose.yml に書かれている DB の設定を環境変数に変更する
 -   アカウントの削除機能を追加する
 -   アカウントの削除ページを作成する
 -   アカウントの管理ページを作成する
@@ -88,35 +88,39 @@ RSS フィードの情報を保存する為のモデルです。以下の属性�
 ## 使い方
 
 > **Note**<br>
-> Googleアカウントの設定以外はコピペで動きます
+> Google アカウントの設定以外はコピペで動きます
 
 ### 1. リポジトリをクローンする
 
 ```Shell
 git clone https://github.com/Neuron-Grid/RSS_News.git
 ```
+
 ### 2. 必要なパッケージをインストールする
+
 ```Shell
 pip install celery django-allauth feedparser django-crispy-forms \
 django-celery-results django_feedparser redis django django-celery-beat \
 django-redis django-bootstrap5 mysqlclient django-environ python-dotenv
 ```
+
 ### パッケージが古い場合は更新してください
+
 ```Shell
-pip list --outdated | tail -n +3 | awk '{print $1}' | xargs pip install -U 
+pip list --outdated | tail -n +3 | awk '{print $1}' | xargs pip install -U
 ```
 
-### 3. プロジェクトのルートフォルダに移動し、local.envに環境変数を設定する
+### 3. プロジェクトのルートフォルダに移動し、local.env に環境変数を設定する
+
 ```Shell
 cd RSS_News && \
 touch local.env
 ```
 
-### local.envの設定例です。
+### local.env の設定例です。
 
-> **Warning**<br>
-> 事前にgoogleアカウントのアプリパスワードを発行してください。
-
+> **Warning** <br>
+> 事前に google アカウントのアプリパスワードを発行してください。
 
 ```local.env
 #メールの設定

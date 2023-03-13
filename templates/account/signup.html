@@ -11,7 +11,7 @@
         <div class="col-md-6 offset-md-3 flex-column">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-8 offset-md-3">
+                    <div class="col-md-8 offset-md-2">
                         <h1 class="my-5 text-center">アカウント作成</h1>
                         <form class="d-flex flex-column" method="post" action="{% url 'account_signup' %}">
                             {% csrf_token %}
@@ -26,18 +26,8 @@
                             <button type="submit" class="btn btn-primary mt-3">作成</button>
                         </form>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- ログインページに戻るリンクを作成ボタンの下に追加 -->
-<div class="container">
-    <div class="row">
-        <div class="col-md-6 offset-md-3 flex-column">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-8 offset-md-3 text-center">
+                    <!-- ログインページに戻るリンクを作成ボタンの下に追加 -->
+                    <div class="col-md-8 offset-md-2 text-center">
                         <p class="my-4">
                             既にアカウントをお持ちの方は、
                             <a href="{% url 'account_login' %}" class="d-inline text-decoration-none">こちら</a>
@@ -52,7 +42,7 @@
 </div>
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-6 offset-md-3 flex-column">
+        <div class="col-md-6 offset-md-2 flex-column">
             <div class="container">
                 <div class="row my-3">
                     <div class="col-md-8 text-center card border-0">

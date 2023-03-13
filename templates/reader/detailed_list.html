@@ -3,7 +3,7 @@
 {% endblock %} {% block navbar %} {{ block.super }} {% endblock %} {% block main %} {{ block.super }}
 <div class="container">
     <div class="text-center">
-        <h1>{{ feed.title }}</h1>
+        <h1 class="mt-5 my-5">{{ feed.title }}</h1>
         <p>{{ feed.description }}</p>
     </div>
     <div class="my-4 text-center">
@@ -16,31 +16,18 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ entry.title }}</h5>
                     <p class="card-text">{{ entry.summary }}</p>
+                    <p class="card-text">
+                        <small class="text-muted">記事の公開日時 : {{ entry.published }} </small>
+                    </p>
                 </div>
                 <div class="card-footer">
                     <a href="{{ entry.link }}" target="_blank" class="btn btn-primary"> 記事を読む </a>
+                    <!-- 日時を追加 -->
+                    <p>{{ entry.published }}</p>
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
 </div>
-{% endblock %} {% block feed_update %}
-<script type="text/javascript">
-    // HTMLのidがupdate-feed-buttonのボタンを押されたら、RSSフィードを更新する
-    // 処理が終わったら、このページをリロードする
-    $(document).on("click", "#update-feed-button", function () {
-        var feed_id = $(this).data("feed-id");
-        $.ajax({
-            url: "/api/feeds/" + feed_id,
-            type: "PUT",
-            success: function (data) {
-                location.reload();
-            },
-            error: function (data) {
-                alert("更新に失敗しました");
-            },
-        });
-    });
-</script>
-{% endblock %} {% block JS_Resize %} {{ block.super }} {% endblock %}
+{% endblock %}

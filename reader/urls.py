@@ -13,7 +13,6 @@ urlpatterns = [
     path('detailed_list/<int:pk>/', views.detailed_list, name='detailed_list'),
     path('formal_error/', views.formal_error, name='formal_error'),
     path('update_feed/<int:feed_id>/', views.update_feed, name='update_feed'),
-    path('update_feed/', views.update_feed, name='update_feed'),
     # エラーページ
     path('error_page/', views.update_feed, name='error'),
     path('duplicate_error/', views.duplicate_error, name='duplicate_error'),

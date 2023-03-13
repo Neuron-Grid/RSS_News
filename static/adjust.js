@@ -1,5 +1,5 @@
+// カードの高さを揃える
 function setCardHeight() {
-	// カードの高さを揃える
 	const cards = document.querySelectorAll(".card");
 	let maxHeight = 0;
 	cards.forEach((card) => {
@@ -13,6 +13,7 @@ function setCardHeight() {
 	});
 }
 setCardHeight();
+
 //detailsタグの展開と高さの調整を制御する
 jQuery(document).ready(function() {
 	jQuery('details').each(function() {
@@ -36,10 +37,21 @@ jQuery(document).ready(function() {
 		$content.hide(isOpen ? 'hide' : 'show');
 	});
 });
-// ページを読み込んだ時に注意事項のリストを閉じる
-document.addEventListener("DOMContentLoaded", function() {
-	const accordionButton = document.querySelector('.accordion-button');
-	const accordionCollapse = document.querySelector('.accordion-collapse');
-	accordionButton.classList.add('collapsed');
-	accordionCollapse.classList.remove('show');
-});
+
+// htmlのupdate-feed-buttonをクリックしたときにRSSフィードを更新する
+function update_feed(feed_id) {
+	const url = '/update_feed/' + feed_id + '/';
+	fetch(url, {
+		method: 'GET',
+		headers: {
+		'Content-Type': 'application/json',
+		'X-CSRFToken': csrftoken,
+		},
+	})
+	.then((response) => {
+		return response.json();
+	})
+	.then((json) => {
+		console.log(json);
+	});
+}
