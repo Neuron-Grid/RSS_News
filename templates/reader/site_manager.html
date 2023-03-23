@@ -5,8 +5,8 @@
     {% endblock %}
 </head>
 {% endblock %} {% block navbar %} {{ block.super }} {% endblock %} {% block main %} {{ block.super }}
-<div class="container mt-5">
-    <h1 class="text-center my-5">管理者情報</h1>
+<div class="container">
+    <h1 class="text-center my-5 mt-5">管理者情報</h1>
     <table class="table table-striped">
         <tbody class="text-center">
             <tr>
@@ -29,6 +29,13 @@
                 <td>
                     <a href="https://misskey.io/@Neuron_Grid/" class="link-primary d-inline text-decoration-none">こちら</a>
                     が管理者のMisskeyアカウントです。
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">Matrix.io</th>
+                <td>
+                    <a href="https://matrix.to/#/@neuron_grid:matrix.org" class="link-primary d-inline text-decoration-none">こちら</a>
+                    が管理者のMatrix.io(Element)アカウントです。
                 </td>
             </tr>
         </tbody>

@@ -69,18 +69,26 @@ RSS フィードの情報を保存する為のモデルです。以下の属性�
 <details><summary>今後修正する問題</summary>
 
 -   フィードが自動更新されない(動作未検証)
--   detailed_list.html の更新ボタンが機能しない
--   settings.py と docker-compose.yml に書かれている DB の設定を環境変数に変更する
+-   `detailed_list.html`の更新ボタンが機能しない
+-   `settings.py`と`docker-compose.yml`に書かれている DB の設定を環境変数に変更する
 -   アカウントの削除機能を追加する
 -   アカウントの削除ページを作成する
 -   アカウントの管理ページを作成する
 -   デザインを統一する
 -   ダークモードの実装
-</details>
+-   エラーページを`error_page.html`にまとめる
+    <!-- -   ログイン機能を`keycloak`などの`SSO`に変更する -->
+    </details>
 
 <details><summary>解決中の問題</summary>
 
--   フィードの更新に関する問題を最優先で解決します
+-   フィードの更新に関する問題を優先的に解決します
+-   デザインを統一する
+
+> **Warning** <br>
+> 現在、非同期処理を利用し RSS フィードを 5 分毎に更新する機能の実装が難航しています。<br>
+> いつ実装できるかは不明ですが、必ず実装します。しばらくお待ちください。
+
 </details>
 
 ---
@@ -88,7 +96,7 @@ RSS フィードの情報を保存する為のモデルです。以下の属性�
 ## 使い方
 
 > **Note**<br>
-> Google アカウントの設定以外はコピペで動きます
+> Google アカウントの設定以外はコピペで動きます。
 
 ### 1. リポジトリをクローンする
 
@@ -112,6 +120,9 @@ pip list --outdated | tail -n +3 | awk '{print $1}' | xargs pip install -U
 
 ### 3. プロジェクトのルートフォルダに移動し、local.env に環境変数を設定する
 
+> **Warning** <br>
+> ローカル環境で実行する場合は、nginx.conf も編集してください。
+
 ```Shell
 cd RSS_News && \
 touch local.env
@@ -132,12 +143,21 @@ EMAIL_HOST_PASSWORD=アプリパスワード
 #settings.py
 SECRET_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 DEBUG=False
+
+#docker-compose.yml
+MYSQL_ROOT_PASSWORD=root
+MYSQL_DATABASE=mysitedb
+MYSQL_USER=mysitedbuser
+MYSQL_PASSWORD=mysitedbpassword
+
+#ドメインの設定
+DOMAIN=example.com
 ```
 
 ### 4. 実行する
 
 ```Shell
-docker-compose up -d && \
+ENV_FILE=local.env docker-compose up -d && \
 sleep 10; python manage.py makemigrations && \
 python manage.py migrate && \
 python manage.py runserver

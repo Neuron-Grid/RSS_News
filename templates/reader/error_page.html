@@ -5,15 +5,17 @@
     <div class="row">
         <div class="col-md-6 offset-md-3 flex-column">
             <div class="container">
-                <div class="row">
+                <div class="row text-center">
                     <div class="col-md-8 offset-md-3">
-                        <h2 class="my-4 mt-4 text-center">エラー</h2>
-                        <p class="my-5 text-center">
+                        <h2 class="my-4 mt-4">エラー</h2>
+                        <p class="my-5">
                             エラーが発生しました。<br />
                             問題が発生している場合は、管理者に状況を報告してください。<br />
                         </p>
                         <!-- エラーメッセージがある場合は表示する -->
-                        <p class="my-4 mt-4 text-center">{% if error_message %} {{ error_message }} {% endif %}</p>
+                        {% if error_message %}
+                        <p class="my-4 mt-4">{{ error_message }}</p>
+                        {% endif %}
                         <div class="d-flex justify-content-between">
                             <a href="{% url 'reader:site_manager' %}" class="btn btn-primary"> 管理者情報 </a>
                             <a href="{% url 'reader:feed_list' %}" class="btn btn-secondary"> フィード一覧に戻る </a>

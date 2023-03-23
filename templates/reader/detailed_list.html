@@ -16,14 +16,10 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ entry.title }}</h5>
                     <p class="card-text">{{ entry.summary }}</p>
-                    <p class="card-text">
-                        <small class="text-muted">記事の公開日時 : {{ entry.published }} </small>
-                    </p>
                 </div>
-                <div class="card-footer">
-                    <a href="{{ entry.link }}" target="_blank" class="btn btn-primary"> 記事を読む </a>
-                    <!-- 日時を追加 -->
-                    <p>{{ entry.published }}</p>
+                <div class="card-footer d-flex justify-content-between">
+                    <a href="{{ entry.link }}" target="_blank" class="btn btn-primary">記事を読む</a>
+                    <p class="mb-0">記事の公開日時:{{ entry.pub_date }}</p>
                 </div>
             </div>
         </div>

@@ -107,7 +107,6 @@ DATABASES = {
         'PASSWORD': 'mysitedbpassword',
         'HOST': '127.0.0.1',
         'PORT': '3306',
-        # MySQLで日本語が使えるようにする設定
         'OPTIONS': {
             'charset': 'utf8mb4',
         },
@@ -179,7 +178,6 @@ LOGIN_REDIRECT_URL = '/feed_list'                       # ログイン後のリ�
 ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login/'        # ログアウト後のリダイレクト先
 
 # メールの設定
-# envファイルから読み取る
 EMAIL_HOST = env('EMAIL_HOST')                          # メールサーバーのホスト名
 EMAIL_PORT = env('EMAIL_PORT')                          # メールサーバーのポート番号
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')                # メールサーバーのユーザー名

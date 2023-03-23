@@ -1,9 +1,14 @@
 version: "3.7"
 services:
-    # envファイルを読み込む
-    env_file:
-        - local.env
-        - server.env
+    # Nginxサーバー
+    nginx:
+        platform: linux/x86_64
+        image: "nginx:1.19.0"
+        ports:
+            - "80:80"
+        volumes:
+            - ./nginx.conf:/etc/nginx/nginx.conf
+            - ./html:/var/www/html
     # MySQLサーバー
     mysql:
         platform: linux/x86_64
@@ -18,28 +23,3 @@ services:
             - "3306:3306"
         volumes:
             - ./mysqldata:/var/lib/mysql
-    # Redisサーバー
-    redis:
-        platform: linux/x86_64
-        image: "redis:latest"
-        ports:
-            - "8000:8000"
-        depends_on:
-            - mysql
-        environment:
-            - "DJANGO_SETTINGS_MODULE=RSS_News.settings.docker"
-            - "DATABASE_URL=mysql://mysitedbuser:mysitedbpassword@mysql:3306/mysitedb"
-        networks:
-            mynetwork:
-                ipv4_address: 172.27.0.2
-        # Redisキャッシュバックエンドを設定
-        extra_hosts:
-            - "redis:172.27.0.2"
-        volumes:
-            - ./data/redis:/var/lib/redis
-
-networks:
-    mynetwork:
-        ipam:
-            config:
-                - subnet: 172.27.0.0/16

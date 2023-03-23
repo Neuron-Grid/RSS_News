@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError, transaction
 from .models import Feed, Subscription, Entry
@@ -115,7 +115,7 @@ def add_feed(request):
         else:
             # フォームが無効な場合はエラーを表示する
             messages.error(request, '不正な値が入力されました。')
-        return redirect('reader:error_page')
+            return redirect('reader:error_page')
     else:
         form = AddFeedForm()
     return render(request, 'reader/add_feed.html', {'form': form})
