@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError, transaction
 from .models import Feed, Subscription, Entry
+# from celery.result import AsyncResult
 from django.db import IntegrityError
 from django.contrib import messages
 from .forms import AddFeedForm
@@ -171,3 +172,4 @@ def detailed_list(request, pk):
         'feed_id': pk,
         'entries': entries,
     })
+

@@ -1,14 +1,5 @@
 version: "3.7"
 services:
-    # Nginxサーバー
-    nginx:
-        platform: linux/x86_64
-        image: "nginx:1.19.0"
-        ports:
-            - "80:80"
-        volumes:
-            - ./nginx.conf:/etc/nginx/nginx.conf
-            - ./html:/var/www/html
     # MySQLサーバー
     mysql:
         platform: linux/x86_64
@@ -23,3 +14,17 @@ services:
             - "3306:3306"
         volumes:
             - ./mysqldata:/var/lib/mysql
+    # redisサーバー
+    redis:
+        platform: linux/x86_64
+        image: redis:latest
+        container_name: redis
+        restart: always
+        ports:
+            - "6379:6379"
+#     networks:
+#         - redis_network
+
+# networks:
+#     redis_network:
+#         driver: bridge

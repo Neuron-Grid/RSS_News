@@ -107,7 +107,7 @@ git clone https://github.com/Neuron-Grid/RSS_News.git
 ### 2. 必要なパッケージをインストールする
 
 ```Shell
-pip install celery django-allauth feedparser django-crispy-forms \
+pip install celery django-allauth feedparser django-crispy-forms sqlalchemy \
 django-celery-results django_feedparser redis django django-celery-beat \
 django-redis django-bootstrap5 mysqlclient django-environ python-dotenv
 ```
@@ -118,22 +118,19 @@ django-redis django-bootstrap5 mysqlclient django-environ python-dotenv
 pip list --outdated | tail -n +3 | awk '{print $1}' | xargs pip install -U
 ```
 
-### 3. プロジェクトのルートフォルダに移動し、local.env に環境変数を設定する
-
-> **Warning** <br>
-> ローカル環境で実行する場合は、nginx.conf も編集してください。
+### 3. プロジェクトのルートフォルダに移動し、service.env に環境変数を設定する
 
 ```Shell
 cd RSS_News && \
-touch local.env
+touch service.env
 ```
 
-### local.env の設定例です。
+### service.env の設定例です。
 
 > **Warning** <br>
 > 事前に google アカウントのアプリパスワードを発行してください。
 
-```local.env
+```service.env
 #メールの設定
 EMAIL_HOST=smtp.googlemail.com
 EMAIL_PORT=587
@@ -143,21 +140,13 @@ EMAIL_HOST_PASSWORD=アプリパスワード
 #settings.py
 SECRET_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 DEBUG=False
-
-#docker-compose.yml
-MYSQL_ROOT_PASSWORD=root
-MYSQL_DATABASE=mysitedb
-MYSQL_USER=mysitedbuser
-MYSQL_PASSWORD=mysitedbpassword
-
-#ドメインの設定
-DOMAIN=example.com
+ALLOWED_HOSTS=localhost,127.0.0.1
 ```
 
 ### 4. 実行する
 
 ```Shell
-ENV_FILE=local.env docker-compose up -d && \
+ENV_FILE=service.env docker-compose up -d && \
 sleep 10; python manage.py makemigrations && \
 python manage.py migrate && \
 python manage.py runserver

@@ -10,23 +10,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
-from dotenv import load_dotenv
 from pathlib import Path
 import environ
 import os
 
 # 環境変数の設定
 BASE_DIR = Path(__file__).resolve().parent.parent
-# 最初にlocal.envを読み込む。無ければserver.envを読み込む
-env_files = ['local.env', 'server.env']
-for env_file in env_files:
-    env_path = os.path.join(BASE_DIR, env_file)
-    if os.path.exists(env_path):
-        load_dotenv(env_path)
-        break
-else:
-    raise EnvironmentError("環境変数の設定ファイルが見つかりませんでした。: {}".format(', '.join(env_files)))
 env = environ.Env()
+env.read_env(os.path.join(BASE_DIR, 'service.env'))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -41,7 +32,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env('ALLOWED_HOSTS').split(',')
 
 
 # Application definition
@@ -89,6 +80,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.static',
             ],
         },
     },
@@ -101,14 +93,14 @@ WSGI_APPLICATION = 'RSS_News.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mysitedb',
-        'USER': 'mysitedbuser',
-        'PASSWORD': 'mysitedbpassword',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
+        'ENGINE':'django.db.backends.mysql',
+        'NAME':'mysitedb',
+        'USER':'mysitedbuser',
+        'PASSWORD':'mysitedbpassword',
+        'HOST':'127.0.0.1',
+        'PORT':'3306',
         'OPTIONS': {
-            'charset': 'utf8mb4',
+            'charset':'utf8mb4',
         },
     }
 }
@@ -148,10 +140,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = '/static/'
-
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
-    '/var/www/static/',
+    os.path.join(BASE_DIR, 'static')
 ]
 
 

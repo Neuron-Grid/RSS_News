@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="ja">
-    {% load static %} {% load django_bootstrap5 %} {% block head %}
+    {% load django_bootstrap5 %} {% block head %}
     <head>
+        {% load static %}
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="description" content="RSSフィードを登録して、最新のニュースを確認できるサイトです。" />
         <meta name="keywords" content="RSS,ニュース,フィード,登録,最新,RSSフィード" />
         <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
-        <script src="{% static 'adjust.js' %}"></script>
+        <script type="text/javascript" src="{% static 'reader/adjust.js' %}"></script>
         {% bootstrap_css %} {% bootstrap_javascript %}
     </head>
     {% endblock %} {% block navbar %}

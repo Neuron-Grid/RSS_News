@@ -12,11 +12,11 @@
                 <form method="post" action="{% url 'account_logout' %}" class="me-5">
                     {% csrf_token %}
                     <div class="ms-3">
-                        <button type="submit button" class="btn btn-primary">ログアウト</button>
+                        <button type="submit button" class="btn btn-danger">ログアウト</button>
                     </div>
                 </form>
                 <div>
-                    <a href="{% url 'reader:feed_list' %}" class="btn btn-danger">
+                    <a href="{% url 'reader:feed_list' %}" class="btn btn-primary">
                         <p class="d-inline text-decoration-none">一覧に戻る</p>
                     </a>
                 </div>
