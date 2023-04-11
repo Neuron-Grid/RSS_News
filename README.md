@@ -139,7 +139,7 @@ EMAIL_HOST_PASSWORD=アプリパスワード
 #settings.py
 SECRET_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 DEBUG=False
-ALLOWED_HOSTS=localhost,127.0.0.1
+HOSTS=localhost,127.0.0.1
 ```
 
 ### 4. 実行する
