@@ -77,8 +77,7 @@ RSS フィードの情報を保存する為のモデルです。以下の属性�
 -   デザインを統一する
 -   ダークモードの実装
 -   エラーページを`error_page.html`にまとめる
-    <!-- -   ログイン機能を`keycloak`などの`SSO`に変更する -->
-    </details>
+</details>
 
 <details><summary>解決中の問題</summary>
 
