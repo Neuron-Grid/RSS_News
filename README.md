@@ -17,17 +17,8 @@
 
 ## 使用しているパッケージ
 
--   [Django-Allauth](https://pypi.org/project/django-allauth/)<br>
--   [feedparser](https://pypi.org/project/feedparser/)<br>
--   [django_feedparser](https://pypi.org/project/django-feedparser/)<br>
--   [django-crispy-forms](https://pypi.org/project/django-crispy-forms/)<br>
--   [django-bootstrap5](https://pypi.org/project/django-bootstrap5/)<br>
--   [django-environ](https://pypi.org/project/django-environ/)<br>
--   [django-celery-beat](https://pypi.org/project/django-celery-beat/)<br>
--   [django-celery-results](https://pypi.org/project/django-celery-results/)<br>
--   [python-dotenv](https://pypi.org/project/python-dotenv/)<br>
-
-リンク先は[PyPI](https://pypi.org/)の URL です。
+`requirements.txt`に記載されています。<br>
+`pip install -r requirements.txt`でインストールできます。
 
 ---
 
@@ -103,24 +94,24 @@ RSS フィードの情報を保存する為のモデルです。以下の属性�
 git clone https://github.com/Neuron-Grid/RSS_News.git
 ```
 
-### 2. 必要なパッケージをインストールする
-
-```Shell
-pip install celery django-allauth feedparser django-crispy-forms sqlalchemy \
-django-celery-results django_feedparser redis django django-celery-beat \
-django-redis django-bootstrap5 mysqlclient django-environ python-dotenv
-```
-
-### パッケージが古い場合は更新してください
-
-```Shell
-pip list --outdated | tail -n +3 | awk '{print $1}' | xargs pip install -U
-```
-
-### 3. プロジェクトのルートフォルダに移動し、service.env に環境変数を設定する
+### 2. プロジェクトのルートフォルダに移動し、必要なパッケージをインストールする
 
 ```Shell
 cd RSS_News && \
+pip install -r requirements.txt
+```
+
+### 3. インストールしたパッケージに問題がないか確認する
+
+```Shell
+pip check
+```
+
+-   問題が発生した場合は、Gitlab の Issue で報告してください。
+
+### 4.service.env に環境変数を設定する
+
+```Shell
 touch service.env
 ```
 
@@ -142,11 +133,11 @@ DEBUG=False
 HOSTS=localhost,127.0.0.1
 ```
 
-### 4. 実行する
+### 5. 実行する
 
 ```Shell
 ENV_FILE=service.env docker-compose up -d && \
-sleep 10; python manage.py makemigrations && \
+sleep 10 && python manage.py makemigrations && \
 python manage.py migrate && \
 python manage.py runserver
 ```
