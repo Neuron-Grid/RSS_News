@@ -18,7 +18,6 @@
 ## 使用しているパッケージ
 
 `requirements.txt`に記載されています。<br>
-`pip install -r requirements.txt`でインストールできます。
 
 ---
 
