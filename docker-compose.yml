@@ -3,28 +3,18 @@ services:
     # MySQLサーバー
     mysql:
         platform: linux/x86_64
-        image: "mysql:8.0"
+        image: mysql:8.0
+        restart: always
+        container_name: docker-mysql
+        env_file:
+            - service.env
         environment:
-            - "MYSQL_ROOT_PASSWORD=root"
-            - "MYSQL_DATABASE=mysitedb"
-            - "MYSQL_USER=mysitedbuser"
-            - "MYSQL_PASSWORD=mysitedbpassword"
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: mysitedb
+            MYSQL_USER: mysitedbuser
+            MYSQL_PASSWORD: mysitedbpassword
         command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
         ports:
             - "3306:3306"
         volumes:
-            - ./mysqldata:/var/lib/mysql
-    # redisサーバー
-    redis:
-        platform: linux/x86_64
-        image: redis:latest
-        container_name: redis
-        restart: always
-        ports:
-            - "6379:6379"
-#     networks:
-#         - redis_network
-
-# networks:
-#     redis_network:
-#         driver: bridge
+            - ./data/mysqldata:/var/lib/mysql

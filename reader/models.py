@@ -10,7 +10,7 @@ class Feed(models.Model):
 
     def __str__(self):
         return self.title
-    # フィードのURLが重複していないかチェックする
+    # フィードのURLが重複していないか確認する
     def clean(self):
         if Feed.objects.filter(url=self.url).exclude(pk=self.pk).exists():
             raise ValidationError('既に登録されているフィードです。')
@@ -18,7 +18,7 @@ class Feed(models.Model):
 # Entryモデル
 class Entry(models.Model):
     feed = models.ForeignKey(Feed, on_delete=models.CASCADE, related_name='entries')    # フィード
-    title = models.CharField(max_length=100, null=False)                                # エントリのタイトル
+    title = models.CharField(null=False, max_length=100)                                # エントリのタイトル
     link = models.URLField(null=False)                                                  # エントリのリンク
     summary = models.TextField()                                                        # エントリの要約
     pub_date = models.DateTimeField(auto_now_add=True)                                  # エントリの公開日時

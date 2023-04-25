@@ -18,8 +18,11 @@
                 <div class="mb-4">{{ form.url.label_tag }} {{ form.url }}</div>
                 <button type="submit" class="btn btn-primary text-center">追加</button>
             </form>
-            <div class="text-center mt-3"><a href="{% url 'reader:feed_list' %}" class="d-inline text-decoration-none">フィード一覧</a>に戻る</div>
+            <div class="text-center mt-3 my-3">
+                <a href="{% url 'reader:feed_list' %}" class="d-inline text-decoration-none"> フィード一覧 </a>
+                に戻る
+            </div>
         </div>
     </div>
+    {% endblock %}
 </div>
-{% endblock %}

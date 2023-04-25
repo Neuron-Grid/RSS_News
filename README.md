@@ -24,7 +24,7 @@
 ## DB 設計
 
 このアプリは、`Feed`、`Entry`、`UserFeed`の 3 つの DB テーブルを使用しています。<br>
-ログイン機能は、Django Allauth を利用している為、User テーブルは無いです。<br>
+ログイン機能は、`Django Allauth`を利用している為、User テーブルは無いです。<br>
 
 <details><summary>詳細はこちら</summary>
 
@@ -84,13 +84,12 @@ RSS フィードの情報を保存する為のモデルです。以下の属性�
 
 ## 使い方
 
-> **Note**<br>
-> Google アカウントの設定以外はコピペで動きます。
+> **Note**<br> > `Googleアカウント`の設定以外はコピペで動きます。
 
 ### 1. リポジトリをクローンする
 
 ```Shell
-git clone https://github.com/Neuron-Grid/RSS_News.git
+git clone https://gitlab.com/Neuron-Grid/RSS_News
 ```
 
 ### 2. プロジェクトのルートフォルダに移動し、必要なパッケージをインストールする
@@ -106,7 +105,7 @@ pip install -r requirements.txt
 pip check
 ```
 
--   問題が発生した場合は、Gitlab の Issue で報告してください。
+-   問題が発生した場合は、`Gitlab`の`Issue`で報告してください。
 
 ### 4.service.env に環境変数を設定する
 
@@ -114,10 +113,10 @@ pip check
 touch service.env
 ```
 
-### service.env の設定例です。
+### `service.env`の設定例です。
 
 > **Warning** <br>
-> 事前に google アカウントのアプリパスワードを発行してください。
+> 事前に`Googleアカウント`のアプリパスワードを発行してください。
 
 ```service.env
 #メールの設定

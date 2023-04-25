@@ -93,9 +93,9 @@ WSGI_APPLICATION = 'RSS_News.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE':'django.db.backends.mysql',
-        'NAME':'mysitedb',
-        'USER':'mysitedbuser',
-        'PASSWORD':'mysitedbpassword',
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
         'HOST':'127.0.0.1',
         'PORT':'3306',
         'OPTIONS': {
@@ -127,11 +127,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
 LANGUAGE_CODE = 'ja'
-
 TIME_ZONE = 'Asia/Tokyo'
-
 USE_I18N = True
-
 USE_TZ = True
 
 
@@ -172,10 +169,3 @@ EMAIL_PORT = env('EMAIL_PORT')                          # メールサーバー�
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')                # メールサーバーのユーザー名
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')        # メールサーバーのパスワード
 EMAIL_USE_TLS = True                                    # TLS暗号化通信を使用する
-
-# CELERY
-CELERY_BROKER_URL = 'redis://localhost:6379/0'                                          # RedisのURL
-# CELERY_RESULT_BACKENDにMySQLの設定を記述
-CELERY_RESULT_BACKEND = 'db+mysql://mysitedbuser:mysitedbpassword@127.0.0.1/mysitedb'   # DBに結果を保存
-CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
-CELERY_TASK_TRACK_STARTED = True                                                        # 開始時刻を記録
