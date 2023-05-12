@@ -40,4 +40,5 @@ mysqldata/
 git-sim_media/
 .env
 *.env
-data/
+MySQLdata/
+.xxx/
