@@ -31,14 +31,12 @@ Temporary Items
 *.pyc
 __pycache__/
 local_settings.py
-venv/
 
 # その他
 db.sqlite3
 db.sqlite3-journal
-mysqldata/
 git-sim_media/
 .env
 *.env
-MySQLdata/
+docker/
 .xxx/

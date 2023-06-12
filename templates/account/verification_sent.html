@@ -1,35 +1,27 @@
-{% extends "../base.html" %}
-{% block head %}
+{% extends "../base.html" %} {% block head %}
 <head>
-    {{ block.super }}
-    {% block title %}
-    <title>
-        メールアドレスを確認してください
-    </title>
+    {{ block.super }} {% block title %}
+    <title>メールアドレスを確認してください</title>
     {% endblock %}
 </head>
-{% endblock %}
-{% block navbar%}
-    {{ block.super }}
-{% endblock %}
-{% block main %}
-    {{ block.super }}
-    <div class="container py-5">
-        <div class="row">
-            <div class="col-md-6 offset-md-3 text-center">
-                <h1 class="mt-5 my-5 text-center">メールボックスを確認してください</h1>
-                <p class="my-4">
-                    確認のための電子メールを送信しました。記載されているリンクに従って、登録を確定してください。<br>
-                    受信トレイに確認メールがメールが届かない場合は、迷惑メールフォルダを確認してください。<br>
-                    確認メールが届かない場合は、管理者までご連絡ください。<br>
+{% endblock %} {% block navbar%} {{ block.super }} {% endblock %} {% block main %} {{ block.super }}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3 text-center">
+            <h1 class="mt-5 my-5 text-center">メールボックスを確認してください</h1>
+            <p class="my-4">
+                確認のための電子メールを送信しました。記載されているリンクに従って、登録を確定してください。<br />
+                受信トレイに確認メールがメールが届かない場合は、迷惑メールフォルダを確認してください。<br />
+                確認メールが届かない場合は、管理者までご連絡ください。<br />
+            </p>
+            <div class="container my-3 mx-auto">
+                <p>
+                    管理者の連絡先は、
+                    <a style="text-decoration: none" href="https://manager.neuron-grid.net/">こちら</a>
+                    からご確認ください。
                 </p>
-                <div class="container my-3 mx-auto">
-                    <p>管理者の連絡先は、
-                        <a style="text-decoration: none;" href="{% url 'reader:site_manager' %}">こちら</a>
-                        からご確認ください。
-                    </p>
-                </div>
             </div>
         </div>
     </div>
+</div>
 {% endblock %}

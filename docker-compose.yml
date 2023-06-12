@@ -6,8 +6,6 @@ services:
         image: mysql:8.0
         restart: always
         container_name: docker-mysql
-        # env_file:
-        #     - service.env
         environment:
             MYSQL_ROOT_PASSWORD: root
             MYSQL_DATABASE: mysitedb
@@ -17,4 +15,4 @@ services:
         ports:
             - "3306:3306"
         volumes:
-            - mysql:/var/lib/mysql
+            - ./docker/mysql:/var/lib/mysql
