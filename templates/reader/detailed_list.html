@@ -4,7 +4,10 @@
 <div class="container">
     <div class="text-center">
         <h1 class="mt-5 my-5">{{ feed.title }}</h1>
-        <p>{{ feed.description }}</p>
+        <p>
+            {{ feed.description }}<br />
+            記事の登録日時:{{ entry.pub_date }}
+        </p>
     </div>
     <div class="my-4 text-center">
         <button class="btn btn-primary mt-3" id="update-feed-button" data-feed-id="{{ feed.id }}">更新</button>
@@ -19,7 +22,6 @@
                 </div>
                 <div class="card-footer d-flex justify-content-between">
                     <a href="{{ entry.link }}" target="_blank" class="btn btn-primary">記事を読む</a>
-                    <p class="mb-0">記事の公開日時:{{ entry.pub_date }}</p>
                 </div>
             </div>
         </div>
