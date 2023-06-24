@@ -1,11 +1,11 @@
-from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.contrib.auth.models import User
 from django.db import models
 
 # Feedモデル
 class Feed(models.Model):
     url = models.URLField(unique=True)                      # フィードのURL
-    title = models.CharField(max_length=100)                # フィードのタイトル
+    title = models.CharField(max_length=100, unique=True)   # フィードのタイトル
     description = models.TextField(blank=True, null=True)   # フィードの説明
 
     def __str__(self):
@@ -13,6 +13,10 @@ class Feed(models.Model):
     # フィードのURLが重複していないか確認する
     def clean(self):
         if Feed.objects.filter(url=self.url).exclude(pk=self.pk).exists():
+            raise ValidationError('既に登録されているフィードです。')
+    # フィードのタイトルが重複していないか確認する
+    def clean(self):
+        if Feed.objects.filter(title=self.title).exclude(pk=self.pk).exists():
             raise ValidationError('既に登録されているフィードです。')
 
 # Entryモデル

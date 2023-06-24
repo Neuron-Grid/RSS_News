@@ -14,25 +14,6 @@ import re
 def index(request):
     return render(request, 'reader/index.html')
 
-# 管理者ページ
-def site_manager(request):
-    return render(request, 'reader/site_manager.html') 
-
-# エラー処理
-@login_required
-def duplicate_error(request):
-    return render(request, 'reader/duplicate_error.html')
-
-# エラー処理
-@login_required
-def formal_error(request):
-    return render(request, 'reader/formal_error.html')
-
-# エラー処理
-@login_required
-def delete_feed_error(request):
-    return render(request, 'reader/delete_feed_error.html')
-
 # エラー処理
 @login_required
 def error_page(request):
@@ -67,12 +48,16 @@ def custom_parse_datetime(value):
                 value = match.group(0)
                 break
         else:
-            return redirect('reader:formal_error')
+            messages.error('RSSフィードの日付のフォーマットが正しくない場合に発生します。\nもしくは、フィードのパースに失敗した場合に発生します。')
+            return redirect('reader:error_page')
+            # return redirect('reader:formal_error')
         # datetimeオブジェクトに変換して返す
         try:
             return datetime.datetime.fromisoformat(value)
         except ValueError:
-            return redirect('reader:formal_error')
+            messages.error('RSSフィードの日付のフォーマットが正しくない場合に発生します。\nもしくは、フィードのパースに失敗した場合に発生します。')
+            return redirect('reader:error_page')
+            # return redirect('reader:formal_error')
 
 # フィードの追加
 @login_required
@@ -85,10 +70,10 @@ def add_feed(request):
             feed = feedparser.parse(feed_url)
             if not feed:
                 messages.error(request, '指定されたURLのフィードが見つかりませんでした。')
-                return render(request, 'reader/add_feed.html', {'form': form})
+                return render(request, 'reader/add_feed', {'form': form})
             if not feed.entries:
                 messages.error(request, '指定されたURLのフィードにエントリがありません。')
-                return render(request, 'reader/add_feed.html', {'form': form})
+                return render(request, 'reader/add_feed', {'form': form})
             feed_description = feed.get('feed', {}).get('description')
             entries = list(feed.entries)
             try:
@@ -109,17 +94,20 @@ def add_feed(request):
                                 pub_date=custom_parse_datetime(entry.get('published', '')),
                             )
                         except ValueError:
-                            return redirect('reader:formal_error')
+                            # エラーメッセージの記述
+                            messages.error(request, '日付のパースに失敗しました。\n RSSフィードの日付のフォーマットが正しくない場合に発生します。\nもしくは、フィードのパースに失敗した場合に発生します。')
+                            return redirect('reader:error_page')
                     Subscription.objects.create(user=request.user, feed=feed)
             except IntegrityError:
-                return redirect('reader:duplicate_error')
+                messages.error(request, '既に登録されているフィードです。')
+                return redirect('reader:error_page')
         else:
             # フォームが無効な場合はエラーを表示する
             messages.error(request, '不正な値が入力されました。')
             return redirect('reader:error_page')
     else:
         form = AddFeedForm()
-    return render(request, 'reader/add_feed.html', {'form': form})
+    return render(request, 'reader/feed_list')
 
 # フィードの更新
 # postを受け取った場合だけフィードを更新する
@@ -135,7 +123,7 @@ def update_feed(request, feed_id):
             summary=entry['summary'],
             pub_date=entry['published'],
         )
-    return redirect('reader:detailed_list', pk=feed_id)
+    return redirect('reader:feed_list', pk=feed_id)
 
 # フィードの削除
 @login_required
@@ -144,32 +132,20 @@ def remove_feed(request, feed_id):
     if Subscription.objects.filter(user=request.user, feed=feed_id).count() == 0:
         return redirect('reader:delete_feed_error')
     # フィードを削除するときは、remove_feedのページにリダイレクトし、そのフィードの削除確認をする。
-    # 削除ボタンを押すとフィードの購読が解除される
     # フィードの購読を解除すると、そのフィードに紐づく記事も削除される
     if Subscription.objects.filter(user=request.user, feed=feed_id).count() > 0:
         feed = Feed.objects.get(id=feed_id)
         if request.method == 'POST':
             feed.delete()
             return redirect('reader:feed_list')
-        return render(request, 'reader/remove_feed.html', {'feed': feed})
+        return render(request, 'reader/remove_feed', {'feed': feed})
     return redirect('reader:feed_list')
 
 # フィードの詳細
 @login_required
 def detailed_list(request, pk):
     feed = Feed.objects.get(id=pk)
-    entries = Entry.objects.filter(
-        feed=feed,
-    ).order_by('pub_date')
-
-    # 更新ボタンが押されたらフィードを更新
-    if request.method == 'POST':
-        update_feed(request, pk)
-        return redirect('reader:detailed_list', pk=pk)
-
-    return render(request, 'reader/detailed_list.html', {
-        'feed': feed,
-        'feed_id': pk,
-        'entries': entries,
-    })
-
+    entries = Entry.objects.filter(feed=feed).order_by('pub_date')
+    # entry.titleを表示させる
+    title = feed.title
+    return render(request, 'reader/detailed_list.html', {'entries': entries})

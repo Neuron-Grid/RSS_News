@@ -10,11 +10,11 @@
                         <h2 class="my-4 mt-4">エラー</h2>
                         <p class="my-5">
                             エラーが発生しました。<br />
-                            問題が発生している場合は、管理者に状況を報告してください。<br />
+                            問題が解決できない場合は、管理者に状況を報告してください。<br />
                         </p>
                         <!-- エラーメッセージがある場合は表示する -->
                         {% if error_message %}
-                        <p class="my-4 mt-4">{{ error_message }}</p>
+                        <p class="my-4 mt-4">{{ error_message | linebreaksbr }}</p>
                         {% endif %}
                         <div class="d-flex justify-content-between">
                             <a href="https://manager.neuron-grid.net/" class="btn btn-primary"> 管理者情報 </a>

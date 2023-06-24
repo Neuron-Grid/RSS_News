@@ -4,7 +4,7 @@ services:
     mysql:
         platform: linux/x86_64
         image: mysql:8.0
-        restart: always
+        restart: unless-stopped
         container_name: docker-mysql
         environment:
             MYSQL_ROOT_PASSWORD: root
