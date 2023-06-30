@@ -39,4 +39,4 @@ git-sim_media/
 .env
 *.env
 docker/
-.xxx/
+.rss_news/

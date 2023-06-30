@@ -96,6 +96,7 @@ git clone https://gitlab.com/Neuron-Grid/RSS_News
 
 ```Shell
 cd RSS_News && \
+python3 -m venv .rss_news
 pip install -r requirements.txt
 ```
 
