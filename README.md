@@ -140,3 +140,23 @@ sleep 10 && python manage.py makemigrations && \
 python manage.py migrate && \
 python manage.py runserver
 ```
+
+### 6. ブラウザでアクセスする
+
+この web アプリにアクセスする。
+
+```Shell
+http://localhost:8000
+```
+
+### 7. 後処理
+
+仮想環境などを削除
+
+```Shell
+deactivate && \
+docker-compose down && \
+rm -rf .rss_news && \
+rm -rf docker && \
+docker rm docker-mysql && \
+```

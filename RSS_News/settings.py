@@ -51,8 +51,8 @@ INSTALLED_APPS = [
     "django_bootstrap5",
     'django_feedparser',
     # フィードの自動更新
-    'django_celery_beat',
-    'django_celery_results',
+    # 'django_celery_beat',
+    # 'django_celery_results',
 ]
 
 MIDDLEWARE = [

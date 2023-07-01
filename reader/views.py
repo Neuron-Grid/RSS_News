@@ -1,7 +1,7 @@
-from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError, transaction
 from .models import Feed, Subscription, Entry
+from django.shortcuts import render, redirect
 # from celery.result import AsyncResult
 from django.contrib import messages
 from .forms import AddFeedForm
@@ -26,7 +26,7 @@ def feed_list(request):
 
 # 文字列値をdatetimeオブジェクトに変換する。
 # 変換できなければ、formal_error.htmlにリダイレクトする。
-def custom_parse_datetime(value):
+def custom_parse_datetime(value, request):
     # 既にdatetimeオブジェクトが渡されている場合はそのまま返す
     if isinstance(value, datetime.datetime):
         return value
@@ -47,7 +47,7 @@ def custom_parse_datetime(value):
                 value = match.group(0)
                 break
         else:
-            messages.error('RSSフィードの日付のフォーマットが正しくない場合に発生します。\nもしくは、フィードのパースに失敗した場合に発生します。')
+            messages.error(request, 'RSSフィードの日付のフォーマットが正しくない場合に発生します。\nもしくは、フィードのパースに失敗した場合に発生します。')
             return redirect('reader:error_page')
             # return redirect('reader:formal_error')
         # datetimeオブジェクトに変換して返す
@@ -61,52 +61,70 @@ def custom_parse_datetime(value):
 # フィードの追加
 @login_required
 def add_feed(request):
+    # POSTリクエストの場合（フォームが送信された場合）
     if request.method == 'POST':
+        # フォームのインスタンスを作成し、送信されたデータをバインドする
         form = AddFeedForm(request.POST)
+        # フォームのバリデーションを行う
         if form.is_valid():
+            # バリデーションが成功した場合、クリーンデータからフィードのURLとタイトルを取得する
             feed_url = form.cleaned_data['url']
             feed_title = form.cleaned_data['feed_name']
+            # フィードをパースする
             feed = feedparser.parse(feed_url)
+            # フィードが存在しない場合、エラーメッセージを表示して同じページに留まる
             if not feed:
                 messages.error(request, '指定されたURLのフィードが見つかりませんでした。')
-                return render(request, 'reader/add_feed', {'form': form})
+                return render(request, 'reader/add_feed.html', {'form': form})
+            # フィードにエントリがない場合、エラーメッセージを表示して同じページに留まる
             if not feed.entries:
                 messages.error(request, '指定されたURLのフィードにエントリがありません。')
-                return render(request, 'reader/add_feed', {'form': form})
+                return render(request, 'reader/add_feed.html', {'form': form})
+            # フィードの説明を取得する
             feed_description = feed.get('feed', {}).get('description')
+            # フィードのエントリをリストとして取得する
             entries = list(feed.entries)
             try:
+                # データベースの操作をアトミック（一体化）に行う
                 with transaction.atomic():
+                    # フィードをデータベースに保存する
                     feed = Feed.objects.create(
                         url=feed_url,
                         title=feed_title,
                         description=feed_description,
                     )
-                    # エントリーを登録する
+                    # 各エントリをデータベースに保存する
                     for entry in entries:
                         try:
                             Entry.objects.create(
                                 feed=feed,
-                                title=entry.get('title', ''),
-                                link=entry.get('link', ''),
-                                summary=entry.get('summary', ''),
-                                pub_date=custom_parse_datetime(entry.get('published', '')),
+                                title = entry.get('title', ''),
+                                link = entry.get('link', ''),
+                                summary = entry.get('summary', ''),
+                                pub_date = custom_parse_datetime(request, entry.get('published', ''))
                             )
                         except ValueError:
-                            # エラーメッセージの記述
+                            # 日付のパースに失敗した場合、エラーメッセージを表示してエラーページにリダイレクトする
                             messages.error(request, '日付のパースに失敗しました。\n RSSフィードの日付のフォーマットが正しくない場合に発生します。\nもしくは、フィードのパースに失敗した場合に発生します。')
                             return redirect('reader:error_page')
+                    # ユーザーの購読をデータベースに保存する
                     Subscription.objects.create(user=request.user, feed=feed)
             except IntegrityError:
+                # 既に登録されているフィードの場合、エラーメッセージを表示してエラーページにリダイレクトする
                 messages.error(request, '既に登録されているフィードです。')
                 return redirect('reader:error_page')
+            # フォームの送信とデータの保存が成功した場合、フィードリストのページにリダイレクトする
+            return redirect('reader:feed_list')
         else:
-            # フォームが無効な場合はエラーを表示する
+            # フォームのバリデーションが失敗した場合、エラーメッセージを表示してエラーページにリダイレクトする
             messages.error(request, '不正な値が入力されました。')
             return redirect('reader:error_page')
     else:
+        # GETリクエストの場合(ページが初めて表示された場合)に、新しい（空の）フォームを作成する
         form = AddFeedForm()
-    return render(request, 'reader/feed_list')
+    # フォームをテンプレートに渡してレンダリングする
+    return render(request, 'reader/add_feed.html', {'form': form})
+
 
 # フィードの更新
 # postを受け取った場合だけフィードを更新する
