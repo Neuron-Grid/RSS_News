@@ -145,9 +145,10 @@ def update_feed(request, feed_id):
 # フィードの削除
 @login_required
 def remove_feed(request, feed_id):
-    # ログインしているユーザーがフィードを購読しているかを確認し、登録されたフィードが0件だった場合delete_feed_errorページにリダイレクトする
+    # ログインしているユーザーがフィードを購読しているかを確認し、登録されたフィードが0件だった場合エラーメッセージを表示する
     if Subscription.objects.filter(user=request.user, feed=feed_id).count() == 0:
-        return redirect('reader:delete_feed_error')
+        messages.error(request, 'フィードが登録されていない為、削除できません。')
+        return redirect('reader:error_page')
     # フィードを削除するときは、remove_feedのページにリダイレクトし、そのフィードの削除確認をする。
     # フィードの購読を解除すると、そのフィードに紐づく記事も削除される
     if Subscription.objects.filter(user=request.user, feed=feed_id).count() > 0:
@@ -155,7 +156,7 @@ def remove_feed(request, feed_id):
         if request.method == 'POST':
             feed.delete()
             return redirect('reader:feed_list')
-        return render(request, 'reader/remove_feed', {'feed': feed})
+        return render(request, 'reader/remove_feed.html', {'feed': feed})
     return redirect('reader:feed_list')
 
 # フィードの詳細

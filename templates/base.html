@@ -71,7 +71,7 @@
         <div class="container my-5 mt-5">
             <div class="col-md-6 mx-auto text-center">
                 {% for message in messages %}
-                <div class="alert alert-danger text-center" role="alert">{{ message }}</div>
+                <div class="alert alert-{{ message.tags }} text-center" role="alert">{{ message }}</div>
                 {% endfor %}
             </div>
         </div>
