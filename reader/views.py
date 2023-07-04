@@ -25,7 +25,6 @@ def feed_list(request):
     return render(request, 'reader/feed_list.html', {'feeds': feeds})
 
 # 文字列値をdatetimeオブジェクトに変換する。
-# 変換できなければ、formal_error.htmlにリダイレクトする。
 def custom_parse_datetime(value, request):
     # 既にdatetimeオブジェクトが渡されている場合はそのまま返す
     if isinstance(value, datetime.datetime):
@@ -47,16 +46,14 @@ def custom_parse_datetime(value, request):
                 value = match.group(0)
                 break
         else:
-            messages.error(request, 'RSSフィードの日付のフォーマットが正しくない場合に発生します。\nもしくは、フィードのパースに失敗した場合に発生します。')
+            messages.error(request, 'RSSフィードの日付のフォーマットが正しくない場合に発生します。\n もしくは、フィードのパースに失敗した場合に発生します。')
             return redirect('reader:error_page')
-            # return redirect('reader:formal_error')
         # datetimeオブジェクトに変換して返す
         try:
             return datetime.datetime.fromisoformat(value)
         except ValueError:
-            messages.error('RSSフィードの日付のフォーマットが正しくない場合に発生します。\nもしくは、フィードのパースに失敗した場合に発生します。')
+            messages.error('RSSフィードの日付のフォーマットが正しくない場合に発生します。\n もしくは、フィードのパースに失敗した場合に発生します。')
             return redirect('reader:error_page')
-            # return redirect('reader:formal_error')
 
 # フィードの追加
 @login_required
