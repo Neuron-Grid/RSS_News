@@ -12,5 +12,5 @@ urlpatterns = [
     path('detailed_list/<int:pk>/', views.detailed_list, name='detailed_list'),
     path('update_feed/<int:feed_id>/', views.update_feed, name='update_feed'),
     # エラーページ
-    path('error_page/', views.update_feed, name='error'),
+    path('error_page/', views.error_page, name='error_page'),
 ]

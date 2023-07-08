@@ -1,31 +1,78 @@
-{% extends "../base.html" %} {% block head %} {{ block.super }} {% endblock %} {% block title %}
-<title>エラー</title>
-{% endblock %} {% block navbar %} {{ block.super }} {% endblock %} {% block main %} {{ block.super }}
-<div class="container">
-    <div class="row">
-        <div class="col-md-6 offset-md-3 flex-column">
-            <div class="container">
-                <div class="row text-center">
-                    <div class="col-md-8 offset-md-3">
-                        <h2 class="my-4 mt-4">エラー</h2>
-                        <p class="my-5">
-                            エラーが発生しました。<br />
-                            問題が解決できない場合は、管理者に状況を報告してください。<br />
-                            管理者の連絡先は下記の「管理者情報」から確認できます。<br />
-                            ご迷惑をおかけして申し訳ございません。
-                        </p>
-                        <!-- エラーメッセージがある場合は表示する -->
-                        {% if error_message %} {% messages %}
-                        <div class="my-4 mt-4 alert alert-{{ message.tags }}">{{ message|linebreaksbr }}</div>
-                        {% endmessages %} {% endif %}
-                        <div class="d-flex justify-content-between">
-                            <a href="https://manager.neuron-grid.net/" class="btn btn-primary"> 管理者情報 </a>
-                            <a href="{% url 'reader:feed_list' %}" class="btn btn-secondary"> フィード一覧に戻る </a>
+<!DOCTYPE html>
+<html lang="ja">
+    {% load django_bootstrap5 %} {% block head %} {% block title %}
+    <head>
+        <title>エラー</title>
+        <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+        {% bootstrap_css %} {% bootstrap_javascript %}
+    </head>
+    {% endblock %} {% endblock %} {% block navbar %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'reader:index' %}">RSS News</a>
+            <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+                aria-controls="navbarNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+            >
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                {% if user.is_authenticated %}
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'account_logout' %}">ログアウト</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'reader:add_feed' %}">RSSフィード追加</a>
+                    </li>
+                    <!--
+                        <li class="nav-item">
+							<a class="nav-link" href="#">アカウント管理</a>
+						</li>
+                    -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'reader:feed_list' %}">フィード一覧</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="https://manager.neuron-grid.net/">サイト管理者</a>
+                    </li>
+                </ul>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    {% endblock %} {% block main %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3 flex-column">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-8 offset-md-3 text-left">
+                            <h2 class="my-5 mt-5 text-center">エラー</h2>
+                            <p class="my-5 text-left">
+                                エラーが発生しました。<br />
+                                問題が解決できない場合は、管理者に状況を報告してください。<br />
+                                管理者の連絡先は下記の「管理者情報」から確認できます。<br />
+                                ご迷惑をおかけして申し訳ございません。
+                            </p>
+                            <!-- エラーメッセージを表示する -->
+                            {% if error_message %}
+                            <div class="my-5 mt-5 alert alert-{{ message.tags }}">{{ message|linebreaksbr }}</div>
+                            {% endif %}
+                            <div class="d-flex justify-content-between">
+                                <a href="https://manager.neuron-grid.net/" class="btn btn-primary"> 管理者情報 </a>
+                                <a href="{% url 'reader:feed_list' %}" class="btn btn-secondary"> フィード一覧に戻る </a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-{% endblock %}
+    {% endblock %}
+</html>

@@ -1,13 +1,17 @@
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError, transaction
-from .models import Feed, Subscription, Entry
+from reader.models import Feed, Subscription, Entry
 from django.shortcuts import render, redirect
 # from celery.result import AsyncResult
 from django.contrib import messages
-from .forms import AddFeedForm
+from reader.forms import AddFeedForm
+from .error_message import ERROR_MESSAGES
 import feedparser
 import datetime
 import re
+
+def get_error_message(error_code):
+    return ERROR_MESSAGES.get(error_code, '未定義のエラーが発生しました。')
 
 # indexページ
 def index(request):
@@ -37,23 +41,42 @@ def custom_parse_datetime(value, request):
         # 日付のフォーマットを調整する
         for pattern in [
             r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?[+-]\d{2}:\d{2}$',
-            r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z$',
-            r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(\.\d+)?$',
+            r'^\d{4}/\d{2}/\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?[+-]\d{2}:\d{2}$',
+            r'^\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}(\.\d+)?[+-]\d{2}:\d{2}$',
+            r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(\.\d+)?[+-]\d{2}:\d{2}$',
+            r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?[+-]\d{2}$',
+            r'^\d{4}/\d{2}/\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?[+-]\d{2}$',
+            r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(\.\d+)?[+-]\d{2}$',
+            r'^\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}(\.\d+)?[+-]\d{2}$',
             r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?$',
+            r'^\d{4}/\d{2}/\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?$',
+            r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(\.\d+)?$',
+            r'^\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}(\.\d+)?$',
+            r'^\d{4}/\d{2}/\d{2}T\d{2}:\d{2}:\d{2}$',
+            r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$',
+            r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$',
+            r'^\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}$',
+            r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$',
+            r'^\d{4}-\d{2}/\d{2}T\d{2}:\d{2}$'
+            r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$',
+            r'^\d{4}/\d{2}/\d{2} \d{2}:\d{2}$',
+            r'^\d{4}-\d{2}-\d{2}$',
+            r'^\d{4}/\d{2}-\d{2}$',
         ]:
             match = re.match(pattern, value)
             if match:
                 value = match.group(0)
                 break
         else:
-            messages.error(request, 'RSSフィードの日付のフォーマットが正しくない場合に発生します。\n もしくは、フィードのパースに失敗した場合に発生します。')
-            return redirect('reader:error_page')
+            # error_message.pyのfeed_date_parse_errorを表示して同じページに留まる
+            messages.error(request, get_error_message('date_parse_error'))
+            return redirect('reader:add_feed')
         # datetimeオブジェクトに変換して返す
         try:
             return datetime.datetime.fromisoformat(value)
         except ValueError:
-            messages.error('RSSフィードの日付のフォーマットが正しくない場合に発生します。\n もしくは、フィードのパースに失敗した場合に発生します。')
-            return redirect('reader:error_page')
+            messages.error(request, get_error_message('date_parse_error'))
+            return redirect('reader:add_feed')
 
 # フィードの追加
 @login_required
@@ -71,11 +94,11 @@ def add_feed(request):
             feed = feedparser.parse(feed_url)
             # フィードが存在しない場合、エラーメッセージを表示して同じページに留まる
             if not feed:
-                messages.error(request, '指定されたURLのフィードが見つかりませんでした。')
+                messages.error(request, get_error_message('not_found_error'))
                 return render(request, 'reader/add_feed.html', {'form': form})
             # フィードにエントリがない場合、エラーメッセージを表示して同じページに留まる
             if not feed.entries:
-                messages.error(request, '指定されたURLのフィードにエントリがありません。')
+                messages.error(request, get_error_message('entry_not_found_error'))
                 return render(request, 'reader/add_feed.html', {'form': form})
             # フィードの説明を取得する
             feed_description = feed.get('feed', {}).get('description')
@@ -102,19 +125,19 @@ def add_feed(request):
                             )
                         except ValueError:
                             # 日付のパースに失敗した場合、エラーメッセージを表示してエラーページにリダイレクトする
-                            messages.error(request, '日付のパースに失敗しました。\n RSSフィードの日付のフォーマットが正しくない場合に発生します。\nもしくは、フィードのパースに失敗した場合に発生します。')
+                            messages.error(request, get_error_message('date_parse_error'))
                             return redirect('reader:error_page')
                     # ユーザーの購読をデータベースに保存する
                     Subscription.objects.create(user=request.user, feed=feed)
             except IntegrityError:
                 # 既に登録されているフィードの場合、エラーメッセージを表示してエラーページにリダイレクトする
-                messages.error(request, '既に登録されているフィードです。')
+                messages.error(request, get_error_message('already_exists_error'))
                 return redirect('reader:error_page')
             # フォームの送信とデータの保存が成功した場合、フィードリストのページにリダイレクトする
             return redirect('reader:feed_list')
         else:
             # フォームのバリデーションが失敗した場合、エラーメッセージを表示してエラーページにリダイレクトする
-            messages.error(request, '不正な値が入力されました。')
+            messages.error(request, get_error_message('invalid_value_error'))
             return redirect('reader:error_page')
     else:
         # GETリクエストの場合(ページが初めて表示された場合)に、新しい（空の）フォームを作成する
@@ -144,7 +167,7 @@ def update_feed(request, feed_id):
 def remove_feed(request, feed_id):
     # ログインしているユーザーがフィードを購読しているかを確認し、登録されたフィードが0件だった場合エラーメッセージを表示する
     if Subscription.objects.filter(user=request.user, feed=feed_id).count() == 0:
-        messages.error(request, 'フィードが登録されていない為、削除できません。')
+        messages.error(request, get_error_message('not_exists_error'))
         return redirect('reader:error_page')
     # フィードを削除するときは、remove_feedのページにリダイレクトし、そのフィードの削除確認をする。
     # フィードの購読を解除すると、そのフィードに紐づく記事も削除される
