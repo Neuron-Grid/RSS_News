@@ -96,7 +96,7 @@ git clone https://gitlab.com/Neuron-Grid/RSS_News
 
 ```Shell
 cd RSS_News && \
-python3 -m venv .rss_news
+python -m venv .rss_news
 pip install -r requirements.txt
 ```
 
@@ -130,6 +130,17 @@ EMAIL_HOST_PASSWORD=アプリパスワード
 SECRET_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 DEBUG=False
 HOSTS=localhost,127.0.0.1
+
+# Databaseの設定
+DB_NAME=mysitedb
+DB_USER=mysitedbuser
+DB_PASSWORD=mysitedbpassword
+
+# Docker-compose.yml
+MYSQL_ROOT_PASSWORD=root
+MYSQL_DATABASE=mysitedb
+MYSQL_USER=mysitedbuser
+MYSQL_PASSWORD=mysitedbpassword
 ```
 
 ### 5. 実行する
@@ -147,16 +158,4 @@ python manage.py runserver
 
 ```Shell
 http://localhost:8000
-```
-
-### 7. 後処理
-
-仮想環境などを削除
-
-```Shell
-deactivate && \
-docker-compose down && \
-rm -rf .rss_news && \
-rm -rf docker && \
-docker rm docker-mysql && \
 ```

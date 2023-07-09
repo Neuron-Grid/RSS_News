@@ -6,11 +6,8 @@ services:
         image: mysql:8.0
         restart: always
         container_name: docker-mysql
-        environment:
-            MYSQL_ROOT_PASSWORD: root
-            MYSQL_DATABASE: mysitedb
-            MYSQL_USER: mysitedbuser
-            MYSQL_PASSWORD: mysitedbpassword
+        env_file:
+            - service.env
         command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
         ports:
             - "3306:3306"
