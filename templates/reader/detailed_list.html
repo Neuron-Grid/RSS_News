@@ -6,7 +6,7 @@
         <h1 class="mt-5 my-5">{{ feed.title }}</h1>
         <p>
             {{ feed.description }}<br />
-            記事の登録日時:{{ entry.pub_date }}
+            記事の登録日時 : {{ entry.pub_date }}
         </p>
     </div>
     <div class="my-4 text-center">
@@ -22,7 +22,6 @@
                 </div>
                 <div class="card-footer d-flex justify-content-between">
                     <a href="{{ entry.link }}" target="_blank" class="btn btn-primary">記事を読む</a>
-                    <p>記事の登録日時:{{ entry.pub_date }}</p>
                 </div>
             </div>
         </div>

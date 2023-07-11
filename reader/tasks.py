@@ -2,6 +2,7 @@ import feedparser
 from celery import shared_task
 from django.core.cache import cache
 from reader.models import Feed, Entry
+from reader.redis_helper import get_redis_connection, schedule_feed
 
 @shared_task
 def update_feed(feed_id):
@@ -19,3 +20,4 @@ def update_feed(feed_id):
         entry.pub_date = entry_data.get('published_parsed') or entry_data.get('updated_parsed')
         entry.save()
     cache.delete(f'feed_{feed_id}')
+    schedule_feed(get_redis_connection(), feed_id)

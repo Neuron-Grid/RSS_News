@@ -51,8 +51,8 @@ INSTALLED_APPS = [
     "django_bootstrap5",
     'django_feedparser',
     # フィードの自動更新
-    # 'django_celery_beat',
-    # 'django_celery_results',
+    'django_celery_beat',
+    'django_celery_results',
 ]
 
 MIDDLEWARE = [
@@ -145,7 +145,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Redis Cache
 CACHES = {
-    # デフォルト
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": "redis://127.0.0.1:6379/0",
@@ -153,7 +152,6 @@ CACHES = {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     },
-    # session
     "session": {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": "redis://127.0.0.1:6379/1",

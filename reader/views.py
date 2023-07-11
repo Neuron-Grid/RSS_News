@@ -1,17 +1,19 @@
 from django.contrib.auth.decorators import login_required
-from django.db import IntegrityError, transaction
 from reader.models import Feed, Subscription, Entry
+from django.db import IntegrityError, transaction
+from reader.error_message import ERROR_MESSAGES
 from django.shortcuts import render, redirect
 # from celery.result import AsyncResult
 from django.contrib import messages
 from reader.forms import AddFeedForm
-from .error_message import ERROR_MESSAGES
 import feedparser
 import datetime
 import re
 
+# エラーメッセージ
 def get_error_message(error_code):
-    return ERROR_MESSAGES.get(error_code, '未定義のエラーが発生しました。')
+    error_message = ERROR_MESSAGES.get(error_code, '予期せぬエラーが発生しました。\n 操作の詳細を管理者に報告してください。')
+    return error_message
 
 # indexページ
 def index(request):
@@ -40,6 +42,10 @@ def custom_parse_datetime(value, request):
     if isinstance(value, str):
         # 日付のフォーマットを調整する
         for pattern in [
+            r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?[+-]\d{2}:\d{2}:\d{2}$', 
+            r'^\d{4}/\d{2}/\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?[+-]\d{2}:\d{2}:\d{2}$', 
+            r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(\.\d+)?[+-]\d{2}:\d{2}:\d{2}$', 
+            r'^\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}(\.\d+)?[+-]\d{2}:\d{2}:\d{2}$',
             r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?[+-]\d{2}:\d{2}$',
             r'^\d{4}/\d{2}/\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?[+-]\d{2}:\d{2}$',
             r'^\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}(\.\d+)?[+-]\d{2}:\d{2}$',
@@ -57,11 +63,11 @@ def custom_parse_datetime(value, request):
             r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$',
             r'^\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}$',
             r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$',
-            r'^\d{4}-\d{2}/\d{2}T\d{2}:\d{2}$'
+            r'^\d{4}/\d{2}/\d{2}T\d{2}:\d{2}$',
             r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$',
             r'^\d{4}/\d{2}/\d{2} \d{2}:\d{2}$',
             r'^\d{4}-\d{2}-\d{2}$',
-            r'^\d{4}/\d{2}-\d{2}$',
+            r'^\d{4}/\d{2}/\d{2}$',
         ]:
             match = re.match(pattern, value)
             if match:
@@ -145,23 +151,6 @@ def add_feed(request):
     # フォームをテンプレートに渡してレンダリングする
     return render(request, 'reader/add_feed.html', {'form': form})
 
-
-# フィードの更新
-# postを受け取った場合だけフィードを更新する
-@login_required
-def update_feed(request, feed_id):
-    feed = Feed.objects.get(id=feed_id)
-    entries = feedparser.parse(feed.url)['entries']
-    for entry in entries:
-        Entry.objects.get_or_create(
-            feed=feed,
-            title=entry['title'],
-            link=entry['link'],
-            summary=entry['summary'],
-            pub_date=entry['published'],
-        )
-    return redirect('reader:feed_list', pk=feed_id)
-
 # フィードの削除
 @login_required
 def remove_feed(request, feed_id):
@@ -184,6 +173,6 @@ def remove_feed(request, feed_id):
 def detailed_list(request, pk):
     feed = Feed.objects.get(id=pk)
     entries = Entry.objects.filter(feed=feed).order_by('pub_date')
-    # entry.titleを表示させる
-    title = feed.title
-    return render(request, 'reader/detailed_list.html', {'entries': entries})
+    # 最新のエントリーを取得
+    entry = entries.last() if entries else None
+    return render(request, 'reader/detailed_list.html', {'entries': entries, 'entry': entry, 'feed': feed})

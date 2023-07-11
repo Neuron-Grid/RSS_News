@@ -24,3 +24,5 @@ services:
             - "6379:6379"
         volumes:
             - ./docker/redis:/var/lib/data
+        depends_on:
+            - mysql
