@@ -68,6 +68,8 @@ def custom_parse_datetime(value, request):
             r'^\d{4}/\d{2}/\d{2} \d{2}:\d{2}$',
             r'^\d{4}-\d{2}-\d{2}$',
             r'^\d{4}/\d{2}/\d{2}$',
+            r'^\d{2}-\d{2}-\d{4}$',
+            r'^\d{2}/\d{2}/\d{4}$',
         ]:
             match = re.match(pattern, value)
             if match:

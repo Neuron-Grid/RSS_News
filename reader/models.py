@@ -8,16 +8,15 @@ class Feed(models.Model):
     title = models.CharField(max_length=100, unique=True)   # フィードのタイトル
     description = models.TextField(blank=True, null=True)   # フィードの説明
 
+    # フィードのURLとタイトルの重複をチェックする
+    def clean(self):
+        if Feed.objects.filter(url=self.url).exclude(id=self.id).exists():
+            raise ValidationError({'url': 'フィードのURLが重複しています。'}) 
+        if Feed.objects.filter(title=self.title).exclude(id=self.id).exists():
+            raise ValidationError({'title': 'フィードのタイトルが重複しています。'})
+
     def __str__(self):
         return self.title
-    # フィードのURLが重複していないか確認する
-    def clean(self):
-        if Feed.objects.filter(url=self.url).exclude(pk=self.pk).exists():
-            raise ValidationError('既に登録されているフィードです。')
-    # フィードのタイトルが重複していないか確認する
-    def clean(self):
-        if Feed.objects.filter(title=self.title).exclude(pk=self.pk).exists():
-            raise ValidationError('既に登録されているフィードです。')
 
 # Entryモデル
 class Entry(models.Model):

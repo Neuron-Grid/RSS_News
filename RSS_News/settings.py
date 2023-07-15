@@ -163,8 +163,6 @@ CACHES = {
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "session"
 
-
-
 # Allauthの設定
 SITE_ID = 1
 
