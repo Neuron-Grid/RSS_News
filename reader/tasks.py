@@ -1,11 +1,12 @@
-import feedparser
-from celery import shared_task
-from django.core.cache import cache
-from reader.models import Feed, Entry
 from reader.redis_helper import get_redis_connection, schedule_feed
+# from reader.models import Feed, Entry 
+from django.core.cache import cache
+from celery import shared_task
+import feedparser
 
 @shared_task
 def update_feed(feed_id):
+    from reader.models import Feed, Entry
     feed = Feed.objects.get(id=feed_id)
     d = feedparser.parse(feed.url)
     for entry_data in d.entries:

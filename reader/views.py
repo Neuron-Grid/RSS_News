@@ -178,3 +178,15 @@ def detailed_list(request, pk):
     # 最新のエントリーを取得
     entry = entries.last() if entries else None
     return render(request, 'reader/detailed_list.html', {'entries': entries, 'entry': entry, 'feed': feed})
+
+
+# フィードの更新
+@login_required
+def update_feed(request, feed_id):
+    # フィードを更新するときは、update_feedのページにリダイレクトし、そのフィードの更新確認をする。
+    # フィードの更新を行うと、そのフィードに紐づく記事も更新される
+    if request.method == 'POST':
+        feed = Feed.objects.get(id=feed_id)
+        feed.update()
+        return redirect('reader:feed_list')
+    return render(request, 'reader/update_feed.html', {'feed_id': feed_id})

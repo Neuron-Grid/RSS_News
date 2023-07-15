@@ -16,7 +16,7 @@ CELERY_TASK_TRACK_STARTED = True
 CELERY_TIMEZONE = 'Asia/Tokyo'
 
 @app.on_after_configure.connect
-def setup_periodic_tasks(sender,):
+def setup_periodic_tasks(sender, **kwargs):
     sender.add_periodic_task(300.0, update_feeds.s(), name='5分ごとにフィードを自動更新')
 
 @app.task

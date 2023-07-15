@@ -17,7 +17,8 @@
                 </div>
                 <div class="card-footer">
                     <a href="{% url 'reader:detailed_list' feed.id %}" class="btn btn-primary me-2">詳細</a>
-                    <a href="{% url 'reader:remove_feed' feed.id %}" class="btn btn-danger">削除</a>
+                    <a href="{% url 'reader:remove_feed' feed.id %}" class="btn btn-danger me-2">削除</a>
+                    <a href="{% url 'reader:update_feed' feed.id %}" class="btn btn-secondary me-2">更新</a>
                 </div>
             </div>
         </div>
