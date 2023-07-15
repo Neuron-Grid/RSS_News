@@ -9,12 +9,6 @@ app = Celery('rss_news')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks()
 
-CELERY_BROKER_URL = 'redis://127.0.0.1:6379/2'
-CELERY_RESULT_BACKEND = "db+mysql://{DB_USER}:{DB_PASSWORD}@127.0.0.1/{DB_NAME}"
-CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
-CELERY_TASK_TRACK_STARTED = True
-CELERY_TIMEZONE = 'Asia/Tokyo'
-
 @app.on_after_configure.connect
 def setup_periodic_tasks(sender, **kwargs):
     sender.add_periodic_task(300.0, update_feeds.s(), name='5分ごとにフィードを自動更新')

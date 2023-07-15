@@ -143,7 +143,7 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Redis Cache
+# Redis settings
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
@@ -162,6 +162,12 @@ CACHES = {
 }
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "session"
+
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/2'
+CELERY_RESULT_BACKEND = "db+mysql://{DB_USER}:{DB_PASSWORD}@127.0.0.1/{DB_NAME}"
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TIMEZONE = 'Asia/Tokyo'
 
 # Allauthの設定
 SITE_ID = 1

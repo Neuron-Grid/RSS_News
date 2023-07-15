@@ -9,10 +9,7 @@
             記事の登録日時 : {{ entry.pub_date }}
         </p>
     </div>
-    <div class="my-4 text-center">
-        <button class="btn btn-primary mt-3" id="update-feed-button" data-feed-id="{{ feed.id }}">更新</button>
-    </div>
-    <div class="row row-cols-1 row-cols-md-3 g-4">
+    <div class="row row-cols-1 row-cols-md-3 g-4 my-4">
         {% for entry in entries %}
         <div class="col mb-4">
             <div class="card h-100">
