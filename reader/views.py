@@ -4,8 +4,8 @@ from django.db import IntegrityError, transaction
 from reader.error_message import ERROR_MESSAGES
 from django.shortcuts import render, redirect
 # from celery.result import AsyncResult
-from django.contrib import messages
 from reader.forms import AddFeedForm
+from django.contrib import messages
 import feedparser
 import datetime
 import re
@@ -183,10 +183,10 @@ def detailed_list(request, pk):
 # フィードの更新
 @login_required
 def update_feed(request, feed_id):
-    # フィードを更新するときは、update_feedのページにリダイレクトし、そのフィードの更新確認をする。
-    # フィードの更新を行うと、そのフィードに紐づく記事も更新される
+    # POSTリクエストがあった場合、非同期タスクでフィードを更新する。
+    # フィードの更新を行うと、そのフィードに関連する記事も更新される。
     if request.method == 'POST':
-        feed = Feed.objects.get(id=feed_id)
-        feed.update()
+        from reader.tasks import update_feed as update_feed_task
+        update_feed_task.delay(feed_id)
         return redirect('reader:feed_list')
     return render(request, 'reader/update_feed.html', {'feed_id': feed_id})
