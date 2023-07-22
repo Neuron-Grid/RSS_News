@@ -1,6 +1,7 @@
-from celery import Celery
-from reader.redis_helper import get_redis_connection, get_feeds_to_update
+from RSS_News.settings import CELERY_BROKER_URL
+from reader.helper import get_feeds_to_update
 from reader.tasks import update_feed
+from celery import Celery
 import os
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'RSS_News.settings')
@@ -15,7 +16,7 @@ def setup_periodic_tasks(sender, **kwargs):
 
 @app.task
 def update_feeds():
-    redis_conn = get_redis_connection()
+    redis_conn = CELERY_BROKER_URL
     feed_ids = get_feeds_to_update(redis_conn)
     for feed_id in feed_ids:
         update_feed.delay(feed_id)

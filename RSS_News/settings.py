@@ -19,9 +19,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
 env.read_env(os.path.join(BASE_DIR, 'service.env'))
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-# BASE_DIR = Path(__file__).resolve().parent.parent
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
@@ -163,8 +160,9 @@ CACHES = {
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "session"
 
+# Celery settings
 CELERY_BROKER_URL = 'redis://127.0.0.1:6379/2'
-CELERY_RESULT_BACKEND = "db+mysql://{DB_USER}:{DB_PASSWORD}@127.0.0.1/{DB_NAME}"
+CELERY_RESULT_BACKEND = f"db+mysql://{env('DB_USER')}:{env('DB_PASSWORD')}@127.0.0.1/{env('DB_NAME')}"
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TIMEZONE = 'Asia/Tokyo'

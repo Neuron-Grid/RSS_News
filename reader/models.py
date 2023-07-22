@@ -1,5 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
+from reader.helper import ERROR_MESSAGES
 from django.db import models
 
 # Feedモデル
@@ -11,9 +12,9 @@ class Feed(models.Model):
     # フィードのURLとタイトルの重複をチェックする
     def clean(self):
         if Feed.objects.filter(url=self.url).exclude(id=self.id).exists():
-            raise ValidationError({'url': 'フィードのURLが重複しています。'}) 
+            raise ValidationError({f'url': ERROR_MESSAGES['feed_url_duplicate_error']}) 
         if Feed.objects.filter(title=self.title).exclude(id=self.id).exists():
-            raise ValidationError({'title': 'フィードのタイトルが重複しています。'})
+            raise ValidationError({f'title': ERROR_MESSAGES['feed_title_duplicate_error']})
 
     def __str__(self):
         return self.title
@@ -24,7 +25,8 @@ class Entry(models.Model):
     title = models.CharField(null=False, max_length=100)                                # エントリのタイトル
     link = models.URLField(null=False)                                                  # エントリのリンク
     summary = models.TextField()                                                        # エントリの要約
-    pub_date = models.DateTimeField(auto_now_add=True)                                  # エントリの公開日時
+    pub_date = models.DateTimeField()                                                   # エントリの公開日時
+    created_at = models.DateTimeField(auto_now_add=True)                                # エントリの作成日時
 
     def __str__(self):
         return self.title
@@ -36,3 +38,6 @@ class Subscription(models.Model):
 
     def __str__(self):
         return f"{self.user.username}:{self.feed.title}"
+    
+    class Meta:
+        unique_together = ('user', 'feed')

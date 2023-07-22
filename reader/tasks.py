@@ -1,4 +1,4 @@
-from reader.redis_helper import get_redis_connection, schedule_feed
+from reader.helper import get_redis_connection, schedule_feed
 # from reader.models import Feed, Entry 
 from django.core.cache import cache
 from celery import shared_task

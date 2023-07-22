@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from reader.models import Feed, Subscription, Entry
 from django.db import IntegrityError, transaction
-from reader.error_message import ERROR_MESSAGES
+from reader.helper import ERROR_MESSAGES, DATE_FORMAT
 from django.shortcuts import render, redirect
 # from celery.result import AsyncResult
 from reader.forms import AddFeedForm
@@ -31,9 +31,12 @@ def feed_list(request):
     return render(request, 'reader/feed_list.html', {'feeds': feeds})
 
 # 文字列値をdatetimeオブジェクトに変換する。
+# この関数は、フィードのパースに失敗した場合に発生するエラーを回避するために使用する。
+# 日付のフォーマットを年月日時分に可能な限り統一する
 def custom_parse_datetime(value, request):
-    # 既にdatetimeオブジェクトが渡されている場合はそのまま返す
+    # 既にdatetimeオブジェクトが渡されている場合は日付のフォーマットを年月日時分か確認する
     if isinstance(value, datetime.datetime):
+        # datetimeオブジェクトに変換して返す
         return value
     # valueがNoneの場合はNoneを返す
     if value is None:
@@ -42,34 +45,7 @@ def custom_parse_datetime(value, request):
     if isinstance(value, str):
         # 日付のフォーマットを調整する
         for pattern in [
-            r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?[+-]\d{2}:\d{2}:\d{2}$', 
-            r'^\d{4}/\d{2}/\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?[+-]\d{2}:\d{2}:\d{2}$', 
-            r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(\.\d+)?[+-]\d{2}:\d{2}:\d{2}$', 
-            r'^\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}(\.\d+)?[+-]\d{2}:\d{2}:\d{2}$',
-            r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?[+-]\d{2}:\d{2}$',
-            r'^\d{4}/\d{2}/\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?[+-]\d{2}:\d{2}$',
-            r'^\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}(\.\d+)?[+-]\d{2}:\d{2}$',
-            r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(\.\d+)?[+-]\d{2}:\d{2}$',
-            r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?[+-]\d{2}$',
-            r'^\d{4}/\d{2}/\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?[+-]\d{2}$',
-            r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(\.\d+)?[+-]\d{2}$',
-            r'^\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}(\.\d+)?[+-]\d{2}$',
-            r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?$',
-            r'^\d{4}/\d{2}/\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?$',
-            r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(\.\d+)?$',
-            r'^\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}(\.\d+)?$',
-            r'^\d{4}/\d{2}/\d{2}T\d{2}:\d{2}:\d{2}$',
-            r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$',
-            r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$',
-            r'^\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}$',
-            r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$',
-            r'^\d{4}/\d{2}/\d{2}T\d{2}:\d{2}$',
-            r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$',
-            r'^\d{4}/\d{2}/\d{2} \d{2}:\d{2}$',
-            r'^\d{4}-\d{2}-\d{2}$',
-            r'^\d{4}/\d{2}/\d{2}$',
-            r'^\d{2}-\d{2}-\d{4}$',
-            r'^\d{2}/\d{2}/\d{4}$',
+            DATE_FORMAT,
         ]:
             match = re.match(pattern, value)
             if match:
@@ -110,6 +86,8 @@ def add_feed(request):
                 return render(request, 'reader/add_feed.html', {'form': form})
             # フィードの説明を取得する
             feed_description = feed.get('feed', {}).get('description')
+            # フィードの公開日時を取得する
+            feed_pub_date = custom_parse_datetime(request, feed.get('feed', {}).get('published'))
             # フィードのエントリをリストとして取得する
             entries = list(feed.entries)
             try:
@@ -129,18 +107,19 @@ def add_feed(request):
                                 title = entry.get('title', ''),
                                 link = entry.get('link', ''),
                                 summary = entry.get('summary', ''),
+                                created_at = custom_parse_datetime(request, entry.get('published', '')),
                                 pub_date = custom_parse_datetime(request, entry.get('published', ''))
                             )
                         except ValueError:
                             # 日付のパースに失敗した場合、エラーメッセージを表示してエラーページにリダイレクトする
                             messages.error(request, get_error_message('date_parse_error'))
                             return redirect('reader:error_page')
-                    # ユーザーの購読をデータベースに保存する
-                    Subscription.objects.create(user=request.user, feed=feed)
+            # 既に登録されているフィードの場合、エラーメッセージを表示してエラーページにリダイレクトする
             except IntegrityError:
-                # 既に登録されているフィードの場合、エラーメッセージを表示してエラーページにリダイレクトする
                 messages.error(request, get_error_message('already_exists_error'))
                 return redirect('reader:error_page')
+            # ユーザーの購読をデータベースに保存する
+            Subscription.objects.create(user=request.user, feed=feed)
             # フォームの送信とデータの保存が成功した場合、フィードリストのページにリダイレクトする
             return redirect('reader:feed_list')
         else:
