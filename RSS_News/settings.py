@@ -10,6 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
+
 from pathlib import Path
 import environ
 import os
@@ -18,9 +21,6 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
 env.read_env(os.path.join(BASE_DIR, 'service.env'))
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY')
@@ -32,24 +32,24 @@ ALLOWED_HOSTS = env('HOSTS').split(',')
 
 # Application definition
 INSTALLED_APPS = [
+    'django.contrib.contenttypes',
+    'django.contrib.staticfiles',
+    'django.contrib.messages',
+    'django.contrib.sessions',
     'django.contrib.admin',
     'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
     # 内部アプリ
     'reader',
     # 外部アプリ
-    'allauth',
-    'allauth.account',
     'allauth.socialaccount',
     'django.contrib.sites',
-    "django_bootstrap5",
     'django_feedparser',
+    "django_bootstrap5",
+    'allauth.account',
+    'allauth',
     # フィードの自動更新
-    'django_celery_beat',
     'django_celery_results',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [

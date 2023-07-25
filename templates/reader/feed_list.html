@@ -14,11 +14,15 @@
                 <div class="card-body">
                     <h3 class="card-title">{{ feed.title }}</h3>
                     <p class="card-text">{{ feed.description }}</p>
+                    <form method="post" action="{% url 'reader:feed_list' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-warning">全てのフィードを更新</button>
+                    </form>
                 </div>
                 <div class="card-footer">
                     <a href="{% url 'reader:detailed_list' feed.id %}" class="btn btn-primary me-2">詳細</a>
                     <a href="{% url 'reader:remove_feed' feed.id %}" class="btn btn-danger me-2">削除</a>
-                    <a href="{% url 'reader:update_feed' feed.id %}" class="btn btn-secondary me-2">更新</a>
+                    <!-- <a href="{% url 'reader:update_feed' feed.id %}" class="btn btn-secondary me-2">更新</a> -->
                 </div>
             </div>
         </div>

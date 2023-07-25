@@ -1,11 +1,14 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from reader.helper import ERROR_MESSAGES, DATE_FORMAT
 from reader.models import Feed, Subscription, Entry
 from django.db import IntegrityError, transaction
-from reader.helper import ERROR_MESSAGES, DATE_FORMAT
+from reader.tasks import update_all_feeds_task
 from django.shortcuts import render, redirect
 # from celery.result import AsyncResult
 from reader.forms import AddFeedForm
 from django.contrib import messages
+from django.views import View
 import feedparser
 import datetime
 import re
@@ -26,9 +29,24 @@ def error_page(request):
 
 # フィード一覧
 @login_required
-def feed_list(request):
-    feeds = Feed.objects.filter(subscription__user=request.user)
-    return render(request, 'reader/feed_list.html', {'feeds': feeds})
+# def feed_list(request):
+#     feeds = Feed.objects.filter(subscription__user=request.user)
+#     return render(request, 'reader/feed_list.html', {'feeds': feeds})
+class feed_list(LoginRequiredMixin, View):
+    # GETリクエストに対応する処理
+    def get(self, request):
+        feeds = Feed.objects.filter(subscription__user=request.user)
+        return render(request, 'reader/feed_list.html', {'feeds': feeds})
+
+    # POSTリクエストに対応する処理
+    # 特定のユーザーが購読している全てのフィードを更新する
+    # また、feed_list.htmlに更新ボタンを設置し、更新ボタンを押した時だけ全てのフィードを更新する
+    # 確認ページは作らない
+    def post(self, request):
+        update_all_feeds_task.delay(
+            user_id=request.user.id
+        )
+        return redirect('reader:feed_list')
 
 # 文字列値をdatetimeオブジェクトに変換する。
 # この関数は、フィードのパースに失敗した場合に発生するエラーを回避するために使用する。
@@ -108,7 +126,7 @@ def add_feed(request):
                                 link = entry.get('link', ''),
                                 summary = entry.get('summary', ''),
                                 created_at = custom_parse_datetime(request, entry.get('published', '')),
-                                pub_date = custom_parse_datetime(request, entry.get('published', ''))
+                                pub_date = custom_parse_datetime(request, entry.get('published', '')),
                             )
                         except ValueError:
                             # 日付のパースに失敗した場合、エラーメッセージを表示してエラーページにリダイレクトする
@@ -169,3 +187,14 @@ def update_feed(request, feed_id):
         update_feed_task.delay(feed_id)
         return redirect('reader:feed_list')
     return render(request, 'reader/update_feed.html', {'feed_id': feed_id})
+
+# 特定のユーザーが購読している全てのフィードを更新する
+# また、feed_list.htmlに更新ボタンを設置し、更新ボタンを押した時だけ全てのフィードを更新する
+# 確認ページは作らない
+# @login_required
+# def update_all_feeds(request):
+#     # POSTリクエストがあった場合、非同期タスクで全てのフィードを更新する。
+#     # フィードの更新を行うと、そのフィードに関連する記事も更新される。
+#     if request.method == 'POST':
+#         update_all_feeds_task.delay()
+#         return redirect('reader:feed_list')

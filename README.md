@@ -96,7 +96,8 @@ git clone https://gitlab.com/Neuron-Grid/RSS_News
 
 ```Shell
 cd RSS_News && \
-python -m venv .rss_news
+python -m venv .rss_news && \
+source .rss_news/bin/activate && \
 pip install -r requirements.txt
 ```
 
@@ -120,12 +121,6 @@ touch service.env
 > 事前に`Googleアカウント`のアプリパスワードを発行してください。
 
 ```service.env
-#メールの設定
-EMAIL_HOST=smtp.googlemail.com
-EMAIL_PORT=587
-EMAIL_HOST_USER=googleアカウント@gmail.com
-EMAIL_HOST_PASSWORD=アプリパスワード
-
 #settings.py
 SECRET_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 DEBUG=False
@@ -137,10 +132,16 @@ DB_USER=mysitedbuser
 DB_PASSWORD=mysitedbpassword
 
 # Docker-compose.yml
-MYSQL_ROOT_PASSWORD=root
-MYSQL_DATABASE=mysitedb
-MYSQL_USER=mysitedbuser
-MYSQL_PASSWORD=mysitedbpassword
+MYSQL_ROOT_PASS=root
+MYSQL_DB_NAME=mysitedb
+MYSQL_DB_USER=mysitedbuser
+MYSQL_DB_PASS=mysitedbpassword
+
+#メールの設定
+EMAIL_HOST=smtp.googlemail.com
+EMAIL_PORT=587
+EMAIL_HOST_USER=googleアカウント@gmail.com
+EMAIL_HOST_PASSWORD=アプリパスワード
 ```
 
 ### 5. 実行する
