@@ -1,14 +1,11 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
-from reader.helper import ERROR_MESSAGES, DATE_FORMAT
+from reader.helper import ERROR_MESSAGES, DATE_FORMAT, DATE_FORMAT_STR
 from reader.models import Feed, Subscription, Entry
 from django.db import IntegrityError, transaction
 from reader.tasks import update_all_feeds_task
 from django.shortcuts import render, redirect
-# from celery.result import AsyncResult
 from reader.forms import AddFeedForm
 from django.contrib import messages
-from django.views import View
 import feedparser
 import datetime
 import re
@@ -17,6 +14,49 @@ import re
 def get_error_message(error_code):
     error_message = ERROR_MESSAGES.get(error_code, '予期せぬエラーが発生しました。\n 操作の詳細を管理者に報告してください。')
     return error_message
+
+def add_error_message(request, error_key):
+    messages.error(request, get_error_message(error_key))
+
+# エラーハンドリングを一元化するプライベート関数
+def handle_error(request, form=None, error_key=None):
+    # エラーメッセージを追加し、適切なページにリダイレクトする
+    add_error_message(request, error_key)
+    if form:
+        return render(request, 'reader/add_feed.html', {'form': form})
+    return redirect('reader:error_page')
+
+# フィード情報をデータベースに保存するプライベート関数
+def save_feed(feed_url, feed_title, feed_description):
+    return Feed.objects.create(
+        url=feed_url,
+        title=feed_title,
+        description=feed_description,
+    )
+
+# エントリ情報をデータベースに保存するプライベート関数
+def save_entries(entries, feed, request):
+    for entry in entries:
+        try:
+            Entry.objects.create(
+                feed=feed,
+                title=entry.get('title', ''),
+                link=entry.get('link', ''),
+                summary=entry.get('summary', ''),
+                pub_date=custom_parse_datetime(request, entry.get('published', '')),
+            )
+        except ValueError:
+            # 日付のパースに失敗した場合、IntegrityErrorを送出する
+            raise IntegrityError(get_error_message('date_parse_error'))
+
+def custom_parse_datetime(date_str):
+    for pattern, date_format in DATE_FORMAT_STR.items():
+        if re.match(pattern, date_str):
+            try:
+                return datetime.datetime.strptime(date_str, date_format)
+            except ValueError:
+                raise ValueError(get_error_message('date_format_error'))
+    raise ValueError(get_error_message('date_format_error'))
 
 # indexページ
 def index(request):
@@ -29,24 +69,21 @@ def error_page(request):
 
 # フィード一覧
 @login_required
-# def feed_list(request):
-#     feeds = Feed.objects.filter(subscription__user=request.user)
-#     return render(request, 'reader/feed_list.html', {'feeds': feeds})
-class feed_list(LoginRequiredMixin, View):
-    # GETリクエストに対応する処理
-    def get(self, request):
-        feeds = Feed.objects.filter(subscription__user=request.user)
-        return render(request, 'reader/feed_list.html', {'feeds': feeds})
+def feed_list(request):
+    if request.method == 'POST':
+        return get_feed_list(request)
+    else:
+        return post_feed_list(request)
 
-    # POSTリクエストに対応する処理
-    # 特定のユーザーが購読している全てのフィードを更新する
-    # また、feed_list.htmlに更新ボタンを設置し、更新ボタンを押した時だけ全てのフィードを更新する
-    # 確認ページは作らない
-    def post(self, request):
-        update_all_feeds_task.delay(
-            user_id=request.user.id
-        )
-        return redirect('reader:feed_list')
+def get_feed_list(request):
+    feeds = Feed.objects.filter(subscription__user=request.user)
+    return render(request, 'reader/feed_list.html', {'feeds': feeds})
+
+def post_feed_list(request):
+    update_all_feeds_task.delay(
+        user_id=request.user.id
+    )
+    return redirect('reader/feed_list.html')
 
 # 文字列値をdatetimeオブジェクトに変換する。
 # この関数は、フィードのパースに失敗した場合に発生するエラーを回避するために使用する。
@@ -78,77 +115,59 @@ def custom_parse_datetime(value, request):
             return datetime.datetime.fromisoformat(value)
         except ValueError:
             messages.error(request, get_error_message('date_parse_error'))
-            return redirect('reader:add_feed')
+            return redirect('reader/add_feed')
 
 # フィードの追加
 @login_required
 def add_feed(request):
-    # POSTリクエストの場合（フォームが送信された場合）
     if request.method == 'POST':
-        # フォームのインスタンスを作成し、送信されたデータをバインドする
-        form = AddFeedForm(request.POST)
-        # フォームのバリデーションを行う
-        if form.is_valid():
-            # バリデーションが成功した場合、クリーンデータからフィードのURLとタイトルを取得する
-            feed_url = form.cleaned_data['url']
-            feed_title = form.cleaned_data['feed_name']
-            # フィードをパースする
-            feed = feedparser.parse(feed_url)
-            # フィードが存在しない場合、エラーメッセージを表示して同じページに留まる
-            if not feed:
-                messages.error(request, get_error_message('not_found_error'))
-                return render(request, 'reader/add_feed.html', {'form': form})
-            # フィードにエントリがない場合、エラーメッセージを表示して同じページに留まる
-            if not feed.entries:
-                messages.error(request, get_error_message('entry_not_found_error'))
-                return render(request, 'reader/add_feed.html', {'form': form})
-            # フィードの説明を取得する
-            feed_description = feed.get('feed', {}).get('description')
-            # フィードの公開日時を取得する
-            feed_pub_date = custom_parse_datetime(request, feed.get('feed', {}).get('published'))
-            # フィードのエントリをリストとして取得する
-            entries = list(feed.entries)
-            try:
-                # データベースの操作をアトミック（一体化）に行う
-                with transaction.atomic():
-                    # フィードをデータベースに保存する
-                    feed = Feed.objects.create(
-                        url=feed_url,
-                        title=feed_title,
-                        description=feed_description,
-                    )
-                    # 各エントリをデータベースに保存する
-                    for entry in entries:
-                        try:
-                            Entry.objects.create(
-                                feed=feed,
-                                title = entry.get('title', ''),
-                                link = entry.get('link', ''),
-                                summary = entry.get('summary', ''),
-                                created_at = custom_parse_datetime(request, entry.get('published', '')),
-                                pub_date = custom_parse_datetime(request, entry.get('published', '')),
-                            )
-                        except ValueError:
-                            # 日付のパースに失敗した場合、エラーメッセージを表示してエラーページにリダイレクトする
-                            messages.error(request, get_error_message('date_parse_error'))
-                            return redirect('reader:error_page')
-            # 既に登録されているフィードの場合、エラーメッセージを表示してエラーページにリダイレクトする
-            except IntegrityError:
-                messages.error(request, get_error_message('already_exists_error'))
-                return redirect('reader:error_page')
-            # ユーザーの購読をデータベースに保存する
-            Subscription.objects.create(user=request.user, feed=feed)
-            # フォームの送信とデータの保存が成功した場合、フィードリストのページにリダイレクトする
-            return redirect('reader:feed_list')
-        else:
-            # フォームのバリデーションが失敗した場合、エラーメッセージを表示してエラーページにリダイレクトする
-            messages.error(request, get_error_message('invalid_value_error'))
-            return redirect('reader:error_page')
+        return add_feed_post(request)
     else:
-        # GETリクエストの場合(ページが初めて表示された場合)に、新しい（空の）フォームを作成する
+        return add_feed_get(request)
+
+def add_feed_get(request):
+    # 新しい（空の）フォームを作成する
+    try:
         form = AddFeedForm()
+    except Exception as e:
+        messages.error(request, str(e))
+        return redirect('reader:error_page')
     # フォームをテンプレートに渡してレンダリングする
     return render(request, 'reader/add_feed.html', {'form': form})
+
+def add_feed_post(request):
+    form = AddFeedForm(request.POST)
+    if form.is_valid():
+        # フォームからフィードのURLとタイトルを取得する
+        feed_url = form.cleaned_data['url']
+        feed_title = form.cleaned_data['feed_name']
+        # フィードをパースする
+        feed = feedparser.parse(feed_url)
+        # フィードが存在しない場合、not_found_errorを呼び出す
+        if not feed:
+            return handle_error(request, form, 'not_found_error')
+        # フィードにエントリがない場合、entry_not_found_errorを呼び出す
+        if not feed.entries:
+            return handle_error(request, form, 'entry_not_found_error')
+        # フィードの説明とエントリを取得する
+        feed_description = feed.get('feed', {}).get('description')
+        entries = list(feed.entries)
+        # アトミックブロック内でフィードとエントリを保存する
+        try:
+            with transaction.atomic():
+                feed_obj = save_feed(feed_url, feed_title, feed_description)
+                save_entries(entries, feed_obj, request)
+        # 既に登録されているフィードの場合、already_exists_errorを呼び出す
+        except IntegrityError:
+            return handle_error(request, None, 'already_exists_error')
+        # ユーザーの購読をデータベースに保存する
+        Subscription.objects.create(user=request.user, feed=feed_obj)
+        # 成功時にフィードリストへリダイレクトする
+        return redirect('reader:feed_list')
+    else:
+        # フォームのバリデーションが失敗した場合、invalid_value_errorを呼び出す
+        print(form.errors)
+        return handle_error(request, form, 'invalid_value_error')
 
 # フィードの削除
 @login_required
@@ -176,25 +195,12 @@ def detailed_list(request, pk):
     entry = entries.last() if entries else None
     return render(request, 'reader/detailed_list.html', {'entries': entries, 'entry': entry, 'feed': feed})
 
-
 # フィードの更新
 @login_required
 def update_feed(request, feed_id):
     # POSTリクエストがあった場合、非同期タスクでフィードを更新する。
     # フィードの更新を行うと、そのフィードに関連する記事も更新される。
     if request.method == 'POST':
-        from reader.tasks import update_feed as update_feed_task
-        update_feed_task.delay(feed_id)
+        update_feed.delay(feed_id)
         return redirect('reader:feed_list')
     return render(request, 'reader/update_feed.html', {'feed_id': feed_id})
-
-# 特定のユーザーが購読している全てのフィードを更新する
-# また、feed_list.htmlに更新ボタンを設置し、更新ボタンを押した時だけ全てのフィードを更新する
-# 確認ページは作らない
-# @login_required
-# def update_all_feeds(request):
-#     # POSTリクエストがあった場合、非同期タスクで全てのフィードを更新する。
-#     # フィードの更新を行うと、そのフィードに関連する記事も更新される。
-#     if request.method == 'POST':
-#         update_all_feeds_task.delay()
-#         return redirect('reader:feed_list')

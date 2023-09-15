@@ -11,7 +11,6 @@ class Feed(models.Model):
     title = models.CharField(max_length=100, unique=True)
     # フィードの説明
     description = models.TextField(blank=True, null=True)
-
     # フィードのURLとタイトルの重複をチェックする
     def clean(self):
         if Feed.objects.filter(url=self.url).exclude(id=self.id).exists():
@@ -42,11 +41,9 @@ class Entry(models.Model):
 class Subscription(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     feed = models.ForeignKey(Feed, on_delete=models.CASCADE)
-
     # ユーザーとフィードの組み合わせを文字列で返す
     def __str__(self):
         return f"{self.user.username}:{self.feed.title}"
-    
     # ユーザーとフィードの組み合わせがユニークであることを保証する
     class Meta:
         unique_together = ('user', 'feed')

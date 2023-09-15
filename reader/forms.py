@@ -9,10 +9,10 @@ class AddFeedForm(forms.Form):
         label='URL',
         widget=forms.URLInput(attrs={'class': 'form-control'})
     )
-    interval = forms.IntegerField(
-        label='更新間隔',
-        widget=forms.NumberInput(attrs={'class': 'form-control'}),
-        min_value=1,
-        max_value=10080,
-        initial=300
-    )
+    # interval = forms.IntegerField(
+    #     label='更新間隔',
+    #     widget=forms.NumberInput(attrs={'class': 'form-control'}),
+    #     min_value=1,
+    #     max_value=10080,
+    #     initial=300
+    # )

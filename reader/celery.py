@@ -1,5 +1,6 @@
 from RSS_News.settings import CELERY_BROKER_URL
 from reader.helper import get_feeds_to_update
+from reader.helper import redis_connection
 from celery import Celery
 import redis
 import os
@@ -12,8 +13,12 @@ app.autodiscover_tasks()
 app.conf.broker_url = CELERY_BROKER_URL
 
 # Redis接続の生成
-redis_connection = redis.Redis.from_url(app.conf.broker_url)
+redis_connection = redis.Redis.from_url(CELERY_BROKER_URL)
 
+# redisの接続を確認する
+redis_connection.ping()
+
+# Celery Beatの設定
 @app.on_after_configure.connect
 def setup_periodic_tasks(sender, **kwargs):
     sender.add_periodic_task(300.0, update_feeds.s(), name='5分ごとにフィードを自動更新')
